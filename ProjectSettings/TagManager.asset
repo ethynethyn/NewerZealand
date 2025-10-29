@@ -5,12 +5,11 @@ TagManager:
   serializedVersion: 3
   tags:
   - CinemachineTarget
-  - CanPickup
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Pickup
   - Water
   - UI
   - 

@@ -13,9 +13,10 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHATEST_ON
-  - _USE_AFFINE_TEXTURES_ON
+  - _USE_AMBIENT_OVERRIDE
   - _USE_POINT_FILTER_ON
   m_InvalidKeywords:
+  - _USE_AFFINE_TEXTURES_ON
   - _USE_AMBIENT_OVERRIDE_ON
   - _USE_SPECULAR_ON
   m_LightmapFlags: 4
@@ -89,6 +90,7 @@ Material:
     - _ResolutionLimit: 64
     - _SnapsPerUnit: 32
     m_Floats:
+    - _AffineTextureStrength: 0.23
     - _AlphaClip: 1
     - _AlphaToMask: 0
     - _AmbientLight: 0.05
@@ -122,6 +124,7 @@ Material:
     - _Surface: 0
     - _USE_AFFINE_TEXTURES: 1
     - _USE_AMBIENT_OVERRIDE: 1
+    - _USE_DITHERING: 0
     - _USE_POINT_FILTER: 1
     - _USE_SPECULAR: 1
     - _WorkflowMode: 1
@@ -132,6 +135,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &9188287531054821174
 MonoBehaviour:
   m_ObjectHideFlags: 11
