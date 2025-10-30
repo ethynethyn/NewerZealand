@@ -29,12 +29,23 @@ public class PlayerPickUp : MonoBehaviour
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         bool hitSomething = Physics.Raycast(ray, out RaycastHit hit, pickupRange, pickupLayer);
 
-        // Show pickup UI if looking at object & not holding anything
+        // Line-of-sight check
+        bool canPickup = false;
+        if (hitSomething)
+        {
+            Vector3 direction = (hit.collider.transform.position - Camera.main.transform.position).normalized;
+            float distance = Vector3.Distance(Camera.main.transform.position, hit.collider.transform.position);
+
+            // Check if any collider (except pickup objects) is in the way
+            canPickup = !Physics.Raycast(Camera.main.transform.position, direction, distance, ~pickupLayer);
+        }
+
+        // Show pickup UI if looking at object & not holding anything & reachable
         if (pickupUI != null)
-            pickupUI.SetActive(hitSomething && heldObject == null);
+            pickupUI.SetActive(canPickup && heldObject == null);
 
         // Pickup with E
-        if (hitSomething && Keyboard.current.eKey.wasPressedThisFrame && heldObject == null)
+        if (canPickup && Keyboard.current.eKey.wasPressedThisFrame && heldObject == null)
         {
             PickUp(hit.collider.gameObject);
         }
@@ -82,6 +93,14 @@ public class PlayerPickUp : MonoBehaviour
             return;
         }
 
+        // ---- SINGLE ADJUSTMENT START ----
+        FreezableObject freezable = obj.GetComponent<FreezableObject>();
+        if (freezable != null && freezable.IsFrozen())
+        {
+            freezable.Unfreeze();
+        }
+        // ---- SINGLE ADJUSTMENT END ----
+
         heldRB.useGravity = false;
         heldRB.linearDamping = 10f;
         heldRB.angularDamping = 10f;
@@ -119,8 +138,6 @@ public class PlayerPickUp : MonoBehaviour
         {
             Debug.Log("Inspecting object.");
             heldRB.transform.position = inspectPoint.position;
-            // Keep current rotation so rotation stays consistent
-            // Reset velocity so it doesn't move
             heldRB.linearVelocity = Vector3.zero;
             heldRB.angularVelocity = Vector3.zero;
 
@@ -142,9 +159,7 @@ public class PlayerPickUp : MonoBehaviour
                 inspectLightObject.SetActive(false);
 
             if (starterAssetsInputs != null)
-            {
                 starterAssetsInputs.cursorInputForLook = true;
-            }
         }
     }
 
