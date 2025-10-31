@@ -25,7 +25,7 @@ public class SprayPainter : MonoBehaviour
 
         sprayTimer += Time.deltaTime;
 
-        if (Input.GetMouseButton(0) && sprayTimer >= sprayInterval)
+        if (Input.GetKeyDown(KeyCode.F) && sprayTimer >= sprayInterval)
         {
             if (SpawnSpray())
                 sprayTimer = 0f;
