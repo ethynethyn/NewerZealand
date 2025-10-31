@@ -37,7 +37,10 @@ public class PlayerPickUp : MonoBehaviour
             float distance = Vector3.Distance(Camera.main.transform.position, hit.collider.transform.position);
 
             // Check if any collider (except pickup objects) is in the way
-            canPickup = !Physics.Raycast(Camera.main.transform.position, direction, distance, ~pickupLayer);
+            int exceptionLayer = LayerMask.NameToLayer("RaycastCollisionException");
+            int layerMask = ~pickupLayer & ~(1 << exceptionLayer);  // Ignore pickup objects + exceptions
+            canPickup = !Physics.Raycast(Camera.main.transform.position, direction, distance, layerMask);
+
         }
 
         // Show pickup UI if looking at object & not holding anything & reachable
