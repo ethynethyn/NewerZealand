@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 
 public class StatChangeDisplay : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class StatChangeDisplay : MonoBehaviour
     public Vector2 spawnOffset = new Vector2(0, 50);
     public float fadeDuration = 1.5f;
     public float riseSpeed = 30f;
+    public float lineSpacing = 2f;
+
+    private List<TextMeshProUGUI> activePopups = new List<TextMeshProUGUI>();
+    private float clearTime = 0.1f;
+    private float lastPopupTime;
 
     private void OnEnable()
     {
@@ -28,26 +34,32 @@ public class StatChangeDisplay : MonoBehaviour
 
     private void ShowStatChange(string statName, float delta)
     {
-        if (Mathf.Approximately(delta, 0f))
-            return; // No change to show
+        if (Mathf.Approximately(delta, 0f)) return;
 
-        // Instantiate TMP element
+        float now = Time.time;
+        if (now - lastPopupTime > clearTime)
+            activePopups.Clear(); // new burst  reset stacking
+
+        lastPopupTime = now;
+
         var tmpInstance = Instantiate(statTextPrefab, canvas.transform);
         tmpInstance.gameObject.SetActive(true);
 
-        // Position in center + offset
-        tmpInstance.rectTransform.anchoredPosition = spawnOffset;
+        // Stack vertically for this batch
+        int index = activePopups.Count;
+        tmpInstance.rectTransform.anchoredPosition =
+            spawnOffset + Vector2.down * (index * lineSpacing);
 
-        // Display delta with +/– sign and color using Rich Text
+        activePopups.Add(tmpInstance);
+
         string prefix = delta > 0 ? "+" : "";
-        string colorHex = delta > 0 ? "#00FF00" : "#FF0000"; // Green for +, Red for -
+        string colorHex = delta > 0 ? "#00FF00" : "#FF0000";
         tmpInstance.text = $"<color={colorHex}>{statName}: {prefix}{delta:0}</color>";
 
-        // Start fade + rise coroutine
-        StartCoroutine(FadeAndRise(tmpInstance));
+        StartCoroutine(FadeAndRise(tmpInstance, index));
     }
 
-    private IEnumerator FadeAndRise(TextMeshProUGUI tmp)
+    private IEnumerator FadeAndRise(TextMeshProUGUI tmp, int index)
     {
         float elapsed = 0f;
         Vector3 startPos = tmp.rectTransform.anchoredPosition;
@@ -57,15 +69,13 @@ public class StatChangeDisplay : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = elapsed / fadeDuration;
 
-            // Fade out (TMP respects alpha with Rich Text)
             tmp.color = new Color(tmp.color.r, tmp.color.g, tmp.color.b, Mathf.Lerp(1f, 0f, t));
-
-            // Move upward
-            tmp.rectTransform.anchoredPosition = startPos + Vector3.up * riseSpeed * t;
+            tmp.rectTransform.anchoredPosition = startPos + Vector3.up * (riseSpeed * t);
 
             yield return null;
         }
 
+        activePopups.Remove(tmp);
         Destroy(tmp.gameObject);
     }
 }

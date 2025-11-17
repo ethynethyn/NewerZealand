@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: casino
+  m_Name: mcdonalds
   m_Shader: {fileID: 4800000, guid: 44fcdb8bd0b79ce4394df616dae2fb51, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -25,12 +25,12 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: a87e121efa21215418160b68d9ced283, type: 3}
+        m_Texture: {fileID: 2800000, guid: 4d5f9aaea303d014cbf1a9f9065205c4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints:
     - _ColorBitDepth: 64
-    - _ResolutionLimit: 205
+    - _ResolutionLimit: 548
     - _SnapsPerUnit: 64
     m_Floats:
     - _AffineTextureStrength: 1
@@ -45,6 +45,6 @@ Material:
     - _USE_POINT_FILTER: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 0.1744133, b: 0.035294116, a: 1}
+    - _BaseColor: {r: 1, g: 0.023597028, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
