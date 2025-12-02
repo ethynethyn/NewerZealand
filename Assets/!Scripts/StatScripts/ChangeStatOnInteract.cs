@@ -6,7 +6,10 @@ public class StatInteractionTrigger : MonoBehaviour
 {
     [Header("Trigger Settings")]
     public string playerTag = "Player";
-    public string interactKey = "e";
+
+    [Tooltip("The key to press for interaction")]
+    public KeyCode interactKey = KeyCode.E;
+
     public TextMeshProUGUI promptUI;          // Drag in your "Press E" UI
     public string promptText = "Press E to interact";
 
@@ -41,10 +44,34 @@ public class StatInteractionTrigger : MonoBehaviour
         if (!playerInRange || Time.time < lastUseTime + cooldownTime)
             return;
 
-        if (Input.GetKeyDown(interactKey.ToLower()))
+        // Check for input - supports both keyboard and mouse buttons
+        if (GetKeyOrMouseDown(interactKey))
         {
             TryInteract();
         }
+    }
+
+    // Helper method to handle both keyboard keys and mouse buttons
+    bool GetKeyOrMouseDown(KeyCode key)
+    {
+        // Check for mouse buttons
+        if (key == KeyCode.Mouse0)
+            return Input.GetMouseButtonDown(0);
+        else if (key == KeyCode.Mouse1)
+            return Input.GetMouseButtonDown(1);
+        else if (key == KeyCode.Mouse2)
+            return Input.GetMouseButtonDown(2);
+        else if (key == KeyCode.Mouse3)
+            return Input.GetMouseButtonDown(3);
+        else if (key == KeyCode.Mouse4)
+            return Input.GetMouseButtonDown(4);
+        else if (key == KeyCode.Mouse5)
+            return Input.GetMouseButtonDown(5);
+        else if (key == KeyCode.Mouse6)
+            return Input.GetMouseButtonDown(6);
+
+        // For all other keys, use GetKeyDown
+        return Input.GetKeyDown(key);
     }
 
     void TryInteract()
@@ -74,7 +101,6 @@ public class StatInteractionTrigger : MonoBehaviour
         // Apply stat change
         targetCharacter.ModifyStat(statToModify, statChangeAmount);
         lastUseTime = Time.time;
-
         Debug.Log($"Stat '{statToModify}' changed by {statChangeAmount} on {targetCharacter.characterName}.");
         onInteractionSuccess.Invoke();
     }

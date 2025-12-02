@@ -61,9 +61,9 @@ Material:
     - _Vertex_Color_Fade: 1
     - _Vertex_Color_Strength: 1
     - _Water_Opacity: 0.6
-    - _Wave_Length: 1
+    - _Wave_Length: 0.56
     - _Wave_Speed: 0.2
-    - _Wave_Strength: 0.2
+    - _Wave_Strength: 1.31
     m_Colors:
     - _Caustic_Tint: {r: 1, g: 1, b: 1, a: 1}
     - _Foam_Color: {r: 0.0492613, g: 0.254717, b: 0.2173614, a: 1}

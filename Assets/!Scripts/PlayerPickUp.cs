@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using StarterAssets;
 using TMPro;
 using System.Collections;
+using UnityEngine.InputSystem.Controls;
 
 public class PlayerPickUp : MonoBehaviour
 {
@@ -19,6 +20,25 @@ public class PlayerPickUp : MonoBehaviour
     public float moveForce = 600f;
     public float inspectRotateSpeed = 2f;
 
+    [Tooltip("Delay in seconds before you can drop/throw after picking up an item")]
+    public float dropDelay = 1f;
+
+    [Header("Input Bindings")]
+    [Tooltip("Key to pick up objects")]
+    public Key pickupKey = Key.E;
+
+    [Tooltip("Key to throw/drop objects (can use mouse buttons)")]
+    public Key throwKey = Key.None;
+
+    [Tooltip("Use Mouse0 (Left Click) for throw if true")]
+    public bool useMouseLeftForThrow = true;
+
+    [Tooltip("Key to toggle inspect mode (can use mouse buttons)")]
+    public Key inspectKey = Key.None;
+
+    [Tooltip("Use Mouse1 (Right Click) for inspect if true")]
+    public bool useMouseRightForInspect = true;
+
     [Header("Inspect Lighting")]
     public GameObject inspectLightObject;
 
@@ -29,7 +49,9 @@ public class PlayerPickUp : MonoBehaviour
 
     private GameObject heldObject;
     private Rigidbody heldRB;
+    private PickupableItem heldPickupableItem;
     private bool isInspecting = false;
+    private float lastPickupTime = -999f;
 
     private GameObject currentTooltipTarget;
     private Weight currentWeight;
@@ -92,20 +114,20 @@ public class PlayerPickUp : MonoBehaviour
             tooltipUI.gameObject.SetActive(false);
         }
 
-        // Pickup with E
-        if (canPickup && Keyboard.current.eKey.wasPressedThisFrame && heldObject == null && targetObject != null)
+        // Pickup with configurable key
+        if (canPickup && Keyboard.current[pickupKey].wasPressedThisFrame && heldObject == null && targetObject != null)
         {
             TryPickUp(targetObject);
         }
 
-        // Toggle inspect with right-click
-        if (heldObject && Mouse.current.rightButton.wasPressedThisFrame)
+        // Toggle inspect with configurable input
+        if (heldObject && GetKeyPressed(inspectKey, useMouseRightForInspect, Mouse.current.rightButton))
         {
             ToggleInspect();
         }
 
-        // Drop/Throw with left-click (works both in inspect mode and normal holding)
-        if (heldObject && Mouse.current.leftButton.wasPressedThisFrame)
+        // Drop/Throw with configurable input (only if enough time has passed since pickup)
+        if (heldObject && Time.time >= lastPickupTime + dropDelay && GetKeyPressed(throwKey, useMouseLeftForThrow, Mouse.current.leftButton))
         {
             if (isInspecting)
             {
@@ -143,6 +165,26 @@ public class PlayerPickUp : MonoBehaviour
         }
     }
 
+    // Helper method to check both keyboard and mouse input
+    bool GetKeyPressed(Key key, bool useMouseButton, ButtonControl mouseButton)
+    {
+        bool keyPressed = false;
+
+        // Check keyboard key if not None
+        if (key != Key.None && Keyboard.current != null)
+        {
+            keyPressed = Keyboard.current[key].wasPressedThisFrame;
+        }
+
+        // Check mouse button if enabled
+        if (useMouseButton && Mouse.current != null)
+        {
+            keyPressed = keyPressed || mouseButton.wasPressedThisFrame;
+        }
+
+        return keyPressed;
+    }
+
     void TryPickUp(GameObject obj)
     {
         Weight weight = obj.GetComponent<Weight>();
@@ -174,6 +216,8 @@ public class PlayerPickUp : MonoBehaviour
 
         heldObject = obj;
         heldRB = obj.GetComponent<Rigidbody>();
+        heldPickupableItem = obj.GetComponent<PickupableItem>();
+        lastPickupTime = Time.time; // Record pickup time
 
         if (heldRB == null)
         {
@@ -193,6 +237,12 @@ public class PlayerPickUp : MonoBehaviour
         heldRB.constraints = RigidbodyConstraints.FreezeRotation;
         heldRB.transform.parent = holdPoint;
 
+        // Notify PickupableItem component if it exists
+        if (heldPickupableItem != null)
+        {
+            heldPickupableItem.OnPickedUp(this);
+        }
+
         // Hide tooltip while holding
         if (tooltipUI != null)
             tooltipUI.gameObject.SetActive(false);
@@ -200,6 +250,12 @@ public class PlayerPickUp : MonoBehaviour
 
     void Drop()
     {
+        // Notify PickupableItem component before dropping
+        if (heldPickupableItem != null)
+        {
+            heldPickupableItem.OnDropped();
+        }
+
         // Gentle drop (for inspect mode)
         heldRB.transform.parent = null;
         heldRB.useGravity = true;
@@ -210,6 +266,7 @@ public class PlayerPickUp : MonoBehaviour
 
         heldObject = null;
         heldRB = null;
+        heldPickupableItem = null;
         isInspecting = false;
 
         if (starterAssetsInputs != null)
@@ -221,6 +278,12 @@ public class PlayerPickUp : MonoBehaviour
 
     void Throw()
     {
+        // Notify PickupableItem component before throwing
+        if (heldPickupableItem != null)
+        {
+            heldPickupableItem.OnDropped();
+        }
+
         // Throw with force (for normal holding)
         heldRB.transform.parent = null;
         heldRB.useGravity = true;
@@ -231,6 +294,34 @@ public class PlayerPickUp : MonoBehaviour
 
         heldObject = null;
         heldRB = null;
+        heldPickupableItem = null;
+        isInspecting = false;
+
+        if (starterAssetsInputs != null)
+            starterAssetsInputs.cursorInputForLook = true;
+
+        if (inspectLightObject != null)
+            inspectLightObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Force drops the held object without throwing - used by PickupableItem when consumed
+    /// </summary>
+    public void ForceDropHeldObject()
+    {
+        if (heldObject == null)
+            return;
+
+        // Don't notify PickupableItem since it's the one calling this
+        heldRB.transform.parent = null;
+        heldRB.useGravity = true;
+        heldRB.linearDamping = 0f;
+        heldRB.angularDamping = 0.05f;
+        heldRB.constraints = RigidbodyConstraints.None;
+
+        heldObject = null;
+        heldRB = null;
+        heldPickupableItem = null;
         isInspecting = false;
 
         if (starterAssetsInputs != null)
