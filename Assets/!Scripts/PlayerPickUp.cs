@@ -331,6 +331,74 @@ public class PlayerPickUp : MonoBehaviour
             inspectLightObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Force pickup an object - used by inventory system
+    /// </summary>
+    public void ForcePickUpObject(GameObject obj)
+    {
+        if (obj == null)
+            return;
+
+        // Drop current item if holding one
+        if (heldObject != null)
+        {
+            ForceDropHeldObject();
+        }
+
+        PickUp(obj);
+    }
+
+    /// <summary>
+    /// Drop item in front of player - used by inventory system
+    /// </summary>
+    public void DropInFrontOfPlayer()
+    {
+        if (heldObject == null)
+            return;
+
+        // Notify PickupableItem component before dropping
+        if (heldPickupableItem != null)
+        {
+            heldPickupableItem.OnDropped();
+        }
+
+        heldRB.transform.parent = null;
+        heldRB.useGravity = true;
+        heldRB.linearDamping = 0f;
+        heldRB.angularDamping = 0.05f;
+        heldRB.constraints = RigidbodyConstraints.None;
+
+        // Position in front of player
+        heldRB.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f;
+
+        heldObject = null;
+        heldRB = null;
+        heldPickupableItem = null;
+        isInspecting = false;
+
+        if (starterAssetsInputs != null)
+            starterAssetsInputs.cursorInputForLook = true;
+
+        if (inspectLightObject != null)
+            inspectLightObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Check if player is holding an object
+    /// </summary>
+    public bool IsHoldingObject()
+    {
+        return heldObject != null;
+    }
+
+    /// <summary>
+    /// Get the currently held object
+    /// </summary>
+    public GameObject GetHeldObject()
+    {
+        return heldObject;
+    }
+
     void ToggleInspect()
     {
         isInspecting = !isInspecting;
