@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
+using System.Collections;
 using System.Collections.Generic;
 using StarterAssets;
 
@@ -12,6 +13,13 @@ public class WeaponWheelUI : MonoBehaviour
     public RectTransform wheelCenter;
     public InventoryManager inventoryManager;
     public StarterAssetsInputs starterAssetsInputs;
+
+    [Header("Opening Animation")]
+    [Tooltip("Object to enable during opening (like bag animation)")]
+    public GameObject openingAnimationObject;
+
+    [Tooltip("How long the opening animation plays before showing wheel")]
+    public float openingAnimationDuration = 0.5f;
 
     [Header("Wheel Settings")]
     public Key openWheelKey = Key.Q;
@@ -33,7 +41,9 @@ public class WeaponWheelUI : MonoBehaviour
     public Color specialSlotColor = Color.cyan;
 
     private bool isWheelOpen = false;
+    private bool isPlayingAnimation = false;
     private int currentSelectedSlot = -1;
+    private int lastSelectedSlot = -1; // Remember last selection
     private float errorMessageTimer = 0f;
     private const float ERROR_DISPLAY_TIME = 3f;
 
@@ -59,6 +69,12 @@ public class WeaponWheelUI : MonoBehaviour
             errorText.gameObject.SetActive(false);
         }
 
+        // Hide animation object
+        if (openingAnimationObject != null)
+        {
+            openingAnimationObject.SetActive(false);
+        }
+
         // Hide all hover objects initially
         foreach (var hoverObj in slotHoverObjects)
         {
@@ -81,14 +97,21 @@ public class WeaponWheelUI : MonoBehaviour
             }
         }
 
+        // Don't process input during animation
+        if (isPlayingAnimation)
+            return;
+
         // Open/Close wheel
         if (Keyboard.current != null && Keyboard.current[openWheelKey].isPressed)
         {
             if (!isWheelOpen)
             {
-                OpenWheel();
+                StartCoroutine(OpenWheelWithAnimation());
             }
-            UpdateWheelSelection();
+            else
+            {
+                UpdateWheelSelection();
+            }
         }
         else if (isWheelOpen)
         {
@@ -106,16 +129,9 @@ public class WeaponWheelUI : MonoBehaviour
         }
     }
 
-    void OpenWheel()
+    IEnumerator OpenWheelWithAnimation()
     {
-        isWheelOpen = true;
-
-        if (weaponWheelCanvas != null)
-        {
-            weaponWheelCanvas.alpha = 1f;
-            weaponWheelCanvas.interactable = true;
-            weaponWheelCanvas.blocksRaycasts = true;
-        }
+        isPlayingAnimation = true;
 
         // Store what player was holding
         if (inventoryManager != null)
@@ -133,14 +149,42 @@ public class WeaponWheelUI : MonoBehaviour
         // Slow time
         Time.timeScale = 0.2f;
 
-        // Keep cursor hidden and locked to center
+        // Keep cursor hidden
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
+
+        // Play animation if exists
+        if (openingAnimationObject != null && openingAnimationDuration > 0f)
+        {
+            openingAnimationObject.SetActive(true);
+            yield return new WaitForSecondsRealtime(openingAnimationDuration);
+            openingAnimationObject.SetActive(false);
+        }
+
+        // Now show the wheel
+        OpenWheel();
+
+        isPlayingAnimation = false;
+    }
+
+    void OpenWheel()
+    {
+        isWheelOpen = true;
+
+        if (weaponWheelCanvas != null)
+        {
+            weaponWheelCanvas.alpha = 1f;
+            weaponWheelCanvas.interactable = true;
+            weaponWheelCanvas.blocksRaycasts = true;
+        }
+
+        // Start at last selected slot
+        currentSelectedSlot = lastSelectedSlot;
 
         // Update all slot visuals
         RefreshAllSlots();
 
-        Debug.Log("Weapon wheel opened");
+        Debug.Log($"Weapon wheel opened, starting at slot {currentSelectedSlot}");
     }
 
     void CloseWheel()
@@ -193,14 +237,14 @@ public class WeaponWheelUI : MonoBehaviour
                     inventoryManager.SpawnItemToHands(currentSelectedSlot);
                 }
             }
+
+            // Remember this selection for next time
+            lastSelectedSlot = currentSelectedSlot;
         }
 
         // Lock cursor back
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        // Reset selection
-        currentSelectedSlot = -1;
 
         // Hide all hover objects
         foreach (var hoverObj in slotHoverObjects)
@@ -208,6 +252,9 @@ public class WeaponWheelUI : MonoBehaviour
             if (hoverObj != null)
                 hoverObj.SetActive(false);
         }
+
+        // Reset current selection
+        currentSelectedSlot = -1;
 
         Debug.Log("Weapon wheel closed");
     }
@@ -230,11 +277,7 @@ public class WeaponWheelUI : MonoBehaviour
         float distanceFromCenter = localMousePos.magnitude;
         if (distanceFromCenter < selectionDeadzone)
         {
-            if (currentSelectedSlot != -1)
-            {
-                currentSelectedSlot = -1;
-                RefreshAllSlots();
-            }
+            // Don't change selection in deadzone, keep current
             return;
         }
 
@@ -309,14 +352,18 @@ public class WeaponWheelUI : MonoBehaviour
             slotHoverObjects[slotIndex].SetActive(isSelected);
         }
 
-        // Update icon and quantity
+        // Update icon/object and quantity
         if (category.isAddSlot)
         {
-            // Show ADD text
+            // Hide all item display objects
+            inventoryManager.HideAllDisplayObjectsInCategory(slotIndex);
+
+            // Hide slot icon if it exists
             if (slotIndex < slotIcons.Count && slotIcons[slotIndex] != null)
             {
                 slotIcons[slotIndex].enabled = false;
             }
+
             if (slotIndex < slotQuantityTexts.Count && slotQuantityTexts[slotIndex] != null)
             {
                 slotQuantityTexts[slotIndex].text = "ADD";
@@ -324,11 +371,15 @@ public class WeaponWheelUI : MonoBehaviour
         }
         else if (category.isExitSlot)
         {
-            // Show EXIT text
+            // Hide all item display objects
+            inventoryManager.HideAllDisplayObjectsInCategory(slotIndex);
+
+            // Hide slot icon if it exists
             if (slotIndex < slotIcons.Count && slotIcons[slotIndex] != null)
             {
                 slotIcons[slotIndex].enabled = false;
             }
+
             if (slotIndex < slotQuantityTexts.Count && slotQuantityTexts[slotIndex] != null)
             {
                 slotQuantityTexts[slotIndex].text = "EXIT";
@@ -336,16 +387,28 @@ public class WeaponWheelUI : MonoBehaviour
         }
         else
         {
-            // Show item icon and quantity
+            // Show item display objects or fallback to slot icon
             var currentItem = category.GetCurrentItem();
+            bool hasActiveDisplayObject = false;
 
+            if (currentItem != null)
+            {
+                // Try to show display object for this item
+                hasActiveDisplayObject = inventoryManager.ShowDisplayObjectForItem(slotIndex, currentItem);
+            }
+            else
+            {
+                // No item, hide all display objects in this category
+                inventoryManager.HideAllDisplayObjectsInCategory(slotIndex);
+            }
+
+            // Show slot icon only if no display object is active and icon exists
             if (slotIndex < slotIcons.Count && slotIcons[slotIndex] != null)
             {
-                if (currentItem != null && currentItem.itemIcon != null)
+                if (!hasActiveDisplayObject && slotIcons[slotIndex].sprite != null)
                 {
-                    slotIcons[slotIndex].sprite = currentItem.itemIcon;
                     slotIcons[slotIndex].enabled = true;
-                    slotIcons[slotIndex].color = Color.white; // Ensure icon is visible
+                    slotIcons[slotIndex].color = Color.white;
                 }
                 else
                 {
@@ -353,6 +416,7 @@ public class WeaponWheelUI : MonoBehaviour
                 }
             }
 
+            // Update quantity text
             if (slotIndex < slotQuantityTexts.Count && slotQuantityTexts[slotIndex] != null)
             {
                 if (currentItem != null && currentItem.quantity > 0)

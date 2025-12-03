@@ -10,8 +10,8 @@ public class InventoryManager : MonoBehaviour
         [Tooltip("The prefab of the item")]
         public GameObject itemPrefab;
 
-        [Tooltip("The sprite to show in the UI")]
-        public Sprite itemIcon;
+        [Tooltip("UI GameObject to display for this item (optional - falls back to slot icon if null)")]
+        public GameObject displayObject;
 
         [Tooltip("Which category this item belongs to (0-7)")]
         [Range(0, 7)]
@@ -95,6 +95,15 @@ public class InventoryManager : MonoBehaviour
             categories.Add(new CategorySlot { categoryName = $"Slot {categories.Count + 1}" });
         }
 
+        // Hide all display objects initially
+        foreach (var item in allItems)
+        {
+            if (item.displayObject != null)
+            {
+                item.displayObject.SetActive(false);
+            }
+        }
+
         // Initial setup
         RefreshCategories();
 
@@ -106,6 +115,15 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     public void RefreshCategories()
     {
+        // First, hide ALL display objects
+        foreach (var item in allItems)
+        {
+            if (item.displayObject != null)
+            {
+                item.displayObject.SetActive(false);
+            }
+        }
+
         // Clear all category lists
         foreach (var category in categories)
         {
@@ -132,6 +150,48 @@ public class InventoryManager : MonoBehaviour
         }
 
         Debug.Log("Categories refreshed");
+    }
+
+    /// <summary>
+    /// Show the display object for a specific item and hide all others in that category
+    /// </summary>
+    public bool ShowDisplayObjectForItem(int categoryIndex, InventoryItem item)
+    {
+        if (item == null || categoryIndex < 0 || categoryIndex >= categories.Count)
+            return false;
+
+        // First hide all display objects in this category
+        HideAllDisplayObjectsInCategory(categoryIndex);
+
+        // Show this item's display object if it exists
+        if (item.displayObject != null)
+        {
+            item.displayObject.SetActive(true);
+            Debug.Log($"Showing display object for {item.itemPrefab.name}");
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Hide all display objects in a category
+    /// </summary>
+    public void HideAllDisplayObjectsInCategory(int categoryIndex)
+    {
+        if (categoryIndex < 0 || categoryIndex >= categories.Count)
+            return;
+
+        var category = categories[categoryIndex];
+
+        // Hide display objects for all items in this category
+        foreach (var item in category.availableItems)
+        {
+            if (item.displayObject != null)
+            {
+                item.displayObject.SetActive(false);
+            }
+        }
     }
 
     /// <summary>
