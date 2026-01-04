@@ -3,96 +3,141 @@ using System.Collections;
 
 public class CraftableObject : MonoBehaviour
 {
+    [Header("Crafting Behavior")]
+    public bool destroyOnCraft = true;
+    public bool shrinkOnCraft = true;
+    public int usesBeforeDestroy = 1;
+    public float cooldownTime = 0f;
+
+    [Header("Spawn Override")]
+    public bool useCustomSpawnPoint = false;
+    public Transform customSpawnPoint;
+
+    [Header("Crafting Distance Check")]
+    [Tooltip("How close two objects must be to craft when one is kinematic (e.g., inspecting)")]
+    public float craftDistance = 0.5f;
+
     private bool hasCrafted = false;
+    private bool onCooldown = false;
+    private int usesRemaining;
 
-    private void OnCollisionEnter(Collision collision)
+    private void Awake()
     {
-        if (hasCrafted) return;
+        usesRemaining = usesBeforeDestroy;
+    }
 
-        CraftableObject otherCraft = collision.gameObject.GetComponent<CraftableObject>();
-        if (otherCraft == null) return;
+    private void Update()
+    {
+        if (hasCrafted || onCooldown) return;
 
-        if (CraftingManager.Instance.TryCraft(this.gameObject, otherCraft.gameObject, out GameObject resultPrefab))
+        // Find all CraftableObjects in scene
+        CraftableObject[] allCraftables = FindObjectsOfType<CraftableObject>();
+
+        foreach (var other in allCraftables)
         {
-            hasCrafted = true;
-            otherCraft.hasCrafted = true;
+            if (other == this || other.hasCrafted || other.onCooldown) continue;
 
-            // Midpoint between the two ingredients
-            Vector3 spawnPos = (transform.position + otherCraft.transform.position) / 2f;
+            float distance = Vector3.Distance(transform.position, other.transform.position);
+            if (distance <= craftDistance)
+            {
+                if (CraftingManager.Instance.TryCraft(gameObject, other.gameObject, out GameObject resultPrefab))
+                {
+                    hasCrafted = true;
+                    other.hasCrafted = true;
 
-            StartCoroutine(CraftSequence(otherCraft.gameObject, resultPrefab, spawnPos));
+                    Vector3 spawnPos = DetermineSpawnPosition(other);
+                    StartCoroutine(CraftSequence(other, resultPrefab, spawnPos));
+                    break;
+                }
+            }
         }
     }
 
-    private IEnumerator CraftSequence(GameObject other, GameObject resultPrefab, Vector3 spawnPos)
+    private Vector3 DetermineSpawnPosition(CraftableObject other)
     {
-        // Read global timing from CraftingManager
+        if (useCustomSpawnPoint && customSpawnPoint != null) return customSpawnPoint.position;
+        if (other.useCustomSpawnPoint && other.customSpawnPoint != null) return other.customSpawnPoint.position;
+        return (transform.position + other.transform.position) * 0.5f;
+    }
+
+    private IEnumerator CraftSequence(CraftableObject other, GameObject resultPrefab, Vector3 spawnPos)
+    {
         float anticipationTime = CraftingManager.Instance.anticipationTime;
         float shrinkTime = CraftingManager.Instance.shrinkTime;
         float fadeInTime = CraftingManager.Instance.fadeInTime;
 
-        // Freeze physics
         Rigidbody rbA = GetComponent<Rigidbody>();
         Rigidbody rbB = other.GetComponent<Rigidbody>();
+
         if (rbA) rbA.isKinematic = true;
         if (rbB) rbB.isKinematic = true;
 
-        // --- Anticipation delay ---
         yield return new WaitForSeconds(anticipationTime);
 
-        // --- Shrink ingredients ---
         float t = 0f;
         Vector3 startScaleA = transform.localScale;
         Vector3 startScaleB = other.transform.localScale;
+
         while (t < shrinkTime)
         {
             t += Time.deltaTime;
             float s = Mathf.SmoothStep(1f, 0f, t / shrinkTime);
-            transform.localScale = startScaleA * s;
-            other.transform.localScale = startScaleB * s;
+
+            if (shrinkOnCraft) transform.localScale = startScaleA * s;
+            if (other.shrinkOnCraft) other.transform.localScale = startScaleB * s;
+
             yield return null;
         }
 
-        // --- Determine safe spawn position ---
-        Vector3 safeSpawn = spawnPos + Vector3.up * 0.5f;
+        Vector3 safeSpawn = spawnPos + Vector3.up * 0.02f;
 
-        // --- Spawn puff VFX BEFORE destroying ingredients ---
         if (CraftingManager.Instance.craftVFX != null)
             Instantiate(CraftingManager.Instance.craftVFX, safeSpawn, Quaternion.identity);
 
-        // --- Trigger SFX & popup immediately ---
         CraftingManager.Instance.SpawnCraftFeedback(resultPrefab, safeSpawn);
 
-        // Destroy ingredients
-        Destroy(this.gameObject);
-        Destroy(other);
+        HandlePostCraft(startScaleA);
+        other.HandlePostCraft(startScaleB);
 
-        // --- Spawn crafted prefab ---
         GameObject crafted = Instantiate(resultPrefab, safeSpawn, Quaternion.identity);
         Vector3 prefabScale = resultPrefab.transform.localScale;
-        crafted.transform.localScale = prefabScale * 0.8f; // start smaller for fade-in
+        crafted.transform.localScale = prefabScale * 0.8f;
 
-        // --- Optional progress bar ---
-        if (CraftingManager.Instance.progressBar != null)
-        {
-            CraftingManager.Instance.progressBar.gameObject.SetActive(true);
-            CraftingManager.Instance.progressBar.fillAmount = 0f;
-        }
-
-        // --- Fade-in / bounce effect ---
         yield return StartCoroutine(ScaleBounceEffect(crafted.transform, prefabScale, fadeInTime));
-
-        // Hide progress bar
-        if (CraftingManager.Instance.progressBar != null)
-            CraftingManager.Instance.progressBar.gameObject.SetActive(false);
-
-        Debug.Log("Crafted prefab spawned: " + crafted.name + " at " + safeSpawn);
     }
 
-    // Smooth bounce/fade-in effect relative to prefab's original scale
+    private void HandlePostCraft(Vector3 originalScale)
+    {
+        if (usesRemaining > 0) usesRemaining--;
+        bool shouldDestroy = destroyOnCraft && usesRemaining == 0;
+
+        if (shouldDestroy)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        if (shrinkOnCraft) transform.localScale = originalScale;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb) rb.isKinematic = false;
+
+        hasCrafted = false;
+
+        if (cooldownTime > 0f) StartCoroutine(CooldownRoutine());
+    }
+
+    private IEnumerator CooldownRoutine()
+    {
+        onCooldown = true;
+        yield return new WaitForSeconds(cooldownTime);
+        onCooldown = false;
+    }
+
     private IEnumerator ScaleBounceEffect(Transform target, Vector3 originalScale, float duration)
     {
         float t = 0f;
+
         while (t < duration)
         {
             t += Time.deltaTime;
@@ -101,6 +146,7 @@ public class CraftableObject : MonoBehaviour
             target.localScale = originalScale * scaleFactor;
             yield return null;
         }
+
         target.localScale = originalScale;
     }
 }
