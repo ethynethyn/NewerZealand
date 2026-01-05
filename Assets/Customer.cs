@@ -15,8 +15,8 @@ public class Customer : MonoBehaviour
     public class OrderConfig
     {
         public GameObject orderPrefab; // The order GameObject
-        public GameObject docketPrefab; // The docket to display to player
         public Transform orderSpawnLocation; // Specific position to spawn the order
+        public Sprite orderImage; // Image to display on docket (drink picture, etc)
     }
 
     [Header("Order Configuration")]
@@ -27,7 +27,7 @@ public class Customer : MonoBehaviour
 
     private Transform targetChair;
     private GameObject currentOrder;
-    private GameObject currentDocket;
+    private Docket currentDocket;
     private float waitTimer = 0f;
     private bool isWaiting = false;
     private bool isLeaving = false;
@@ -37,6 +37,7 @@ public class Customer : MonoBehaviour
     private bool hasClaimedChair = false;
     private float floorTimer = 0f;
     private bool isOnFloor = false;
+    private int tableNumber = 0;
 
     // Static tracker of which chairs are claimed
     private static Dictionary<Transform, Customer> claimedChairs = new Dictionary<Transform, Customer>();
@@ -87,11 +88,14 @@ public class Customer : MonoBehaviour
         isOnFloor = true;
         floorTimer = 0f;
 
+        // Randomize floor wander duration per customer (between 60-80% and 120-140% of base)
+        float randomizedDuration = floorWanderDuration * Random.Range(0.6f, 1.4f);
+
         // Wander on floor
         WanderFloor();
 
-        // Wait for floor duration
-        yield return new WaitForSeconds(floorWanderDuration);
+        // Wait for randomized floor duration
+        yield return new WaitForSeconds(randomizedDuration);
 
         isOnFloor = false;
 
@@ -191,6 +195,7 @@ public class Customer : MonoBehaviour
             if (targetChair != null && Vector3.Distance(transform.position, targetChair.position) < 0.2f)
             {
                 isSeated = true;
+                AssignTableNumber();
                 OrderFood();
             }
 
@@ -198,6 +203,19 @@ public class Customer : MonoBehaviour
         }
 
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * lerpSpeed);
+    }
+
+    void AssignTableNumber()
+    {
+        // Find which chair index this is
+        for (int i = 0; i < chairLocations.Length; i++)
+        {
+            if (chairLocations[i] == targetChair)
+            {
+                tableNumber = i + 1; // Tables numbered 1, 2, 3, etc
+                break;
+            }
+        }
     }
 
     void OrderFood()
@@ -231,9 +249,10 @@ public class Customer : MonoBehaviour
             return;
         }
 
-        // Spawn docket at chair
-        if (selectedOrder.docketPrefab != null)
-            currentDocket = Instantiate(selectedOrder.docketPrefab, targetChair.position + Vector3.up, Quaternion.identity);
+        // Create docket and add to manager
+        string orderName = selectedOrder.orderPrefab.name.Replace("(Clone)", "").Trim();
+        currentDocket = new Docket(tableNumber, orderName, currentOrder, selectedOrder.orderImage);
+        DocketManager.Get().AddDocket(currentDocket);
 
         isWaiting = true;
         waitTimer = 0f;
@@ -246,7 +265,7 @@ public class Customer : MonoBehaviour
         {
             Debug.Log("Customer: currentOrder is null, leaving");
             if (currentDocket != null)
-                Destroy(currentDocket);
+                DocketManager.Get().RemoveDocket(currentDocket);
 
             Leave();
             return;
@@ -257,7 +276,7 @@ public class Customer : MonoBehaviour
             Debug.Log("Customer: Order completed/disabled, leaving");
             // Order was completed/taken
             if (currentDocket != null)
-                Destroy(currentDocket);
+                DocketManager.Get().RemoveDocket(currentDocket);
 
             Leave();
             return;
@@ -273,7 +292,7 @@ public class Customer : MonoBehaviour
                 Destroy(currentOrder);
 
             if (currentDocket != null)
-                Destroy(currentDocket);
+                DocketManager.Get().RemoveDocket(currentDocket);
 
             // Decrease strikes on player
             if (playerCharacter != null)
