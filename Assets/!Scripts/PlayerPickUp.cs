@@ -120,6 +120,7 @@ public class PlayerPickUp : MonoBehaviour
             TryPickUp(targetObject);
         }
 
+
         // Toggle inspect with configurable input
         if (heldObject && GetKeyPressed(inspectKey, useMouseRightForInspect, Mouse.current.rightButton))
         {
@@ -185,7 +186,7 @@ public class PlayerPickUp : MonoBehaviour
         return keyPressed;
     }
 
-    void TryPickUp(GameObject obj)
+    public void TryPickUp(GameObject obj)
     {
         Weight weight = obj.GetComponent<Weight>();
         if (weight != null && !weight.TryPickupCheck())
@@ -210,7 +211,9 @@ public class PlayerPickUp : MonoBehaviour
         UpdateTooltipText();
     }
 
-    void PickUp(GameObject obj)
+  
+
+    public void PickUp(GameObject obj)
     {
         Debug.Log("Picked up: " + obj.name);
 

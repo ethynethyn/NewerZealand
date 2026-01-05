@@ -100,10 +100,8 @@ public class CraftableObject : MonoBehaviour
         other.HandlePostCraft(startScaleB);
 
         GameObject crafted = Instantiate(resultPrefab, safeSpawn, Quaternion.identity);
-        Vector3 prefabScale = resultPrefab.transform.localScale;
-        crafted.transform.localScale = prefabScale * 0.8f;
-
-        yield return StartCoroutine(ScaleBounceEffect(crafted.transform, prefabScale, fadeInTime));
+        // Always spawn crafted object at full prefab scale - no shrinking for the result
+        crafted.transform.localScale = resultPrefab.transform.localScale;
     }
 
     private void HandlePostCraft(Vector3 originalScale)

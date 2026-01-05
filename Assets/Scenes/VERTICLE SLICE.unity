@@ -15288,10 +15288,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pint
       objectReference: {fileID: 0}
-    - target: {fileID: 3727736874926250581, guid: 9fa7b73069068704f84ce94c9f872fd2, type: 3}
-      propertyPath: m_Mass
-      value: 15
-      objectReference: {fileID: 0}
+    - target: {fileID: 7656239177107930864, guid: 9fa7b73069068704f84ce94c9f872fd2, type: 3}
+      propertyPath: playerPickUp
+      value: 
+      objectReference: {fileID: 2028921036}
     - target: {fileID: 7656239177107930864, guid: 9fa7b73069068704f84ce94c9f872fd2, type: 3}
       propertyPath: customSpawnPoint
       value: 
@@ -30370,6 +30370,11 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &1134205783 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4135013735270702863, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+  m_PrefabInstance: {fileID: 5393215579111688471}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1135225153
 GameObject:
   m_ObjectHideFlags: 0
@@ -50468,7 +50473,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e320ce8f4eeb77b4ea563f218afdbb2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 0}
 --- !u!1001 &1904252363
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74970,12 +74974,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: MoveSpeed
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: diveSpeed
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: CameraRoot
+      value: 
+      objectReference: {fileID: 1134205783}
     - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: JumpHeight
       value: 0.8
@@ -74986,7 +74994,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: SprintSpeed
-      value: 6.5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: maxBhopSpeed
@@ -75005,8 +75013,16 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: CrouchCameraHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: GroundLayers.m_Bits
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: StandingCameraHeight
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_Name
@@ -83462,7 +83478,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: dda645ff8477c634693b85d8ec1d3e96, type: 3}
 --- !u!1 &8416272007278236158

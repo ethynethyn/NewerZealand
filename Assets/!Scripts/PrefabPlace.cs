@@ -7,7 +7,8 @@ public class PrefabPlace : MonoBehaviour
     [Header("Trigger Settings")]
     public string requiredLayerName = "Pickup";
     public GameObject requiredPrefab;
-    public bool destroyObjectOnSuccess = true;
+    public bool destroyObjectOnSuccess = true;   // Destroy the collected prefab
+    public bool destroyTriggerOnSuccess = false; // Destroy this trigger itself when completed
 
     [Header("UI Settings")]
     public TextMeshProUGUI messageUI;
@@ -69,16 +70,37 @@ public class PrefabPlace : MonoBehaviour
         if (requiredPrefab != null && !MatchesPrefab(other.gameObject))
             return;
 
+        // Prevent double triggering
+        if (!enabled) return;
+        enabled = false; // disable this script immediately to block retriggers
+
         JobOutcome selectedOutcome = RunRandomOutcome();
 
         if (selectedOutcome != null)
-            ApplyOutcome(selectedOutcome);
+            StartCoroutine(HandleOutcome(selectedOutcome, other));
+    }
 
+    private System.Collections.IEnumerator HandleOutcome(JobOutcome outcome, Collider other)
+    {
+        ApplyOutcome(outcome);
         ProcessPostCompletionObjects();
 
+        // Destroy the collected prefab if needed
         if (destroyObjectOnSuccess)
             Destroy(other.gameObject);
+
+        // Wait for message UI to finish
+        if (messageUI != null)
+            yield return new WaitForSeconds(messageTime);
+
+        // Destroy this trigger if needed
+        if (destroyTriggerOnSuccess)
+            Destroy(gameObject);
+        else
+            enabled = true; // re-enable the script if we want it reusable
     }
+
+
 
     bool MatchesPrefab(GameObject obj)
     {
