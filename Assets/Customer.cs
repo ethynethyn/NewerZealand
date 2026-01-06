@@ -15,7 +15,6 @@ public class Customer : MonoBehaviour
     public class OrderConfig
     {
         public GameObject orderPrefab; // The order GameObject
-        public Transform orderSpawnLocation; // Specific position to spawn the order
         public Sprite orderImage; // Image to display on docket (drink picture, etc)
     }
 
@@ -235,12 +234,11 @@ public class Customer : MonoBehaviour
         {
             Quaternion orderRotation = Quaternion.Euler(-90, 0, 0);
 
-            if (selectedOrder.orderSpawnLocation != null)
-                currentOrder = Instantiate(selectedOrder.orderPrefab, selectedOrder.orderSpawnLocation.position, orderRotation);
-            else
-                currentOrder = Instantiate(selectedOrder.orderPrefab, targetChair.position + Vector3.up, orderRotation);
+            // Always spawn at the customer's table (chair location)
+            Vector3 spawnPos = targetChair.position + new Vector3(0, 0.03f, 0); // Adjust Y offset as needed
+            currentOrder = Instantiate(selectedOrder.orderPrefab, spawnPos, orderRotation);
 
-            Debug.Log($"Customer spawned order at {currentOrder.transform.position}, Active: {currentOrder.activeSelf}");
+            Debug.Log($"Customer spawned order at Table {tableNumber} ({currentOrder.transform.position}), Active: {currentOrder.activeSelf}");
         }
         else
         {
