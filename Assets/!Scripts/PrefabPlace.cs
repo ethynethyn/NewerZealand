@@ -136,10 +136,20 @@ public class PrefabPlace : MonoBehaviour
 
     void ApplyOutcome(JobOutcome outcome)
     {
+        NightRecapManager recapManager = FindObjectOfType<NightRecapManager>();
+
         foreach (StatChange change in outcome.statChanges)
         {
             if (change.targetCharacter != null)
+            {
+                // Track money earnings BEFORE applying the stat change
+                if (change.statName == "Money" && change.amount > 0 && recapManager != null)
+                {
+                    recapManager.AddEarnings(change.amount);
+                }
+
                 change.targetCharacter.ModifyStat(change.statName, change.amount);
+            }
         }
 
         if (messageUI != null)

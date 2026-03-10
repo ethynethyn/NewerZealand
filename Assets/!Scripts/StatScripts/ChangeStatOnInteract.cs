@@ -82,6 +82,8 @@ public class StatInteractionTrigger : MonoBehaviour
             return;
         }
 
+        NightRecapManager recapManager = FindObjectOfType<NightRecapManager>();
+
         // Check for cost
         if (requireCost)
         {
@@ -94,6 +96,12 @@ public class StatInteractionTrigger : MonoBehaviour
             }
             else
             {
+                // Track money spending BEFORE applying the stat change
+                if (costStat == "Money" && recapManager != null)
+                {
+                    recapManager.AddExpense(costAmount);
+                }
+
                 targetCharacter.ModifyStat(costStat, -costAmount);
             }
         }

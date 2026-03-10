@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8706517701977851875}
   - component: {fileID: 643427453414279841}
   - component: {fileID: 8743392283714957667}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BeerGlass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -205,7 +205,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee95ee93964738741a990deaafde353b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyOnCraft: 0
+  destroyOnCraft: 1
   shrinkOnCraft: 1
-  usesBeforeDestroy: -1
+  usesBeforeDestroy: 1
   cooldownTime: 0
+  useCustomSpawnPoint: 0
+  customSpawnPoint: {fileID: 0}
+  craftDistance: 0.5
