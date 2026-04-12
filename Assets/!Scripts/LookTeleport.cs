@@ -8,6 +8,11 @@ public class LookTeleport : MonoBehaviour
     public Camera playerCamera;
     public FirstPersonController playerController;
 
+    [Header("Time Control (Optional)")]
+    public Character worldCharacter;
+    public string timeStatName = "Time";
+    public bool toggleTimeOnTeleport = false;
+
     [Header("Teleport Settings")]
     public Transform teleportTarget; // Assign the empty for the teleport location
     public float maxDistance = 20f;  // Max raycast distance
@@ -20,6 +25,13 @@ public class LookTeleport : MonoBehaviour
     private Vector3 targetPosition;
     private Quaternion targetRotation;
 
+    private CharacterStat cachedTimeStat;
+
+    private void Start()
+    {
+        CacheTimeStat();
+    }
+
     private void Update()
     {
         HandleTeleportInput();
@@ -28,8 +40,17 @@ public class LookTeleport : MonoBehaviour
         {
             if (useSmoothTeleport)
             {
-                playerController.transform.position = Vector3.Lerp(playerController.transform.position, targetPosition, Time.deltaTime * smoothSpeed);
-                playerController.transform.rotation = Quaternion.Slerp(playerController.transform.rotation, targetRotation, Time.deltaTime * smoothSpeed);
+                playerController.transform.position = Vector3.Lerp(
+                    playerController.transform.position,
+                    targetPosition,
+                    Time.deltaTime * smoothSpeed
+                );
+
+                playerController.transform.rotation = Quaternion.Slerp(
+                    playerController.transform.rotation,
+                    targetRotation,
+                    Time.deltaTime * smoothSpeed
+                );
 
                 if (Vector3.Distance(playerController.transform.position, targetPosition) < 0.01f)
                     FinishTeleport();
@@ -41,11 +62,26 @@ public class LookTeleport : MonoBehaviour
         }
     }
 
+    private void CacheTimeStat()
+    {
+        if (worldCharacter == null) return;
+
+        foreach (var stat in worldCharacter.stats)
+        {
+            if (stat.definition != null && stat.definition.statName == timeStatName)
+            {
+                cachedTimeStat = stat;
+                break;
+            }
+        }
+    }
+
     private void HandleTeleportInput()
     {
         if (Keyboard.current[teleportKey].wasPressedThisFrame)
         {
             Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+
             if (Physics.Raycast(ray, out RaycastHit hit, maxDistance))
             {
                 if (hit.collider.gameObject == gameObject)
@@ -61,10 +97,18 @@ public class LookTeleport : MonoBehaviour
         if (teleportTarget == null) return;
 
         targetPosition = teleportTarget.position;
-        targetRotation = maintainRotation ? playerController.transform.rotation : teleportTarget.rotation;
+        targetRotation = maintainRotation
+            ? playerController.transform.rotation
+            : teleportTarget.rotation;
 
         if (playerController != null)
             playerController.enabled = false;
+
+        //  ONLY toggle time if enabled
+        if (toggleTimeOnTeleport && cachedTimeStat != null)
+        {
+            cachedTimeStat.autoChangeEnabled = !cachedTimeStat.autoChangeEnabled;
+        }
 
         isTeleporting = true;
 
@@ -78,6 +122,7 @@ public class LookTeleport : MonoBehaviour
     private void FinishTeleport()
     {
         isTeleporting = false;
+
         if (playerController != null)
             playerController.enabled = true;
     }
