@@ -155,6 +155,7 @@ GameObject:
   - component: {fileID: 7991943436393425599}
   - component: {fileID: 8719853216263011717}
   - component: {fileID: 5627702974841138727}
+  - component: {fileID: 958472117429666250}
   m_Layer: 3
   m_Name: RED
   m_TagString: Untagged
@@ -170,10 +171,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3524313206497570020}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 81, y: 1, z: -81}
-  m_LocalScale: {x: 0.52271926, y: 0.46589464, z: 0.5886418}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5227194, y: 0.46589464, z: 0.5886418}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6747146237074117060}
   m_Father: {fileID: 0}
@@ -297,7 +298,7 @@ MonoBehaviour:
   cooldownTime: 0
   useCustomSpawnPoint: 0
   customSpawnPoint: {fileID: 0}
-  craftDistance: 0.5
+  craftDistance: 1
 --- !u!114 &7991943436393425599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,7 +348,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 0
   idleObjects: []
-  interactionObjects:
-  - {fileID: 869712279691168231}
+  interactionObjects: []
   interactionDuration: 3
   cooldownDuration: 5
+--- !u!114 &958472117429666250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3524313206497570020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f064ac2dc01f2cf42904e235e7597564, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scale: {x: 0.5227194, y: 0.4658946, z: 0.5886418}

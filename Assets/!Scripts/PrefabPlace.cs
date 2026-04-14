@@ -7,8 +7,9 @@ public class PrefabPlace : MonoBehaviour
     [Header("Trigger Settings")]
     public string requiredLayerName = "Pickup";
     public GameObject requiredPrefab;
-    public bool destroyObjectOnSuccess = true;   // Destroy the collected prefab
-    public bool destroyTriggerOnSuccess = false; // Destroy this trigger itself when completed
+    public bool destroyObjectOnSuccess = true;
+    public bool deactivateTriggerOnSuccess = false; // NEW
+    public bool destroyTriggerOnSuccess = false;
 
     [Header("UI Settings")]
     public TextMeshProUGUI messageUI;
@@ -70,9 +71,8 @@ public class PrefabPlace : MonoBehaviour
         if (requiredPrefab != null && !MatchesPrefab(other.gameObject))
             return;
 
-        // Prevent double triggering
         if (!enabled) return;
-        enabled = false; // disable this script immediately to block retriggers
+        enabled = false;
 
         JobOutcome selectedOutcome = RunRandomOutcome();
 
@@ -85,22 +85,27 @@ public class PrefabPlace : MonoBehaviour
         ApplyOutcome(outcome);
         ProcessPostCompletionObjects();
 
-        // Destroy the collected prefab if needed
+        //  THIS IS YOUR ORIGINAL OBJECT LOGIC (RESTORED)
         if (destroyObjectOnSuccess)
             Destroy(other.gameObject);
 
-        // Wait for message UI to finish
         if (messageUI != null)
             yield return new WaitForSeconds(messageTime);
 
-        // Destroy this trigger if needed
-        if (destroyTriggerOnSuccess)
+        //  NEW: trigger handling (safe, separate)
+        if (deactivateTriggerOnSuccess)
+        {
+            gameObject.SetActive(false);
+        }
+        else if (destroyTriggerOnSuccess)
+        {
             Destroy(gameObject);
+        }
         else
-            enabled = true; // re-enable the script if we want it reusable
+        {
+            enabled = true;
+        }
     }
-
-
 
     bool MatchesPrefab(GameObject obj)
     {
@@ -111,12 +116,6 @@ public class PrefabPlace : MonoBehaviour
 
     JobOutcome RunRandomOutcome()
     {
-        if (outcomes.Count == 0)
-        {
-            Debug.LogWarning("No outcomes set on " + name);
-            return null;
-        }
-
         float totalChance = 0f;
         foreach (JobOutcome o in outcomes)
             totalChance += o.chance;
@@ -142,11 +141,8 @@ public class PrefabPlace : MonoBehaviour
         {
             if (change.targetCharacter != null)
             {
-                // Track money earnings BEFORE applying the stat change
                 if (change.statName == "Money" && change.amount > 0 && recapManager != null)
-                {
                     recapManager.AddEarnings(change.amount);
-                }
 
                 change.targetCharacter.ModifyStat(change.statName, change.amount);
             }
