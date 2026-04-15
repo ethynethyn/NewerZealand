@@ -4,27 +4,38 @@ using UnityEngine;
 public class CashConvertersDesk : MonoBehaviour
 {
     [Header("References")]
-    [Tooltip("Drag the GameObject with the Character script here.")]
     public Character playerCharacter;
-
-    [Tooltip("The object that activates selling.")]
     public GameObject sellActivationObject;
 
     [Header("Settings")]
-    [Tooltip("The stat to increase when selling items.")]
     public string currencyStatName = "Money";
 
     private List<Value> itemsOnCounter = new List<Value>();
+    private List<BackpackWorldObject> bagsOnCounter = new List<BackpackWorldObject>();
+
     private bool hasSold = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        // Detect any object with a Value component
+        // -----------------------------
+        // NORMAL ITEMS
+        // -----------------------------
         Value item = other.GetComponent<Value>();
         if (item != null && !itemsOnCounter.Contains(item))
         {
             itemsOnCounter.Add(item);
-            Debug.Log($"Added item to counter: {item.itemName} (worth {item.value})");
+            Debug.Log("Added item: " + item.itemName);
+            return;
+        }
+
+        // -----------------------------
+        // BACKPACKS (STORE, DON'T SELL YET)
+        // -----------------------------
+        BackpackWorldObject bag = other.GetComponent<BackpackWorldObject>();
+        if (bag != null && bag.storage != null && !bagsOnCounter.Contains(bag))
+        {
+            bagsOnCounter.Add(bag);
+            Debug.Log("Backpack placed on counter");
         }
     }
 
@@ -34,7 +45,12 @@ public class CashConvertersDesk : MonoBehaviour
         if (item != null && itemsOnCounter.Contains(item))
         {
             itemsOnCounter.Remove(item);
-            Debug.Log($"Removed item from counter: {item.itemName}");
+        }
+
+        BackpackWorldObject bag = other.GetComponent<BackpackWorldObject>();
+        if (bag != null && bagsOnCounter.Contains(bag))
+        {
+            bagsOnCounter.Remove(bag);
         }
     }
 
@@ -42,10 +58,9 @@ public class CashConvertersDesk : MonoBehaviour
     {
         if (sellActivationObject != null && sellActivationObject.activeSelf && !hasSold)
         {
-            SellItems();
+            SellAll();
             hasSold = true;
 
-            // Deactivate the sell activation object after sale
             sellActivationObject.SetActive(false);
         }
 
@@ -55,27 +70,63 @@ public class CashConvertersDesk : MonoBehaviour
         }
     }
 
-    private void SellItems()
+    // -----------------------------
+    // SELL EVERYTHING
+    // -----------------------------
+    private void SellAll()
     {
         if (playerCharacter == null)
         {
-            Debug.LogWarning("PawnShop: Player Character not assigned in Inspector!");
+            Debug.LogWarning("PlayerCharacter not assigned!");
             return;
         }
 
         float totalValue = 0f;
+
+        // SELL NORMAL ITEMS
         foreach (var item in itemsOnCounter)
         {
+            if (item == null) continue;
+
             totalValue += item.value;
             Destroy(item.gameObject);
         }
 
         itemsOnCounter.Clear();
 
+        // SELL BACKPACK CONTENTS
+        foreach (var bag in bagsOnCounter)
+        {
+            if (bag == null || bag.storage == null) continue;
+
+            List<GameObject> items = bag.storage.storedItems;
+
+            foreach (GameObject obj in items)
+            {
+                if (obj == null) continue;
+
+                Value val = obj.GetComponent<Value>();
+                if (val != null)
+                {
+                    totalValue += val.value;
+                }
+
+                Destroy(obj);
+            }
+
+            items.Clear();
+
+            // Optional: destroy the bag itself after selling
+            // Destroy(bag.gameObject);
+        }
+
+        bagsOnCounter.Clear();
+
+        // GIVE MONEY
         if (totalValue > 0)
         {
             playerCharacter.ModifyStat(currencyStatName, totalValue);
-            Debug.Log($"Sold items for {totalValue}. Added to {playerCharacter.characterName}'s {currencyStatName} stat.");
+            Debug.Log("Sold everything for: " + totalValue);
         }
     }
 }

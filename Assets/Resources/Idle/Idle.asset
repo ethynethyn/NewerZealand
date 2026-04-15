@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77cb0a652cf59094d8a0d9a33e629179, type: 3}
+  m_Name: Idle
+  m_EditorClassIdentifier: 
+  frames:
+  - {fileID: 21300000, guid: ff2bdd5b25e013447b74b9d854058c2b, type: 3}
+  - {fileID: 21300000, guid: 61eaba9ede1a439488bcb7c888c9366f, type: 3}
+  - {fileID: 21300000, guid: 9cb19e5033706204c88cc3610e08bdbd, type: 3}
+  - {fileID: 21300000, guid: 469ab5c3630c05b4c8b1700b256295d6, type: 3}
+  frameRate: 0.15
