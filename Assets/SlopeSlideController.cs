@@ -49,10 +49,6 @@ public class SlopeSlideController : MonoBehaviour
     private Vector3 grindDirection;
     private float currentGrindSpeed;
 
-    // ---------------- GRIND EXIT STATE ----------------
-    private bool justExitedGrind;
-    private float exitSpeedCap;
-
     void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -68,8 +64,10 @@ public class SlopeSlideController : MonoBehaviour
 
     public void StartGrind(Vector3 start, Vector3 end)
     {
+        // Require Shift
+        if (!Input.GetKey(slideKey)) return;
+
         isGrinding = true;
-        justExitedGrind = false;
 
         Vector3 railDir = (end - start).normalized;
 
@@ -87,17 +85,18 @@ public class SlopeSlideController : MonoBehaviour
 
     public void EndGrind()
     {
+        if (!isGrinding) return;
+
         isGrinding = false;
-        justExitedGrind = true;
 
+        // 🔥 THIS IS THE IMPORTANT PART
+        // Use current speed as temporary cap
         Vector3 flat = new Vector3(momentum.x, 0f, momentum.z);
-
-        exitSpeedCap = Mathf.Max(flat.magnitude, maxSpeed);
-        currentSpeedCap = exitSpeedCap;
+        currentSpeedCap = Mathf.Max(flat.magnitude, maxSpeed);
     }
 
     // =========================================================
-    // SKATEBOARD ROTATION VISUAL
+    // SKATEBOARD VISUAL
     // =========================================================
 
     private void UpdateSkateboardRotation()
@@ -108,22 +107,12 @@ public class SlopeSlideController : MonoBehaviour
         float d = Input.GetKey(KeyCode.D) ? 1f : 0f;
         float w = Input.GetKey(KeyCode.W) ? 1f : 0f;
 
-        // Base lateral input
         float turnInput = a + d;
-
-        // W pulls stance back toward forward (reduces extreme turning)
         float forwardBias = 1f - (w * 0.5f);
-
-        // Apply bias so W+A / W+D naturally land in-between
         turnInput *= forwardBias;
 
-        // Clamp so we stay stable
         turnInput = Mathf.Clamp(turnInput, -1f, 1f);
 
-        // Convert to angle:
-        // 0 = forward
-        // ±0.5 = half turn
-        // ±1 = full turn
         float targetYaw = turnInput * maxTurnAngle;
 
         Quaternion targetRotation = Quaternion.Euler(0f, targetYaw, 0f);
@@ -143,17 +132,19 @@ public class SlopeSlideController : MonoBehaviour
     {
         bool isSliding = Input.GetKey(slideKey);
 
-        // ---------------- SKATEBOARD VISUAL TOGGLE ----------------
-        if (skateboardObject != null)
+        // Exit grind if Shift released
+        if (isGrinding && !isSliding)
         {
-            if (skateboardObject.activeSelf != isSliding)
-                skateboardObject.SetActive(isSliding);
+            EndGrind();
         }
 
-        // rotation update (only visual)
+        // ---------------- VISUAL ----------------
+        if (skateboardObject != null)
+            skateboardObject.SetActive(isSliding);
+
         UpdateSkateboardRotation();
 
-        // ---------------- GRIND MODE ----------------
+        // ---------------- GRIND ----------------
         if (isGrinding)
         {
             currentGrindSpeed = Mathf.Lerp(
@@ -171,12 +162,23 @@ public class SlopeSlideController : MonoBehaviour
                 grindRotationSpeed * Time.deltaTime
             );
 
-            Vector3 flat = Vector3.Project(momentum, grindDirection);
-            flat = Vector3.ClampMagnitude(flat, downhillMaxSpeed);
-            momentum = flat;
-
             Vector3 move = momentum;
             move.y = verticalVelocity;
+            return move;
+        }
+
+        // ---------------- WALK ----------------
+        if (!isSliding)
+        {
+            // instantly return to walk cap
+            currentSpeedCap = maxSpeed;
+
+            momentum = Vector3.Lerp(momentum, Vector3.zero, friction * Time.deltaTime);
+
+            Vector3 move = baseMove;
+            move.y = verticalVelocity;
+
+            wasSlidingLastFrame = false;
             return move;
         }
 
@@ -186,36 +188,6 @@ public class SlopeSlideController : MonoBehaviour
             Vector3 v = controller.velocity;
             v.y = 0f;
             momentum = v;
-        }
-
-        // ---------------- SLIDE END ----------------
-        if (!isSliding && !justExitedGrind)
-        {
-            momentum = Vector3.Lerp(momentum, Vector3.zero, friction * Time.deltaTime);
-            currentSpeedCap = Mathf.Lerp(currentSpeedCap, maxSpeed, speedReturnLerp * Time.deltaTime);
-
-            Vector3 move = baseMove;
-            move.y = verticalVelocity;
-
-            wasSlidingLastFrame = false;
-            return move;
-        }
-
-        // ---------------- GRIND EXIT RECOVERY ----------------
-        if (justExitedGrind)
-        {
-            Vector3 flat = new Vector3(momentum.x, 0f, momentum.z);
-
-            float exitTargetCap = maxSpeed;
-            currentSpeedCap = Mathf.Lerp(currentSpeedCap, exitTargetCap, speedReturnLerp * Time.deltaTime);
-
-            float speed = flat.magnitude;
-            speed = Mathf.Lerp(speed, currentSpeedCap, speedReturnLerp * Time.deltaTime);
-
-            if (speed <= maxSpeed + 0.1f)
-                justExitedGrind = false;
-
-            momentum = flat.normalized * speed;
         }
 
         // ---------------- SLOPE DETECTION ----------------
@@ -238,7 +210,16 @@ public class SlopeSlideController : MonoBehaviour
             Vector3.Dot(smoothSlopeDir, transform.forward) > 0.2f;
 
         float targetCap = isOnDownhill ? downhillMaxSpeed : maxSpeed;
-        currentSpeedCap = Mathf.Lerp(currentSpeedCap, targetCap, speedReturnLerp * Time.deltaTime);
+
+        // 🔥 KEY LOGIC: only reduce cap if above target
+        if (currentSpeedCap > targetCap)
+        {
+            currentSpeedCap = Mathf.Lerp(currentSpeedCap, targetCap, speedReturnLerp * Time.deltaTime);
+        }
+        else
+        {
+            currentSpeedCap = targetCap;
+        }
 
         // ---------------- MOMENTUM ----------------
         if (grounded)
