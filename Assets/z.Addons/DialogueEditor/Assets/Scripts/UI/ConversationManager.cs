@@ -513,15 +513,17 @@ namespace DialogueEditor
             {
                 if (ScrollText)
                 {
-                    DialogueText.text = speech.Text;
-                    m_targetScrollTextCount = speech.Text.Length + 1;
+                    DialogueText.text = DialogueTextProcessor.Process(speech.Text);
+                    string processed = DialogueTextProcessor.Process(speech.Text);
+                    DialogueText.text = processed;
+                    m_targetScrollTextCount = processed.Length + 1;
                     DialogueText.maxVisibleCharacters = 0;
                     m_elapsedScrollTime = 0f;
                     m_scrollIndex = 0;
                 }
                 else
                 {
-                    DialogueText.text = speech.Text;
+                    DialogueText.text = DialogueTextProcessor.Process(speech.Text);
                     DialogueText.maxVisibleCharacters = speech.Text.Length;
                 }
             }
