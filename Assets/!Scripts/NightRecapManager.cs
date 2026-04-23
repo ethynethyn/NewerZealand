@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class NightRecapManager : MonoBehaviour
 {
@@ -7,11 +8,11 @@ public class NightRecapManager : MonoBehaviour
     [SerializeField] private Character playerCharacter;
 
     [Header("Money Stat Tracking")]
-    [SerializeField] private string moneyStatForTracking = "Money"; // Should match your money stat name
+    [SerializeField] private string moneyStatForTracking = "Money";
 
     [Header("Operating Hours")]
-    [SerializeField] private int startHour = 18; // 6 PM
-    [SerializeField] private int endHour = 5; // 5 AM
+    [SerializeField] private int startHour = 18;
+    [SerializeField] private int endHour = 5;
 
     [Header("Stat Names")]
     [SerializeField] private string moneyStatName = "Money";
@@ -27,7 +28,8 @@ public class NightRecapManager : MonoBehaviour
     [SerializeField] private Canvas recapCanvas;
 
     [Header("Exit Settings")]
-    [SerializeField] private GameObject objectToEnableOnExit;
+    [SerializeField] private List<GameObject> objectsToEnableOnExit = new List<GameObject>();
+    [SerializeField] private List<GameObject> objectsToDisableOnExit = new List<GameObject>();
     [SerializeField] private KeyCode exitKey = KeyCode.Space;
 
     private float startingMoney = 0f;
@@ -62,13 +64,11 @@ public class NightRecapManager : MonoBehaviour
             totalMoneyEarned = 0f;
             totalMoneySpent = 0f;
             hasTrackedStartValues = true;
+
             Debug.Log($"Captured starting values - Money: {startingMoney}, Strikes: {startingStrikes}");
         }
     }
 
-    /// <summary>
-    /// Track money earned (e.g., from selling beer)
-    /// </summary>
     public void AddEarnings(float amount)
     {
         if (amount > 0)
@@ -82,9 +82,6 @@ public class NightRecapManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Track money spent (e.g., buying stock)
-    /// </summary>
     public void AddExpense(float amount)
     {
         if (amount > 0)
@@ -138,7 +135,6 @@ public class NightRecapManager : MonoBehaviour
         float takeHomePay = currentMoney - startingMoney;
         float strikesReceived = startingStrikes - currentStrikes;
 
-        // Calculate spent as the difference between earned and take home
         float moneySpent = totalMoneyEarned - takeHomePay;
 
         if (moneyEarnedText != null)
@@ -163,10 +159,24 @@ public class NightRecapManager : MonoBehaviour
         if (recapCanvas != null)
             recapCanvas.gameObject.SetActive(false);
 
-        if (objectToEnableOnExit != null)
+        // Enable objects
+        foreach (GameObject obj in objectsToEnableOnExit)
         {
-            objectToEnableOnExit.SetActive(true);
-            Debug.Log($"Enabled: {objectToEnableOnExit.name}");
+            if (obj != null)
+            {
+                obj.SetActive(true);
+                Debug.Log($"Enabled: {obj.name}");
+            }
+        }
+
+        // Disable objects
+        foreach (GameObject obj in objectsToDisableOnExit)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+                Debug.Log($"Disabled: {obj.name}");
+            }
         }
     }
 }
