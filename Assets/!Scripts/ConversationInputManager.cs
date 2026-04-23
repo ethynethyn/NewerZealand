@@ -27,7 +27,7 @@ public class ConversationInputManager : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 ConversationManager.Instance.PressSelectedOption();
             }
