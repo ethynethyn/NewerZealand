@@ -127,7 +127,30 @@ public class SlopeSlideController : MonoBehaviour
     // =========================================================
     // MAIN MOVEMENT
     // =========================================================
+    public void ForceResetState()
+    {
+        // kill all momentum
+        momentum = Vector3.zero;
 
+        // reset speed cap
+        currentSpeedCap = maxSpeed;
+
+        // clear slope + states
+        isGrinding = false;
+        isOnDownhill = false;
+        wasSlidingLastFrame = false;
+
+        // reset grind values
+        currentGrindSpeed = 0f;
+        grindDirection = Vector3.zero;
+
+        // reset smoothing
+        smoothSlopeDir = Vector3.zero;
+
+        // hide skateboard visually
+        if (skateboardObject != null)
+            skateboardObject.SetActive(false);
+    }
     public Vector3 ModifyMovement(Vector3 baseMove, float verticalVelocity, bool grounded)
     {
         bool isSliding = Input.GetKey(slideKey);
@@ -254,5 +277,7 @@ public class SlopeSlideController : MonoBehaviour
         wasSlidingLastFrame = true;
 
         return finalMove;
+
+
     }
 }

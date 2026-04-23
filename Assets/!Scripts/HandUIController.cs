@@ -17,25 +17,24 @@ public class HandUIController : MonoBehaviour
     public HandAnimationSet punch;
 
     [HideInInspector] public bool npcNearby = false;
+    [HideInInspector] public bool punchEnabled = true; // controlled by DisablePunch
 
     private HandState currentState;
     private Coroutine animationRoutine;
     private bool isPunching = false;
-
     private bool lockState = false;
 
     void Start()
     {
         if (handImage != null)
             handImage.gameObject.SetActive(true);
-
         currentState = HandState.Idle;
         StartAnimation(idle);
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !isPunching)
+        if (Input.GetMouseButtonDown(0) && !isPunching && punchEnabled)
             StartCoroutine(PlayPunchOnce());
 
         if (!isPunching)
@@ -52,11 +51,9 @@ public class HandUIController : MonoBehaviour
         if (lockState) return;
 
         bool isHolding = false;
-
         if (playerPickUp != null)
         {
             isHolding = playerPickUp.IsHoldingObject();
-
             if (playerPickUp.gameObject == null)
                 isHolding = false;
         }
@@ -84,7 +81,6 @@ public class HandUIController : MonoBehaviour
         isPunching = false;
         currentState = HandState.Idle;
         StartAnimation(idle);
-
         lockState = true;
         StartCoroutine(UnlockStateNextFrame());
     }
@@ -98,7 +94,6 @@ public class HandUIController : MonoBehaviour
     void SetState(HandState newState)
     {
         if (currentState == newState) return;
-
         currentState = newState;
         StartAnimation(GetSet(newState));
     }
@@ -107,7 +102,6 @@ public class HandUIController : MonoBehaviour
     {
         if (animationRoutine != null)
             StopCoroutine(animationRoutine);
-
         if (set != null && set.frames.Length > 0)
             animationRoutine = StartCoroutine(PlayAnimation(set));
     }
@@ -127,7 +121,6 @@ public class HandUIController : MonoBehaviour
     IEnumerator PlayPunchOnce()
     {
         isPunching = true;
-
         if (animationRoutine != null)
             StopCoroutine(animationRoutine);
 
@@ -148,14 +141,11 @@ public class HandUIController : MonoBehaviour
     IEnumerator PlayAnimation(HandAnimationSet set)
     {
         int index = 0;
-
         while (true)
         {
             if (set.frames.Length == 0) yield break;
-
             handImage.sprite = set.frames[index];
             index = (index + 1) % set.frames.Length;
-
             yield return new WaitForSeconds(set.frameRate);
         }
     }
