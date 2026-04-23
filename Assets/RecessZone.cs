@@ -1,13 +1,48 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class RecessZone : MonoBehaviour
 {
-    public Transform[] hangoutPoints;
+    [Header("Identity")]
+    public string zoneName;
 
-    public Transform GetRandomSpot()
+    [Header("Access Control")]
+    public bool restricted = false;
+    public bool teachersOnly = false;
+
+    [Header("Spots")]
+    public List<Transform> hangoutPoints = new List<Transform>();
+
+    private Dictionary<Transform, bool> occupied = new Dictionary<Transform, bool>();
+
+    void Awake()
     {
-        if (hangoutPoints.Length == 0) return null;
+        foreach (var point in hangoutPoints)
+            occupied[point] = false;
+    }
 
-        return hangoutPoints[Random.Range(0, hangoutPoints.Length)];
+    public Transform GetFreeSpot()
+    {
+        foreach (var point in hangoutPoints)
+        {
+            if (!occupied[point])
+            {
+                occupied[point] = true;
+                return point;
+            }
+        }
+
+        // fallback sharing
+        if (hangoutPoints.Count > 0)
+            return hangoutPoints[Random.Range(0, hangoutPoints.Count)];
+
+        return null;
+    }
+
+    public void ResetSpots()
+    {
+        var keys = new List<Transform>(occupied.Keys);
+        foreach (var k in keys)
+            occupied[k] = false;
     }
 }

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -6,7 +6,7 @@ public class SpriteBillboardTwoSided : MonoBehaviour
 {
     [Header("References")]
     public Transform cameraTransform;
-    public NavMeshAgent agent; // IMPORTANT
+    public NavMeshAgent agent;
 
     [Header("Sprites")]
     public Sprite frontSprite;
@@ -14,6 +14,10 @@ public class SpriteBillboardTwoSided : MonoBehaviour
 
     [Header("Settings")]
     public bool invertFacing = false;
+
+    [Header("Optional Override (CLASS FOCUS)")]
+    public Transform focusOverride;
+    public bool useFocusOverride = false;
 
     private SpriteRenderer spriteRenderer;
     private Vector3 lastMoveDir;
@@ -31,28 +35,33 @@ public class SpriteBillboardTwoSided : MonoBehaviour
         if (cameraTransform == null) return;
 
         // -------------------------
-        // BILLBOARD ROTATION
+        // BILLBOARD FACING CAMERA
         // -------------------------
-        Vector3 directionToCamera = cameraTransform.position - transform.position;
-        directionToCamera.y = 0f;
+        Vector3 toCam = cameraTransform.position - transform.position;
+        toCam.y = 0f;
 
-        if (directionToCamera.sqrMagnitude < 0.0001f) return;
+        if (toCam.sqrMagnitude < 0.0001f) return;
 
-        Quaternion lookRot = Quaternion.LookRotation(directionToCamera);
-        transform.rotation = Quaternion.Euler(0f, lookRot.eulerAngles.y, 0f);
+        transform.rotation = Quaternion.Euler(0f, Quaternion.LookRotation(toCam).eulerAngles.y, 0f);
 
         // -------------------------
-        // GET CHARACTER FORWARD (NOT BILLBOARD)
+        // DETERMINE FORWARD DIRECTION
         // -------------------------
         Vector3 forward;
 
-        if (agent != null && agent.velocity.sqrMagnitude > 0.01f)
+        if (useFocusOverride && focusOverride != null)
         {
-            // use movement direction
-            lastMoveDir = agent.velocity.normalized;
+            forward = focusOverride.position - transform.position;
         }
-
-        forward = lastMoveDir.sqrMagnitude > 0.01f ? lastMoveDir : transform.parent.forward;
+        else if (agent != null && agent.velocity.sqrMagnitude > 0.01f)
+        {
+            lastMoveDir = agent.velocity.normalized;
+            forward = lastMoveDir;
+        }
+        else
+        {
+            forward = transform.parent.forward;
+        }
 
         forward.y = 0f;
 
@@ -62,7 +71,7 @@ public class SpriteBillboardTwoSided : MonoBehaviour
         Vector3 toCamera = (cameraTransform.position - transform.position).normalized;
         toCamera.y = 0f;
 
-        float dot = Vector3.Dot(forward, toCamera);
+        float dot = Vector3.Dot(forward.normalized, toCamera);
 
         bool isFront = invertFacing ? dot < 0f : dot > 0f;
 
@@ -75,5 +84,18 @@ public class SpriteBillboardTwoSided : MonoBehaviour
         {
             spriteRenderer.sprite = target;
         }
+    }
+
+    // 🔥 CALL THIS FROM NPC WHEN SITTING
+    public void SetFocus(Transform focus)
+    {
+        focusOverride = focus;
+        useFocusOverride = true;
+    }
+
+    public void ClearFocus()
+    {
+        useFocusOverride = false;
+        focusOverride = null;
     }
 }

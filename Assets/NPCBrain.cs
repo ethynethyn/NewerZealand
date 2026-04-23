@@ -35,8 +35,29 @@ public class NPCBrain : MonoBehaviour
 
     private bool dayResetting = false;
 
+    private ClassroomZone currentClassroom;
+    private Transform currentSeat;
+    private Transform currentFocus;
+
+    private bool isSeated = false;
+    private bool rotationDone = false;
+
+    private SpriteBillboardTwoSided billboard;
+
+    [Header("Role")]
+    public bool isTeacher = false;
+
+    [Header("Recess Target")]
+    public string preferredRecessZone;
+
+
+
     void Start()
     {
+        agent.updateRotation = false;
+
+        billboard = GetComponentInChildren<SpriteBillboardTwoSided>();
+
         if (spawnAtDoor && spawnPoint != null)
             InitDay();
     }
@@ -64,59 +85,25 @@ public class NPCBrain : MonoBehaviour
         isWalkingToExit = false;
         dayResetting = false;
 
-        // 🕐 Late wake catch-up: if the current hour is already past arrival,
-        // skip the wait and snap the NPC to wherever they should be right now.
         float currentHour = GetCurrentHour();
+
         if (currentHour >= arrivalHour && currentHour < leaveHour)
         {
             waitingToEnter = false;
             hasEnteredSchool = true;
             waitingToLeave = true;
+
             agent.Warp(entrancePoint.position);
             agent.isStopped = false;
 
-            // Ask the time controller what state is active right now and go there
             SnapToCurrentState();
-
-            Debug.Log($"{name} [LATE WAKE] snapped at hour {currentHour:0.00}");
         }
-        else
-        {
-            Debug.Log($"{name} [NEW DAY] arrives {arrivalHour:0.00} (+{spawnDelay}s), leaves {leaveHour} (+{leaveDelay}s)");
-        }
-    }
-
-    // Reads the current school state directly and moves the NPC immediately,
-    // without waiting for the next OnStateChanged event.
-    void SnapToCurrentState()
-    {
-        var controller = FindObjectOfType<SchoolTimeController>();
-        if (controller == null) return;
-
-        float hour = GetCurrentHour();
-        SchoolPeriod active = controller.periods[0];
-        for (int i = 0; i < controller.periods.Length; i++)
-        {
-            if (controller.IsInPeriodPublic(hour, controller.periods[i]))
-            {
-                active = controller.periods[i];
-                break;
-            }
-        }
-
-        if (active.state == SchoolState.Class)
-            GoToClass(active.periodIndex);
-        else
-            GoToRecess();
     }
 
     void Update()
     {
         float currentHour = GetCurrentHour();
 
-        // 🔁 DAILY RESET — clock has looped back before the leave window starts,
-        // meaning a new day has begun. Covers overnight reset AND handles a player
-        // who slept through part of the day correctly on next load.
         if (!dayResetting && hasLeftSchool && currentHour < leaveWindow.x)
         {
             dayResetting = true;
@@ -124,7 +111,7 @@ public class NPCBrain : MonoBehaviour
             return;
         }
 
-        // 🟢 ENTER SCHOOL
+        // ENTER
         if (spawnAtDoor && !hasEnteredSchool && waitingToEnter)
         {
             if (currentHour >= arrivalHour)
@@ -134,7 +121,7 @@ public class NPCBrain : MonoBehaviour
             }
         }
 
-        // 🔴 TRIGGER LEAVE WALK
+        // LEAVE
         if (spawnAtDoor && hasEnteredSchool && !hasLeftSchool && waitingToLeave && !isWalkingToExit)
         {
             if (currentHour >= leaveHour)
@@ -144,28 +131,64 @@ public class NPCBrain : MonoBehaviour
             }
         }
 
-        // 🚪 CHECK IF NPC HAS REACHED THE ENTRANCE TO EXIT
+        // EXIT ARRIVAL
         if (isWalkingToExit)
         {
-            bool pathDone = !agent.pathPending
-                && agent.remainingDistance <= arrivalDistanceThreshold
-                && (!agent.hasPath || agent.velocity.sqrMagnitude < 0.1f);
+            bool done =
+                !agent.pathPending &&
+                agent.remainingDistance <= arrivalDistanceThreshold &&
+                agent.velocity.sqrMagnitude < 0.05f;
 
-            if (pathDone)
+            if (done)
             {
                 isWalkingToExit = false;
                 hasLeftSchool = true;
+
                 agent.isStopped = true;
                 agent.ResetPath();
 
-                if (spawnPoint != null)
-                {
-                    bool warped = agent.Warp(spawnPoint.position);
-                    if (!warped) transform.position = spawnPoint.position;
-                }
-
-                Debug.Log($"🏠 {name} LEFT SCHOOL");
+                agent.Warp(spawnPoint.position);
             }
+        }
+
+        // 🪑 SEAT ARRIVAL
+        if (currentSeat != null && !rotationDone)
+        {
+            bool arrived =
+                !agent.pathPending &&
+                agent.remainingDistance <= agent.stoppingDistance &&
+                agent.velocity.sqrMagnitude < 0.05f;
+
+            if (arrived)
+            {
+                rotationDone = true;
+                isSeated = true;
+
+                agent.isStopped = true;
+                agent.ResetPath();
+
+                ApplyFocusToBillboard();
+            }
+        }
+    }
+
+    // 🔥 BILLBOARD FOCUS SYSTEM (NO TRANSFORM ROTATION)
+    void ApplyFocusToBillboard()
+    {
+        if (billboard == null) return;
+
+        if (currentFocus != null)
+        {
+            billboard.SetFocus(currentFocus);
+            Debug.Log("🪑 NPC BILLBOARD FACING CLASS FOCUS");
+        }
+    }
+
+    void ClearBillboardFocus()
+    {
+        if (billboard != null)
+        {
+            billboard.ClearFocus();
         }
     }
 
@@ -176,10 +199,10 @@ public class NPCBrain : MonoBehaviour
 
         agent.Warp(entrancePoint.position);
         agent.isStopped = false;
+
         hasEnteredSchool = true;
         waitingToLeave = true;
 
-        Debug.Log($"🚪 {name} ENTERED");
         GoToRecess();
     }
 
@@ -188,10 +211,12 @@ public class NPCBrain : MonoBehaviour
         yield return new WaitForSeconds(leaveDelay);
         if (hasLeftSchool) yield break;
 
-        Debug.Log($"🚶 {name} walking to exit...");
+        ClearBillboardFocus();
+
         agent.isStopped = false;
         agent.ResetPath();
         agent.SetDestination(entrancePoint.position);
+
         isWalkingToExit = true;
     }
 
@@ -216,14 +241,11 @@ public class NPCBrain : MonoBehaviour
 
     IEnumerator HandleStateWithDelay(SchoolState state, int period)
     {
-        float delay = Random.Range(0f, stateChangeDelay);
-        yield return new WaitForSeconds(delay);
-
-        if (isWalkingToExit || hasLeftSchool) yield break;
+        yield return new WaitForSeconds(Random.Range(0f, stateChangeDelay));
 
         if (state == SchoolState.Class)
             GoToClass(period);
-        else if (state == SchoolState.Recess || state == SchoolState.AfterSchool)
+        else
             GoToRecess();
     }
 
@@ -236,6 +258,15 @@ public class NPCBrain : MonoBehaviour
         Transform seat = zone.GetFreeSeat();
         if (seat == null) return;
 
+        currentClassroom = zone;
+        currentSeat = seat;
+        currentFocus = zone.focusTarget;
+
+        isSeated = false;
+        rotationDone = false;
+
+        ClearBillboardFocus();
+
         agent.isStopped = false;
         agent.ResetPath();
         agent.SetDestination(seat.position);
@@ -243,14 +274,65 @@ public class NPCBrain : MonoBehaviour
 
     void GoToRecess()
     {
-        if (ClassroomRegistry.Instance.recessZone == null) return;
+        RecessZone zone = null;
 
-        Transform spot = ClassroomRegistry.Instance.recessZone.GetRandomSpot();
+        // 1. Try named zone first
+        if (!string.IsNullOrEmpty(preferredRecessZone))
+        {
+            zone = ClassroomRegistry.Instance.GetRecessZone(preferredRecessZone);
+        }
+
+        // 2. If not found, fallback to random
+        if (zone == null)
+        {
+            zone = ClassroomRegistry.Instance.GetRandomRecessZone();
+        }
+
+        if (zone == null) return;
+
+        // 3. Restriction check
+        if (zone.restricted)
+        {
+            if (zone.teachersOnly && !isTeacher)
+            {
+                Debug.Log($"{name} denied entry (teachers only zone)");
+                zone = ClassroomRegistry.Instance.GetRandomRecessZone();
+            }
+        }
+
+        Transform spot = zone.GetFreeSpot();
         if (spot == null) return;
+
+        currentFocus = null;
+        ClearBillboardFocus();
 
         agent.isStopped = false;
         agent.ResetPath();
         agent.SetDestination(spot.position);
+    }
+
+    void SnapToCurrentState()
+    {
+        var controller = FindObjectOfType<SchoolTimeController>();
+        if (controller == null) return;
+
+        float hour = GetCurrentHour();
+
+        SchoolPeriod active = controller.periods[0];
+
+        for (int i = 0; i < controller.periods.Length; i++)
+        {
+            if (controller.IsInPeriodPublic(hour, controller.periods[i]))
+            {
+                active = controller.periods[i];
+                break;
+            }
+        }
+
+        if (active.state == SchoolState.Class)
+            GoToClass(active.periodIndex);
+        else
+            GoToRecess();
     }
 
     string GetClass(int period)
@@ -270,6 +352,7 @@ public class NPCBrain : MonoBehaviour
         var controller = FindObjectOfType<SchoolTimeController>();
         if (controller == null || controller.character == null)
             return 0f;
+
         return controller.character.GetStatValue(controller.timeStatName) % 24f;
     }
 }

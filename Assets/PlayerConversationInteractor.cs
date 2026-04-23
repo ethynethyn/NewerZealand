@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using DialogueEditor;
 using System.Collections;
 
@@ -58,6 +58,9 @@ public class PlayerConversationInteractor : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
+            // 🔥 MAKE NPC FACE PLAYER
+            currentNPC.OnConversationStart(transform);
+
             ConversationManager.Instance.StartConversation(currentNPC.myConversation);
 
             if (interactionImage != null)
@@ -74,6 +77,9 @@ public class PlayerConversationInteractor : MonoBehaviour
 
         if (previousNPC != null && currentNPC == null)
         {
+            // 🔥 STOP NPC FACING PLAYER
+            previousNPC.OnConversationEnd();
+
             ConversationManager.Instance.EndConversation();
 
             if (interactionImage != null)
