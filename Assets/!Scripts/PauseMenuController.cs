@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using StarterAssets; // So we can reference StarterAssetsInputs
@@ -38,14 +38,11 @@ public class PauseMenuController : MonoBehaviour
     {
         isPaused = !isPaused;
 
-        // Pause or resume time
         Time.timeScale = isPaused ? 0f : 1f;
 
-        // Enable/disable menu
         if (pauseMenuUI != null)
             pauseMenuUI.SetActive(isPaused);
 
-        // Toggle objects
         foreach (GameObject obj in enableOnPause)
             if (obj != null)
                 obj.SetActive(isPaused);
@@ -54,25 +51,16 @@ public class PauseMenuController : MonoBehaviour
             if (obj != null)
                 obj.SetActive(!isPaused);
 
-        // Cursor behavior
         Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = isPaused;
 
-        //  Disable or enable input actions to prevent stuck movement
-        if (playerInput != null)
-        {
-            if (isPaused)
-            {
-                playerInput.DeactivateInput();
-            }
-            else
-            {
-                playerInput.ActivateInput();
-            }
-        }
+        // ðŸ”¥ Disable player controller instead of PlayerInput
+        var controller = FindObjectOfType<StarterAssets.FirstPersonController>();
+        if (controller != null)
+            controller.enabled = !isPaused;
 
-        //  Optional: clear custom input flags so movement doesn’t “stick”
-        if (starterInputs != null && !isPaused)
+        // Clear input so nothing sticks
+        if (starterInputs != null)
         {
             starterInputs.move = Vector2.zero;
             starterInputs.look = Vector2.zero;
