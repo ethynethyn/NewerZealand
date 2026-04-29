@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class SaveManager : MonoBehaviour
 {
@@ -15,9 +16,6 @@ public class SaveManager : MonoBehaviour
             continueButton.SetActive(PlayerPrefs.HasKey("SaveExists"));
     }
 
-    // =========================
-    // SAVE GAME
-    // =========================
     public void SaveGame()
     {
         Debug.Log("Saving Game...");
@@ -25,7 +23,6 @@ public class SaveManager : MonoBehaviour
         SavePlayer();
         playerCharacter.SaveStats();
         worldCharacter.SaveStats();
-
         SaveAllObjects();
 
         PlayerPrefs.SetInt("SaveExists", 1);
@@ -37,9 +34,6 @@ public class SaveManager : MonoBehaviour
         Debug.Log("Game Saved!");
     }
 
-    // =========================
-    // LOAD GAME
-    // =========================
     public void LoadGame()
     {
         Debug.Log("Loading Game...");
@@ -47,15 +41,11 @@ public class SaveManager : MonoBehaviour
         LoadPlayer();
         playerCharacter.LoadStats();
         worldCharacter.LoadStats();
-
         LoadAllObjects();
 
         Debug.Log("Game Loaded!");
     }
 
-    // =========================
-    // NEW GAME
-    // =========================
     public void NewGame()
     {
         Debug.Log("Clearing Save Data...");
@@ -63,11 +53,9 @@ public class SaveManager : MonoBehaviour
         PlayerPrefs.DeleteKey("player_x");
         PlayerPrefs.DeleteKey("player_y");
         PlayerPrefs.DeleteKey("player_z");
-
         PlayerPrefs.DeleteKey("SaveExists");
 
         ClearAllObjectSaves();
-
         PlayerPrefs.Save();
 
         if (continueButton != null)
@@ -76,9 +64,6 @@ public class SaveManager : MonoBehaviour
         Debug.Log("New Game Ready");
     }
 
-    // =========================
-    // PLAYER
-    // =========================
     void SavePlayer()
     {
         PlayerPrefs.SetFloat("player_x", player.position.x);
@@ -97,36 +82,73 @@ public class SaveManager : MonoBehaviour
         );
     }
 
-    // =========================
-    // OBJECT SYSTEM (NEW)
-    // =========================
     void SaveAllObjects()
     {
-        SaveableObject[] objects = FindObjectsOfType<SaveableObject>();
+        // FindObjectsOfType with true includes inactive objects
+        SaveableObject[] objects = FindObjectsOfType<SaveableObject>(true);
 
         foreach (var obj in objects)
-        {
             obj.SaveState();
-        }
     }
 
     void LoadAllObjects()
     {
-        SaveableObject[] objects = FindObjectsOfType<SaveableObject>();
+        // PHASE 1: Clear pending list, then load all objects (including inactive)
+        SaveableObject.pendingBagAssignments.Clear();
 
+        SaveableObject[] objects = FindObjectsOfType<SaveableObject>(true);
         foreach (var obj in objects)
-        {
             obj.LoadState();
+
+        // PHASE 2: Build a lookup of bagID -> BackpackItemStorage
+        // so we can assign items to the right bag
+        Dictionary<string, BackpackItemStorage> bagLookup =
+            new Dictionary<string, BackpackItemStorage>();
+
+        BackpackItemStorage[] allBags = FindObjectsOfType<BackpackItemStorage>(true);
+        foreach (var bag in allBags)
+        {
+            SaveableObject bagSave = bag.GetComponent<SaveableObject>();
+            if (bagSave != null)
+                bagLookup[bagSave.uniqueID] = bag;
         }
+
+        // PHASE 3: Process all pending bag assignments
+        foreach (var (item, bagID) in SaveableObject.pendingBagAssignments)
+        {
+            if (!bagLookup.TryGetValue(bagID, out BackpackItemStorage targetBag))
+            {
+                Debug.LogWarning($"[SaveManager] Could not find bag with ID {bagID} for item {item.name}");
+                continue;
+            }
+
+            // Re-add to the bag's stored list (it was cleared on scene load)
+            if (!targetBag.storedItems.Contains(item))
+                targetBag.storedItems.Add(item);
+
+            // Ensure the item is inactive and has no physics active
+            // (mirrors what ShrinkIntoBag does at the end)
+            Rigidbody rb = item.GetComponent<Rigidbody>();
+            if (rb)
+            {
+                rb.isKinematic = true;
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
+            foreach (Collider col in item.GetComponentsInChildren<Collider>())
+                col.enabled = false;
+
+            item.SetActive(false);
+        }
+
+        SaveableObject.pendingBagAssignments.Clear();
     }
 
     void ClearAllObjectSaves()
     {
-        SaveableObject[] objects = FindObjectsOfType<SaveableObject>();
-
+        SaveableObject[] objects = FindObjectsOfType<SaveableObject>(true);
         foreach (var obj in objects)
-        {
             obj.ClearSave();
-        }
     }
 }

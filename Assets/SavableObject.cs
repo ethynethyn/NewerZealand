@@ -67,22 +67,24 @@ public class SaveableObject : MonoBehaviour
         if (!PlayerPrefs.HasKey(key + "_x"))
             return;
 
-        // Restore position
+        // 🔥 If this item is bagged, skip position restore entirely.
+        // Phase 2 in SaveManager will handle re-adding it to the bag.
+        if (PlayerPrefs.HasKey(key + "_bag"))
+        {
+            string bagID = PlayerPrefs.GetString(key + "_bag");
+            pendingBagAssignments.Add((gameObject, bagID));
+            return; // Don't touch position or SetActive — Phase 2 handles it
+        }
+
+        // Restore position only for world objects
         transform.position = new Vector3(
             PlayerPrefs.GetFloat(key + "_x"),
             PlayerPrefs.GetFloat(key + "_y"),
             PlayerPrefs.GetFloat(key + "_z")
         );
 
-        // Restore active
+        // Restore active state
         gameObject.SetActive(PlayerPrefs.GetInt(key + "_active") == 1);
-
-        // 🔥 Queue bag assignment (DO NOT APPLY YET)
-        if (PlayerPrefs.HasKey(key + "_bag"))
-        {
-            string bagID = PlayerPrefs.GetString(key + "_bag");
-            pendingBagAssignments.Add((gameObject, bagID));
-        }
     }
 
     // =========================
