@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
 using System.Collections;
@@ -18,23 +18,23 @@ public class PlayerNameManager : MonoBehaviour
         if (nameCanvas != null)
             nameCanvas.SetActive(true);
 
-        Time.timeScale = 0f;
+  
 
         StartCoroutine(FocusInputNextFrame());
     }
 
     private IEnumerator FocusInputNextFrame()
     {
-        yield return null; // wait 1 frame so UI fully loads
+        yield return null;
 
         if (inputField != null)
         {
             inputField.text = "";
 
-            inputField.ActivateInputField();
-            inputField.Select();
-
             EventSystem.current.SetSelectedGameObject(inputField.gameObject);
+            inputField.ActivateInputField();
+
+            MoveCaretToEnd();
         }
     }
 
@@ -42,20 +42,27 @@ public class PlayerNameManager : MonoBehaviour
     {
         if (!isActive) return;
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetMouseButtonDown(0))
         {
-            SubmitName();
-        }
-
-        // keep forcing focus if player clicks away / deselects
-        if (inputField != null &&
-            EventSystem.current.currentSelectedGameObject != inputField.gameObject)
-        {
-            EventSystem.current.SetSelectedGameObject(inputField.gameObject);
-            inputField.ActivateInputField();
+            // Only refocus if NOT clicking UI
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                EventSystem.current.SetSelectedGameObject(inputField.gameObject);
+                inputField.ActivateInputField();
+                MoveCaretToEnd();
+            }
         }
     }
 
+    private void MoveCaretToEnd()
+    {
+        int end = inputField.text.Length;
+        inputField.caretPosition = end;
+        inputField.selectionAnchorPosition = end;
+        inputField.selectionFocusPosition = end;
+    }
+
+    // 🔥 Called by your UI Button
     public void SubmitName()
     {
         if (inputField == null) return;
@@ -63,9 +70,7 @@ public class PlayerNameManager : MonoBehaviour
         string name = inputField.text;
 
         if (!string.IsNullOrWhiteSpace(name))
-        {
             PlayerName = name.Trim();
-        }
 
         isActive = false;
 

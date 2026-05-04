@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 3055955f44881fc40b2bdf974d7f6b00
+AssetOrigin:
+  serializedVersion: 1
+  productId: 332738
+  packageName: UIDraw
+  packageVersion: 1.0.1
+  assetPath: Assets/DrawSystem/Scripts/DrawingInputHandler.cs
+  uploadId: 811886

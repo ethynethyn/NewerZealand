@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class SaveManager : MonoBehaviour
@@ -7,8 +8,16 @@ public class SaveManager : MonoBehaviour
     public Transform player;
     public Character playerCharacter;
     public Character worldCharacter;
+    [Header("Spawned Object Registry")]
+    public SpawnedObjectRegistry spawnedRegistry;
 
     public GameObject continueButton;
+
+    [Header("UI Color Save")]
+    public Image colorImage; // assign your UI Image here
+
+    [Header("Active State Save")]
+    public Transform stateParent; // assign parent object here
 
     void Start()
     {
@@ -24,6 +33,15 @@ public class SaveManager : MonoBehaviour
         playerCharacter.SaveStats();
         worldCharacter.SaveStats();
         SaveAllObjects();
+
+        // ✅ Save player name
+        PlayerPrefs.SetString("player_name", PlayerNameManager.PlayerName);
+
+        // ✅ Save UI color
+        SaveUIColor();
+
+        // ✅ Save active states
+        SaveActiveStates();
 
         PlayerPrefs.SetInt("SaveExists", 1);
         PlayerPrefs.Save();
@@ -41,7 +59,28 @@ public class SaveManager : MonoBehaviour
         LoadPlayer();
         playerCharacter.LoadStats();
         worldCharacter.LoadStats();
+
+        if (spawnedRegistry != null)
+        {
+            Debug.Log("[SaveManager] Calling ReinstantiateAll...");
+            List<GameObject> spawned = spawnedRegistry.ReinstantiateAll();
+            Debug.Log($"[SaveManager] ReinstantiateAll returned {spawned.Count} objects");
+        }
+        else
+        {
+            Debug.LogError("[SaveManager] spawnedRegistry is NULL! Assign it in the Inspector.");
+        }
+
         LoadAllObjects();
+
+        if (PlayerPrefs.HasKey("player_name"))
+        {
+            PlayerNameManager.PlayerName = PlayerPrefs.GetString("player_name");
+            DialogueTextProcessor.PlayerName = PlayerNameManager.PlayerName;
+        }
+
+        LoadUIColor();
+        LoadActiveStates();
 
         Debug.Log("Game Loaded!");
     }
@@ -53,9 +92,14 @@ public class SaveManager : MonoBehaviour
         PlayerPrefs.DeleteKey("player_x");
         PlayerPrefs.DeleteKey("player_y");
         PlayerPrefs.DeleteKey("player_z");
+        PlayerPrefs.DeleteKey("player_name");
         PlayerPrefs.DeleteKey("SaveExists");
 
+        ClearUIColor();
+        ClearActiveStates();
+
         ClearAllObjectSaves();
+        spawnedRegistry?.ClearAllSpawnedSaves();
         PlayerPrefs.Save();
 
         if (continueButton != null)
@@ -63,6 +107,8 @@ public class SaveManager : MonoBehaviour
 
         Debug.Log("New Game Ready");
     }
+
+    // ---------------- PLAYER ----------------
 
     void SavePlayer()
     {
@@ -82,26 +128,99 @@ public class SaveManager : MonoBehaviour
         );
     }
 
+    // ---------------- UI COLOR ----------------
+
+    void SaveUIColor()
+    {
+        if (colorImage == null) return;
+
+        Color c = colorImage.color;
+
+        PlayerPrefs.SetFloat("ui_r", c.r);
+        PlayerPrefs.SetFloat("ui_g", c.g);
+        PlayerPrefs.SetFloat("ui_b", c.b);
+        PlayerPrefs.SetFloat("ui_a", c.a);
+    }
+
+    void LoadUIColor()
+    {
+        if (colorImage == null) return;
+        if (!PlayerPrefs.HasKey("ui_r")) return;
+
+        Color c = new Color(
+            PlayerPrefs.GetFloat("ui_r"),
+            PlayerPrefs.GetFloat("ui_g"),
+            PlayerPrefs.GetFloat("ui_b"),
+            PlayerPrefs.GetFloat("ui_a")
+        );
+
+        colorImage.color = c;
+    }
+
+    void ClearUIColor()
+    {
+        PlayerPrefs.DeleteKey("ui_r");
+        PlayerPrefs.DeleteKey("ui_g");
+        PlayerPrefs.DeleteKey("ui_b");
+        PlayerPrefs.DeleteKey("ui_a");
+    }
+
+    // ---------------- ACTIVE STATES ----------------
+
+    void SaveActiveStates()
+    {
+        if (stateParent == null) return;
+
+        for (int i = 0; i < stateParent.childCount; i++)
+        {
+            GameObject child = stateParent.GetChild(i).gameObject;
+            PlayerPrefs.SetInt("obj_active_" + i, child.activeSelf ? 1 : 0);
+        }
+    }
+
+    void LoadActiveStates()
+    {
+        if (stateParent == null) return;
+
+        for (int i = 0; i < stateParent.childCount; i++)
+        {
+            if (!PlayerPrefs.HasKey("obj_active_" + i)) continue;
+
+            GameObject child = stateParent.GetChild(i).gameObject;
+            bool isActive = PlayerPrefs.GetInt("obj_active_" + i) == 1;
+            child.SetActive(isActive);
+        }
+    }
+
+    void ClearActiveStates()
+    {
+        if (stateParent == null) return;
+
+        for (int i = 0; i < stateParent.childCount; i++)
+        {
+            PlayerPrefs.DeleteKey("obj_active_" + i);
+        }
+    }
+
+    // ---------------- EXISTING OBJECT SYSTEM ----------------
+
     void SaveAllObjects()
     {
-        // FindObjectsOfType with true includes inactive objects
         SaveableObject[] objects = FindObjectsOfType<SaveableObject>(true);
 
         foreach (var obj in objects)
             obj.SaveState();
+        spawnedRegistry?.SaveAllSpawned();
     }
 
     void LoadAllObjects()
     {
-        // PHASE 1: Clear pending list, then load all objects (including inactive)
         SaveableObject.pendingBagAssignments.Clear();
 
         SaveableObject[] objects = FindObjectsOfType<SaveableObject>(true);
         foreach (var obj in objects)
             obj.LoadState();
 
-        // PHASE 2: Build a lookup of bagID -> BackpackItemStorage
-        // so we can assign items to the right bag
         Dictionary<string, BackpackItemStorage> bagLookup =
             new Dictionary<string, BackpackItemStorage>();
 
@@ -113,7 +232,6 @@ public class SaveManager : MonoBehaviour
                 bagLookup[bagSave.uniqueID] = bag;
         }
 
-        // PHASE 3: Process all pending bag assignments
         foreach (var (item, bagID) in SaveableObject.pendingBagAssignments)
         {
             if (!bagLookup.TryGetValue(bagID, out BackpackItemStorage targetBag))
@@ -122,12 +240,9 @@ public class SaveManager : MonoBehaviour
                 continue;
             }
 
-            // Re-add to the bag's stored list (it was cleared on scene load)
             if (!targetBag.storedItems.Contains(item))
                 targetBag.storedItems.Add(item);
 
-            // Ensure the item is inactive and has no physics active
-            // (mirrors what ShrinkIntoBag does at the end)
             Rigidbody rb = item.GetComponent<Rigidbody>();
             if (rb)
             {
@@ -151,4 +266,37 @@ public class SaveManager : MonoBehaviour
         foreach (var obj in objects)
             obj.ClearSave();
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+            DebugPrintSaveData();
+    }
+
+    public void DebugPrintSaveData()
+    {
+        Debug.Log("=== SAVE DATA DEBUG ===");
+        string ids = PlayerPrefs.GetString("SPAWNED_IDS", "");
+        Debug.Log($"SPAWNED_IDS: '{ids}'");
+
+        if (!string.IsNullOrEmpty(ids))
+        {
+            foreach (var id in ids.Split(','))
+            {
+                if (string.IsNullOrEmpty(id)) continue;
+                string prefab = PlayerPrefs.GetString("SPAWNED_PREFAB_" + id, "MISSING");
+                string x = PlayerPrefs.GetFloat("OBJ_" + id + "_x", -9999f).ToString();
+                string y = PlayerPrefs.GetFloat("OBJ_" + id + "_y", -9999f).ToString();
+                string z = PlayerPrefs.GetFloat("OBJ_" + id + "_z", -9999f).ToString();
+                string active = PlayerPrefs.GetInt("OBJ_" + id + "_active", -1).ToString();
+                Debug.Log($"  ID: {id} | Prefab: {prefab} | Pos: ({x},{y},{z}) | Active: {active}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("SPAWNED_IDS is empty — nothing was registered or save was cleared");
+        }
+        Debug.Log("=== END DEBUG ===");
+    }
+
 }

@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 4a69db156f9eaee47af3222f6e3d797e
+AssetOrigin:
+  serializedVersion: 1
+  productId: 332738
+  packageName: UIDraw
+  packageVersion: 1.0.1
+  assetPath: Assets/DrawSystem/Scripts/DrawingBrushes.cs
+  uploadId: 811886

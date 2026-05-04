@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class LootAndVendor : MonoBehaviour
@@ -18,7 +18,7 @@ public class LootAndVendor : MonoBehaviour
     public bool infiniteSupply = true;
 
     // -----------------------------
-    // TAKE ITEM (NEW PREFAB SYSTEM)
+    // TAKE ITEM
     // -----------------------------
     public GameObject TakeItem(int index)
     {
@@ -36,25 +36,26 @@ public class LootAndVendor : MonoBehaviour
         if (isVendor && playerCharacter != null && entry.cost > 0f)
         {
             float money = playerCharacter.GetStatValue(currencyStatName);
-
             if (money < entry.cost)
             {
                 Debug.Log("Not enough money");
                 return null;
             }
-
             playerCharacter.ModifyStat(currencyStatName, -entry.cost);
         }
 
         // -----------------------------
-        // SPAWN ITEM (NEW INSTANCE EVERY TIME)
+        // SPAWN ITEM
         // -----------------------------
         Vector3 spawnPos = spawnPoint != null ? spawnPoint.position : transform.position;
-
         GameObject item = Instantiate(entry.prefab, spawnPos, Quaternion.identity);
         item.SetActive(true);
 
-        return item;
+        // ✅ Register with the save system — must be AFTER SetActive so uniqueID is ready
+        if (SpawnedObjectRegistry.Instance != null)
+            SpawnedObjectRegistry.Instance.Register(item, entry.prefab.name);
+
+        return item; // ✅ Single return, after registration
     }
 
     // -----------------------------
@@ -64,7 +65,6 @@ public class LootAndVendor : MonoBehaviour
     {
         if (index < 0 || index >= lootTable.Count)
             return 0f;
-
         return lootTable[index].cost;
     }
 

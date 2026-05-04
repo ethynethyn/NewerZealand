@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 5b8f204637f1b3f4c8836558c005b972
+AssetOrigin:
+  serializedVersion: 1
+  productId: 332738
+  packageName: UIDraw
+  packageVersion: 1.0.1
+  assetPath: Assets/DrawSystem/Scripts/UIDrawable.cs
+  uploadId: 811886

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0069ab5c352cc694391ad4583e0048e4
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 332738
+  packageName: UIDraw
+  packageVersion: 1.0.1
+  assetPath: Assets/DrawSystem/README.md
+  uploadId: 811886

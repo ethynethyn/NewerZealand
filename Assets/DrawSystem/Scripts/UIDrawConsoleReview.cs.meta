@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: d17ac29b088634d4db06586068d129aa
+AssetOrigin:
+  serializedVersion: 1
+  productId: 332738
+  packageName: UIDraw
+  packageVersion: 1.0.1
+  assetPath: Assets/DrawSystem/Scripts/UIDrawConsoleReview.cs
+  uploadId: 811886

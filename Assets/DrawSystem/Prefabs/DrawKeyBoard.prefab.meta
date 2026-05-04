@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c81087d691876fc489f4da448c424153
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 332738
+  packageName: UIDraw
+  packageVersion: 1.0.1
+  assetPath: Assets/DrawSystem/Prefabs/DrawKeyBoard.prefab
+  uploadId: 811886

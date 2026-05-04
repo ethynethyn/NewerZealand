@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0b9ec1b184318894bafc7d783c9ecd6c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 332738
+  packageName: UIDraw
+  packageVersion: 1.0.1
+  assetPath: Assets/DrawSystem/Prefabs/DrawFrame.prefab
+  uploadId: 811886
