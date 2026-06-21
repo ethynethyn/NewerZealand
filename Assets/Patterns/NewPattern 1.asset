@@ -12,11 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f0f24cb6e71594388be69bca99792e, type: 3}
   m_Name: NewPattern 1
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: ddf395e505ff8784e95287d88d1e1568, type: 3}
+  clip: {fileID: 8300000, guid: 9aa3adb1d133dce4a8b6b47736d9b7f3, type: 3}
   notes:
   - direction: 2
-    time: 1.116
+    time: 2.1613333
+  - direction: 2
+    time: 3.6973333
   - direction: 0
-    time: 2.0973334
-  - direction: 3
-    time: 2.9933333
+    time: 4.188
+  - direction: 2
+    time: 5.148
+  - direction: 0
+    time: 5.6386666
+  - direction: 2
+    time: 6.193333
+  - direction: 2
+    time: 7.708
+  - direction: 2
+    time: 8.156
+  - direction: 0
+    time: 8.177333

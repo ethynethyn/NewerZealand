@@ -17,6 +17,14 @@ public class RhythmGame : MonoBehaviour
         public Sprite colorSprite;
         [Tooltip("Optional grey sprite for the showcase. If empty, the coloured sprite is just dimmed instead.")]
         public Sprite graySprite;
+
+        // --- runtime only (filled in automatically) ---
+        [System.NonSerialized] public SpriteRenderer targetRenderer; // the sprite on the target object
+        [System.NonSerialized] public Sprite targetRestSprite;       // its normal (grey) look
+        [System.NonSerialized] public Color targetRestColor;         // its normal colour
+        [System.NonSerialized] public Vector3 targetRestScale;       // its normal size
+        [System.NonSerialized] public float flashUntil;              // Time.time the colour flash ends
+        [System.NonSerialized] public float popUntil;                // Time.time the hit pop ends
     }
 
     [Header("Lanes (one per arrow)")]
@@ -45,6 +53,16 @@ public class RhythmGame : MonoBehaviour
     public Color grayTint = new Color(0.55f, 0.55f, 0.55f, 1f);
     public int noteSortingOrder = 10;
 
+    [Header("Targets")]
+    [Tooltip("Targets are hidden during the showcase and only shown on the player's turn. When you press a key, that target briefly flashes its coloured sprite. This sets how long (seconds) the flash/pop lasts.")]
+    public float targetFlashTime = 0.12f;
+    [Tooltip("How big a target pops when you actually HIT a note. 1.3 = grows 30% then shrinks back.")]
+    public float popScale = 1.3f;
+
+    [Header("Sounds")]
+    [Tooltip("Played when you miss a note (the buzzer). The turn fails instantly and restarts from the demo.")]
+    public AudioClip missSound;
+
     [Header("Rules")]
     [Tooltip("On = pressing a key when no note is there also fails the round.")]
     public bool punishStrayPresses = false;
@@ -58,6 +76,7 @@ public class RhythmGame : MonoBehaviour
     public string startMessage = "Press Space to start";
     public string watchMessage = "Watch...";
     public string yourTurnMessage = "It's your turn!";
+    public string niceMessage = "NICE";
     public string wrongMessage = "WRONG";
     public string winMessage = "YOU WIN";
     [Tooltip("How long 'It's your turn!' shows before the notes start.")]
@@ -84,10 +103,89 @@ public class RhythmGame : MonoBehaviour
         };
     }
 
+    private AudioSource sfxSource;
+
     void Awake()
     {
         source = GetComponent<AudioSource>();
         source.playOnAwake = false;
+
+        // A second, separate source for sound effects, so the buzzer keeps playing
+        // even when we stop the pattern audio on a miss.
+        sfxSource = gameObject.AddComponent<AudioSource>();
+        sfxSource.playOnAwake = false;
+        sfxSource.spatialBlend = 0f;
+
+        CacheTargets();
+    }
+
+    void PlaySfx(AudioClip clip)
+    {
+        if (clip != null && sfxSource != null) sfxSource.PlayOneShot(clip);
+    }
+
+    // Find the sprite on each target object and remember its normal look, then hide them.
+    void CacheTargets()
+    {
+        if (lanes == null) return;
+        foreach (Lane lane in lanes)
+        {
+            if (lane == null || lane.target == null) continue;
+            lane.targetRenderer = lane.target.GetComponentInChildren<SpriteRenderer>(true);
+            if (lane.targetRenderer != null)
+            {
+                lane.targetRestSprite = lane.targetRenderer.sprite;
+                lane.targetRestColor = lane.targetRenderer.color;
+                lane.targetRestScale = lane.targetRenderer.transform.localScale;
+            }
+        }
+        SetTargetsVisible(false);
+    }
+
+    // Show/hide the target sprites. They're only visible on the player's turn.
+    void SetTargetsVisible(bool show)
+    {
+        if (lanes == null) return;
+        foreach (Lane lane in lanes)
+        {
+            if (lane == null || lane.targetRenderer == null) continue;
+            lane.targetRenderer.enabled = show;
+            // Always reset to the normal grey look + size.
+            lane.targetRenderer.sprite = lane.targetRestSprite;
+            lane.targetRenderer.color = lane.targetRestColor;
+            lane.targetRenderer.transform.localScale = lane.targetRestScale;
+            lane.flashUntil = 0f;
+            lane.popUntil = 0f;
+        }
+    }
+
+    // Called every frame during the player's turn: handles the colour flash (on press)
+    // and the grow-and-shrink pop (on a successful hit), returning to normal afterward.
+    void UpdateTargetVisuals()
+    {
+        if (lanes == null) return;
+        foreach (Lane lane in lanes)
+        {
+            if (lane == null || lane.targetRenderer == null || !lane.targetRenderer.enabled) continue;
+            Transform t = lane.targetRenderer.transform;
+
+            // Colour: coloured sprite while flashing, otherwise grey.
+            if (Time.time < lane.flashUntil && lane.colorSprite != null)
+                lane.targetRenderer.sprite = lane.colorSprite;
+            else
+                lane.targetRenderer.sprite = lane.targetRestSprite;
+
+            // Size: pop up on a hit, then ease back to normal.
+            if (Time.time < lane.popUntil && targetFlashTime > 0f)
+            {
+                float k = (lane.popUntil - Time.time) / targetFlashTime; // 1 -> 0
+                t.localScale = lane.targetRestScale * (1f + (popScale - 1f) * k);
+            }
+            else
+            {
+                t.localScale = lane.targetRestScale;
+            }
+        }
     }
 
     void Start()
@@ -160,9 +258,11 @@ public class RhythmGame : MonoBehaviour
         notes.Sort((a, b) => a.time.CompareTo(b.time));
         int total = notes.Count;
         int spawnIndex = 0;
-        int hitCount = 0;
-        int strayPresses = 0;
+        bool failed = false;
         List<FallingNote> active = new List<FallingNote>();
+
+        // Targets show only on the player's turn, hidden during the showcase.
+        SetTargetsVisible(interactive);
 
         // Schedule audio to start after a lead-in so early notes have room to fall in.
         double dspStart = AudioSettings.dspTime + fallDuration;
@@ -191,14 +291,22 @@ public class RhythmGame : MonoBehaviour
                 spawnIndex++;
             }
 
-            // Move notes; mark misses; clean up notes that fell past.
+            // Move notes; detect a missed note (instant fail on the player's turn); clean up.
             for (int i = active.Count - 1; i >= 0; i--)
             {
                 FallingNote n = active[i];
                 n.Tick(songTime);
 
                 if (!n.judged && songTime > n.hitTime + hitWindow)
-                    n.judged = true; // missed (only matters on the player's turn)
+                {
+                    n.judged = true; // its window has passed
+                    if (interactive && !n.hit && !failed)
+                    {
+                        // A note slipped through — buzzer, and bail out back to the demo.
+                        failed = true;
+                        PlaySfx(missSound);
+                    }
+                }
 
                 if (n.judged && !n.hit && songTime > n.hitTime + missFallTime)
                 {
@@ -206,6 +314,8 @@ public class RhythmGame : MonoBehaviour
                     active.RemoveAt(i);
                 }
             }
+
+            if (failed) break;
 
             // Player input.
             if (interactive)
@@ -215,6 +325,11 @@ public class RhythmGame : MonoBehaviour
                     if (lane == null) continue;
                     if (!Input.GetKeyDown(lane.key)) continue;
 
+                    // Flash this target to its coloured sprite — but ONLY if it's active (visible).
+                    if (lane.targetRenderer != null && lane.targetRenderer.enabled && lane.colorSprite != null)
+                        lane.flashUntil = Time.time + targetFlashTime;
+
+                    // Look for a note to hit in this lane.
                     FallingNote best = null;
                     float bestDelta = hitWindow + 1f;
                     foreach (FallingNote n in active)
@@ -227,17 +342,24 @@ public class RhythmGame : MonoBehaviour
 
                     if (best != null)
                     {
+                        // Good hit: pop the target, say NICE, remove the note.
                         best.hit = true;
                         best.judged = true;
-                        hitCount++;
                         active.Remove(best);
                         Destroy(best.gameObject);
+                        if (lane.targetRenderer != null) lane.popUntil = Time.time + targetFlashTime;
+                        SetStatus(niceMessage);
                     }
-                    else
+                    else if (punishStrayPresses && !failed)
                     {
-                        strayPresses++;
+                        // Optional: pressing with nothing there also fails.
+                        failed = true;
+                        PlaySfx(missSound);
                     }
                 }
+
+                UpdateTargetVisuals();
+                if (failed) break;
             }
 
             if (songTime >= endTime) break;
@@ -249,10 +371,13 @@ public class RhythmGame : MonoBehaviour
             if (n != null) Destroy(n.gameObject);
         active.Clear();
 
+        // Hide the targets again until the next turn.
+        SetTargetsVisible(false);
+
         if (source.isPlaying) source.Stop();
 
-        // Passed only if every note was hit (and no stray presses, if you punish those).
-        turnPassed = (hitCount == total) && (!punishStrayPresses || strayPresses == 0);
+        // Passed as long as nothing slipped through.
+        turnPassed = !failed;
     }
 
     void SpawnNote(NoteEvent ev, bool interactive, List<FallingNote> active)

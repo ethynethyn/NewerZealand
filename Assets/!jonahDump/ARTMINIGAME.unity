@@ -1993,10 +1993,10 @@ MonoBehaviour:
   submitPrompt: {fileID: 1007411873}
   notAccurateObject: {fileID: 123371529}
   gameEndObject: {fileID: 942519836}
-  requiredCoverage: 30
+  requiredCoverage: 2.6
   totalDrawings: 3
   submitKey: 13
-  similarityThreshold: 0
+  similarityThreshold: 0.49
   gridResolution: 8
   cellFillThreshold: 0.05
   referenceBackgroundTolerance: 0.25
