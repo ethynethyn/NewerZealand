@@ -9,6 +9,26 @@ public class ClassroomZone : MonoBehaviour
     [Header("Focus")]
     public Transform focusTarget;
 
+    // ── NEW: DOOR SWAP ────────────────────────────────────────────────
+    // Assign BOTH per class. closedDoor blocks the player; openDoor lets them in.
+    // Leave closedDoor active in the scene and openDoor inactive by default —
+    // the brain flips them at runtime.
+    [Header("Doors (assign both)")]
+    [Tooltip("Shown when the class is CLOSED (blocks the player). Active by default.")]
+    public GameObject closedDoor;
+    [Tooltip("Shown when the class is OPEN (this is the player's next class). Inactive by default.")]
+    public GameObject openDoor;
+
+    // ── NEW: LOCK-IN OBJECTS ──────────────────────────────────────────
+    // Activated when the player is locked into THIS class (e.g. the "classwork"
+    // trigger box at their desk). Leave these inactive by default.
+    [Header("Lock-In Objects")]
+    [Tooltip("Activated while the player is locked into this class. Inactive by default.")]
+    public GameObject[] lockInObjects;
+
+    // Wired up automatically by the ClassTriggerZone child at runtime.
+    [HideInInspector] public ClassTriggerZone trigger;
+
     [Header("Player Checkpoint Objects")]
     public GameObject[] checkpoint0Objects;
     public GameObject[] checkpoint25Objects;
@@ -18,7 +38,7 @@ public class ClassroomZone : MonoBehaviour
 
     private Dictionary<Transform, bool> occupied = new Dictionary<Transform, bool>();
 
-    // ✅ NEW: prevents reapplying checkpoints
+    // prevents reapplying checkpoints
     private HashSet<int> appliedCheckpoints = new HashSet<int>();
 
     void Awake()
@@ -27,6 +47,24 @@ public class ClassroomZone : MonoBehaviour
             occupied[seat] = false;
     }
 
+    // ── NEW: DOOR CONTROL ─────────────────────────────────────────────
+    // open == true  → openDoor ON,  closedDoor OFF (player can enter)
+    // open == false → closedDoor ON, openDoor   OFF (player blocked)
+    public void SetDoorOpen(bool open)
+    {
+        if (openDoor != null) openDoor.SetActive(open);
+        if (closedDoor != null) closedDoor.SetActive(!open);
+    }
+
+    // ── NEW: LOCK-IN CONTROL ──────────────────────────────────────────
+    public void SetLockInObjects(bool active)
+    {
+        if (lockInObjects == null) return;
+        foreach (var go in lockInObjects)
+            if (go != null) go.SetActive(active);
+    }
+
+    // ── SEATS ─────────────────────────────────────────────────────────
     public Transform GetFreeSeat()
     {
         foreach (var seat in seats)
@@ -47,7 +85,7 @@ public class ClassroomZone : MonoBehaviour
             occupied[k] = false;
     }
 
-    // ✅ Call this instead of GetCheckpointObjects
+    // ── CHECKPOINTS (unchanged) ───────────────────────────────────────
     public void ApplyCheckpoint(int index)
     {
         if (appliedCheckpoints.Contains(index))
@@ -65,7 +103,6 @@ public class ClassroomZone : MonoBehaviour
         }
     }
 
-    // Keeps your mapping
     public GameObject[] GetCheckpointObjects(int index)
     {
         switch (index)
@@ -79,7 +116,6 @@ public class ClassroomZone : MonoBehaviour
         }
     }
 
-    // Optional: full reset if needed (restart day/class)
     public void ResetCheckpoints()
     {
         appliedCheckpoints.Clear();

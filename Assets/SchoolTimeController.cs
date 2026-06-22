@@ -14,10 +14,28 @@ public class SchoolTimeController : MonoBehaviour
 
     private SchoolPeriod lastPeriod;
 
-    // Add this to SchoolTimeController — just makes the existing private method public
+    // Just makes the existing private method public
     public bool IsInPeriodPublic(float hour, SchoolPeriod p)
     {
         return IsInPeriod(hour, p);
+    }
+
+    // ── A/B DAY HELPERS ───────────────────────────────────────────────
+    // Day index uses the RAW (un-modded) time stat. Day 1 = index 0.
+    //   index 0 (Day 1) → A day
+    //   index 1 (Day 2) → B day
+    //   index 2 (Day 3) → A day ... and so on.
+    public int GetDayIndex()
+    {
+        if (character == null) return 0;
+        float rawTime = character.GetStatValue(timeStatName);
+        return Mathf.FloorToInt(rawTime / 24f);
+    }
+
+    // A days are the ODD calendar days (1, 3, 5...), which are EVEN indices (0, 2, 4...).
+    public bool IsADay()
+    {
+        return (GetDayIndex() % 2) == 0;
     }
 
     void Update()
@@ -42,7 +60,6 @@ public class SchoolTimeController : MonoBehaviour
         {
             Debug.Log($"🕒 STATE CHANGE → {active.name}");
 
-            // 🔥 THIS FIXES YOUR BUG
             if (ClassroomRegistry.Instance != null)
             {
                 ClassroomRegistry.Instance.ResetAllClassrooms();

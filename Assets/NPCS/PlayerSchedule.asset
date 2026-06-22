@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77dd303287028b5459bb73017fda8252, type: 3}
   m_Name: PlayerSchedule
   m_EditorClassIdentifier: 
-  period1Class: English
-  period2Class: Maths
-  period3Class: English
-  period4Class: Maths
+  aPeriod1Class: English
+  aPeriod2Class: Science
+  aPeriod3Class: Art
+  bPeriod1Class: Maths
+  bPeriod2Class: Music
+  bPeriod3Class: ComputerLab

@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad178c8b6b8096b459ed7c116c8d8b04, type: 3}
   m_Name: TeacherSchedule
   m_EditorClassIdentifier: 
-  period1Class: Teacher_English
-  period2Class: Teacher_Maths
-  period3Class: Teacher_English
-  period4Class: Teacher_Maths
+  aPeriod1Class: Teacher_English
+  aPeriod2Class: Teacher_Science
+  aPeriod3Class: Teacher_Art
+  bPeriod1Class: Maths
+  bPeriod2Class: Music
+  bPeriod3Class: ComputerLab

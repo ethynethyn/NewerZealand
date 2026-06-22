@@ -50,7 +50,16 @@ public class NPCBrain : MonoBehaviour
     [Header("Recess Target")]
     public string preferredRecessZone;
 
-
+    // Cached controller (lazy-found, then reused).
+    private SchoolTimeController controller;
+    private SchoolTimeController Controller
+    {
+        get
+        {
+            if (controller == null) controller = FindObjectOfType<SchoolTimeController>();
+            return controller;
+        }
+    }
 
     void Start()
     {
@@ -246,7 +255,7 @@ public class NPCBrain : MonoBehaviour
         if (state == SchoolState.Class)
             GoToClass(period);
         else
-            GoToRecess();
+            GoToRecess();   // Recess AND Lunch both route here
     }
 
     void GoToClass(int period)
@@ -313,7 +322,7 @@ public class NPCBrain : MonoBehaviour
 
     void SnapToCurrentState()
     {
-        var controller = FindObjectOfType<SchoolTimeController>();
+        var controller = Controller;
         if (controller == null) return;
 
         float hour = GetCurrentHour();
@@ -335,24 +344,20 @@ public class NPCBrain : MonoBehaviour
             GoToRecess();
     }
 
+    // Uses today's A/B day automatically.
     string GetClass(int period)
     {
-        switch (period)
-        {
-            case 0: return schedule.period1Class;
-            case 1: return schedule.period2Class;
-            case 2: return schedule.period3Class;
-            case 3: return schedule.period4Class;
-        }
-        return "";
+        if (schedule == null) return "";
+        bool isADay = (Controller != null) && Controller.IsADay();
+        return schedule.GetClass(period, isADay);
     }
 
     float GetCurrentHour()
     {
-        var controller = FindObjectOfType<SchoolTimeController>();
-        if (controller == null || controller.character == null)
+        var c = Controller;
+        if (c == null || c.character == null)
             return 0f;
 
-        return controller.character.GetStatValue(controller.timeStatName) % 24f;
+        return c.character.GetStatValue(c.timeStatName) % 24f;
     }
 }
