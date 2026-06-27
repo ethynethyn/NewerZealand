@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SchoolRPG.unity
     guid: 88fb8ee6d878448559e56ad9bc8918cc
+  - enabled: 1
+    path: Assets/!jonahDump/GRANNY/GranBlack.unity
+    guid: 645b0c4cca8a6054d853c34c82f0a1be
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
