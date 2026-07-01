@@ -86,6 +86,10 @@ public class RhythmGame : MonoBehaviour
     public bool autoStart = false;
     public KeyCode startKey = KeyCode.Space;
 
+    [Header("Minigame Return")]
+    [Tooltip("After winning, how long 'YOU WIN' shows before returning to the class. 0 = return instantly.")]
+    public float returnDelayAfterWin = 2f;
+
     private AudioSource source;
     private bool turnPassed;
     private const float endPadding = 0.5f;
@@ -248,6 +252,10 @@ public class RhythmGame : MonoBehaviour
         }
 
         SetStatus(winMessage);
+
+        // Tell the class minigame system the player finished, after a beat so YOU WIN shows.
+        yield return new WaitForSeconds(returnDelayAfterWin);
+        ClassMinigameBridge.Finish();
     }
 
     // Runs one pass of a pattern. interactive=false is the grey showcase (watch only).

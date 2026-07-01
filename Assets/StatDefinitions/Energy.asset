@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cc13045286b52a4abe0c22b0f6749cc, type: 3}
-  m_Name: Karma
+  m_Name: Energy
   m_EditorClassIdentifier: 
-  statName: Karma
+  statName: Energy
   description: Describe what this stat does.

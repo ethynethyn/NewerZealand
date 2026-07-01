@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -37,6 +38,10 @@ public class MathQuiz : MonoBehaviour
     public bool randomizeOrder = true;
     [Tooltip("Only allow digits, minus, and a decimal point to be typed.")]
     public bool numbersOnly = true;
+
+    [Header("Minigame Return")]
+    [Tooltip("After winning, how long YOU WIN shows before returning to the class. 0 = return instantly.")]
+    public float returnDelayAfterWin = 2f;
 
     [Header("UI References")]
     public TMP_Text questionText;   // shows the current problem
@@ -179,6 +184,15 @@ public class MathQuiz : MonoBehaviour
         if (answerText != null) answerText.text = "";
         if (feedbackText != null) feedbackText.text = winMessage;
         onWin?.Invoke();
+
+        // Tell the class minigame system the player finished, after a beat so YOU WIN shows.
+        StartCoroutine(ReturnToClassAfterWin());
+    }
+
+    IEnumerator ReturnToClassAfterWin()
+    {
+        yield return new WaitForSeconds(returnDelayAfterWin);
+        ClassMinigameBridge.Finish();
     }
 
     void RefreshAnswer()

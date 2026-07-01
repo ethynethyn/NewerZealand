@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cc13045286b52a4abe0c22b0f6749cc, type: 3}
-  m_Name: Fun
+  m_Script: {fileID: 11500000, guid: 37f0f24cb6e71594388be69bca99792e, type: 3}
+  m_Name: NewPattern 7
   m_EditorClassIdentifier: 
-  statName: Fun
-  description: Describe what this stat does.
+  clip: {fileID: 8300000, guid: d4dc2105f2bc0724d892fabe3b683415, type: 3}
+  notes: []

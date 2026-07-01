@@ -51,6 +51,10 @@ public class ChemistryMixGame : MonoBehaviour
     public GameObject winScreen;
     public int tasksToWin = 5;
 
+    [Header("Minigame Return")]
+    [Tooltip("After winning, how long the win screen shows before returning to the class. 0 = return instantly.")]
+    public float returnDelayAfterWin = 2f;
+
     [Header("Input")]
     public KeyCode confirmKey = KeyCode.Space;
     public KeyCode confirmKeyAlt = KeyCode.Return;
@@ -421,6 +425,16 @@ public class ChemistryMixGame : MonoBehaviour
 
         if (winScreen != null)
             winScreen.SetActive(true);
+
+        // Tell the class minigame system the player finished, after a beat so the
+        // win screen is visible before we return to the class.
+        StartCoroutine(ReturnToClassAfterWin());
+    }
+
+    IEnumerator ReturnToClassAfterWin()
+    {
+        yield return new WaitForSeconds(returnDelayAfterWin);
+        ClassMinigameBridge.Finish();
     }
 
     // ------------------------------------------------------------- Helpers

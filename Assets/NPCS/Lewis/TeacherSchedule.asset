@@ -15,6 +15,6 @@ MonoBehaviour:
   aPeriod1Class: Teacher_English
   aPeriod2Class: Teacher_Science
   aPeriod3Class: Teacher_Art
-  bPeriod1Class: Maths
-  bPeriod2Class: Music
-  bPeriod3Class: ComputerLab
+  bPeriod1Class: Teacher_Maths
+  bPeriod2Class: Teacher_Music
+  bPeriod3Class: Teacher_ComputerLab

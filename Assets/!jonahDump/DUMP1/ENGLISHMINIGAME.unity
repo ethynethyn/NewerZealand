@@ -156,10 +156,10 @@ MonoBehaviour:
   - real shit bro1
   - internet 1
   - please please1
-  paragraphsToWin: 7
+  paragraphsToWin: 3
   autoSubmitWhenComplete: 0
   wrongResetsEntireGame: 0
-  avoidImmediateRepeat: 1
+  noRepeatsUntilCycled: 1
   paragraphText: {fileID: 1268420795}
   inputText: {fileID: 284052654}
   statusText: {fileID: 2071538671}
@@ -175,6 +175,7 @@ MonoBehaviour:
   flashDuration: 0.6
   backspaceRepeatDelay: 0.4
   backspaceRepeatRate: 0.04
+  returnDelayAfterWin: 2
 --- !u!4 &127549827
 Transform:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +29,10 @@ public class DrawingGameManager : MonoBehaviour
     [SerializeField, Range(0f, 100f)] private float requiredCoverage = 15f;
     [SerializeField] private int totalDrawings = 3;
     [SerializeField] private KeyCode submitKey = KeyCode.Return;
+
+    [Header("Minigame Return")]
+    [Tooltip("After finishing all drawings, how long the end screen shows before returning to the class. 0 = return instantly.")]
+    [SerializeField] private float returnDelayAfterWin = 2f;
 
     [Header("Resemblance Check")]
     [Tooltip("0..1. Higher = must match more closely. Keep LOW for 'very vaguely resembles'.")]
@@ -136,5 +141,15 @@ public class DrawingGameManager : MonoBehaviour
         if (drawingCanvas != null) drawingCanvas.SetInteractable(false); // stop drawing on the end screen
         if (notAccurateObject != null) notAccurateObject.SetActive(false);
         if (gameEndObject != null) gameEndObject.SetActive(true);
+
+        // Tell the class minigame system the player finished, after a beat so the
+        // end screen is visible before we return to the class.
+        StartCoroutine(ReturnToClassAfterWin());
+    }
+
+    private IEnumerator ReturnToClassAfterWin()
+    {
+        yield return new WaitForSeconds(returnDelayAfterWin);
+        ClassMinigameBridge.Finish();
     }
 }

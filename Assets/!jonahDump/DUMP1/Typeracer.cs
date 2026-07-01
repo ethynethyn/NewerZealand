@@ -11,9 +11,15 @@
 //       * Exact match  -> flash CORRECT, jump to next random paragraph.
 //       * Not a match  -> flash INCORRECT, clear your typing, retry (or full reset - see toggle).
 //   - After completing 'Paragraphs To Win' paragraphs (default 7) -> YOU WIN.
+//   - On win, "YOU WIN" stays up for 'Return Delay After Win' seconds, then this scene tells
+//     the main scene it's done (via ClassMinigameBridge.Finish), which resumes the main scene,
+//     lerps the camera back and re-enables player input.
 //
 // SETUP: attach this to an empty GameObject and assign the three TextMeshPro texts.
 //        (Detailed steps are in the chat message.)
+//
+// REQUIRES: ClassMinigameTrigger.cs must also be in the project, because this calls
+//           ClassMinigameBridge.Finish(). Don't use this typing script in a project without it.
 //
 // NOTE on input: this auto-detects the Input System. If you're on the NEW Input System,
 // keyboard text is captured via Keyboard.onTextInput; on the OLD one it uses Input.inputString.
@@ -88,6 +94,11 @@ public class TypeRacer : MonoBehaviour
     [Tooltip("Time between deletes while Backspace is held.")]
     public float backspaceRepeatRate = 0.04f;
 
+    [Header("Minigame Return")]
+    [Tooltip("After winning, how long YOU WIN stays on screen before returning to the main scene.\n" +
+             "Set to 0 to return instantly.")]
+    public float returnDelayAfterWin = 2f;
+
     // ---- runtime state ----
     private GameState state;
     private string target = "";
@@ -100,6 +111,9 @@ public class TypeRacer : MonoBehaviour
     private float statusTimer;
     private bool statusPersistent;
     private float backspaceTimer;
+
+    private bool returning;
+    private float returnTimer;
 
 #if ENABLE_INPUT_SYSTEM
     private Keyboard subscribedKeyboard;
@@ -147,6 +161,7 @@ public class TypeRacer : MonoBehaviour
         EnsureTextSubscription();
 #endif
         TickStatus();
+        TickReturn();
 
         if (state == GameState.Playing)
         {
@@ -158,7 +173,7 @@ public class TypeRacer : MonoBehaviour
         }
         else // Idle or Won
         {
-            if (StartPressed()) StartGame();
+            if (!returning && StartPressed()) StartGame();
         }
 
         if (dirty)
@@ -277,6 +292,7 @@ public class TypeRacer : MonoBehaviour
             return;
         }
         correctCount = 0;
+        returning = false;
         lastIndex = -1;
         bag.Clear();
         state = GameState.Playing;
@@ -330,6 +346,10 @@ public class TypeRacer : MonoBehaviour
         if (paragraphText != null) paragraphText.text = "";
         if (inputText != null) inputText.text = "";
         ShowStatus(winMessage, winColor, true);
+
+        // Start the countdown that returns control to the main scene.
+        returning = true;
+        returnTimer = returnDelayAfterWin;
     }
 
     void LoadRandomParagraph()
@@ -444,5 +464,18 @@ public class TypeRacer : MonoBehaviour
         if (statusPersistent || statusTimer <= 0f) return;
         statusTimer -= Time.deltaTime;
         if (statusTimer <= 0f && statusText != null) statusText.text = "";
+    }
+
+    // ---------------- minigame return ----------------
+
+    void TickReturn()
+    {
+        if (!returning) return;
+        returnTimer -= Time.deltaTime;
+        if (returnTimer <= 0f)
+        {
+            returning = false;
+            ClassMinigameBridge.Finish(); // tells the main scene the minigame is done
+        }
     }
 }

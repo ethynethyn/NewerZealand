@@ -26,6 +26,21 @@ public class ClassroomZone : MonoBehaviour
     [Tooltip("Activated while the player is locked into this class. Inactive by default.")]
     public GameObject[] lockInObjects;
 
+    // ── NEW: CLASS MINIGAME TRIGGER ───────────────────────────────────
+    // The classwork minigame trigger (the ClassMinigameTrigger component) for THIS class.
+    // It ENABLES when the player locks into this class, but is deliberately NOT disabled
+    // when the class ends — unlike the lock-in objects above. The ClassMinigameTrigger
+    // turns itself off when the bell rings (after returning player input etc.) in a way
+    // that doesn't disrupt that, so we leave all of its disabling to it.
+    //
+    // Start it DISABLED by default: either un-tick the ClassMinigameTrigger component's
+    // enabled checkbox, or leave its GameObject inactive. SetLockInObjects(true) turns
+    // both on, so whichever you pick works.
+    [Header("Class Minigame Trigger")]
+    [Tooltip("The ClassMinigameTrigger for this class. Enabled on lock-in, never disabled here " +
+             "(it disables itself on the bell). Start it DISABLED in the inspector.")]
+    public ClassMinigameTrigger classMinigameTrigger;
+
     // Wired up automatically by the ClassTriggerZone child at runtime.
     [HideInInspector] public ClassTriggerZone trigger;
 
@@ -59,9 +74,20 @@ public class ClassroomZone : MonoBehaviour
     // ── NEW: LOCK-IN CONTROL ──────────────────────────────────────────
     public void SetLockInObjects(bool active)
     {
-        if (lockInObjects == null) return;
-        foreach (var go in lockInObjects)
-            if (go != null) go.SetActive(active);
+        if (lockInObjects != null)
+        {
+            foreach (var go in lockInObjects)
+                if (go != null) go.SetActive(active);
+        }
+
+        // The class minigame trigger turns ON with the lock-in, but is intentionally NOT
+        // turned off here. The ClassMinigameTrigger disables itself when the bell rings
+        // (after returning input, etc.), so forcing it off here could disrupt that.
+        if (active && classMinigameTrigger != null)
+        {
+            classMinigameTrigger.gameObject.SetActive(true);
+            classMinigameTrigger.enabled = true;
+        }
     }
 
     // ── SEATS ─────────────────────────────────────────────────────────

@@ -31,7 +31,7 @@ Material:
     m_TexEnvs:
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: d889c10cf14437c4a8114123844aa4a8, type: 3}
-        m_Scale: {x: 20, y: 20}
+        m_Scale: {x: 200, y: 200}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
@@ -130,7 +130,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.43511406, g: 0.5849055, b: 0.1682982, a: 0.64705884}
+    - _BaseColor: {r: 0.39962777, g: 0.76862746, b: 0.15294115, a: 0.64705884}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

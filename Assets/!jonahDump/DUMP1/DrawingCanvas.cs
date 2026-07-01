@@ -166,6 +166,7 @@ public class DrawingCanvas : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        Debug.Log("canvas pointer down");   // 
         lastPixel = null; // start a fresh stroke
         PaintAt(eventData);
     }
