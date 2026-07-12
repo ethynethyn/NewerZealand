@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b71023dd9c6f0c5458c033b8073c9aba, type: 3}
+  m_Name: EmptyHand
+  m_EditorClassIdentifier: 
+  itemName: Empty Hand
+  isEmptyHand: 1
+  icon: {fileID: 21300000, guid: 7bc8e3d50f105ec4f85b35dea553ae5d, type: 3}
+  handHoldingSprite: {fileID: 0}
+  handUsingSprite: {fileID: 0}
+  maxStackSize: 1
+  isUsable: 0
+  useDuration: 0
+  useSound: {fileID: 0}
+  useEffectPrefabs: []
+  consumeOnUse: 0
+  transformInto: {fileID: 0}
+  worldPrefab: {fileID: 0}
