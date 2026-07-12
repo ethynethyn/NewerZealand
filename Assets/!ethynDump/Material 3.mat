@@ -89,7 +89,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints:
     - _ColorBitDepth: 64
-    - _ResolutionLimit: 64
+    - _ResolutionLimit: 867
     - _SnapsPerUnit: 127
     m_Floats:
     - _AddPrecomputedVelocity: 0

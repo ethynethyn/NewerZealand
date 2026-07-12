@@ -51474,7 +51474,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &472734767
 Transform:
   m_ObjectHideFlags: 0
@@ -89443,7 +89443,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &816937075
 Transform:
   m_ObjectHideFlags: 0
@@ -150866,18 +150866,18 @@ MonoBehaviour:
   cameraLerpDuration: 1
   cameraControllerToDisable: {fileID: 135756641613574981}
   targetCharacter: {fileID: 1007035012}
-  statToModify: Coolness
+  statToModify: Strength
   statChangeAmount: 1
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
-  activityAnimator: {fileID: 0}
-  activityStateName: coolnessanim
-  returnStateName: 
+  activityAnimator: {fileID: 472734768}
+  activityStateName: StrengthAnim
+  returnStateName: Idle
   activityLayer: 0
-  ePrompt: {fileID: 848037976}
+  ePrompt: {fileID: 231999737}
   mashKey: 101
   minMashSpeed: 0.5
   maxMashSpeed: 5
@@ -191764,7 +191764,7 @@ MonoBehaviour:
   - {fileID: 391771334}
   activityAnimator: {fileID: 897330082}
   activityStateName: coolnessanim
-  returnStateName: Idle
+  returnStateName: 
   activityLayer: 0
   ePrompt: {fileID: 231999737}
   mashKey: 101
