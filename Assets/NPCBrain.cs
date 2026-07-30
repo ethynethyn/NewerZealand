@@ -71,6 +71,42 @@ public class NPCBrain : MonoBehaviour
             InitDay();
     }
 
+    // ---- Conversation freeze / face ----
+    private bool inConversation = false;
+
+    public void EnterConversation(Transform lookAt)
+    {
+        if (inConversation) return;
+        inConversation = true;
+
+        // Stop where they are
+        if (agent != null && agent.isOnNavMesh)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
+
+        // Face the player via the billboard (no transform rotation, matches your setup)
+        if (billboard != null && lookAt != null)
+            billboard.SetFocus(lookAt);
+    }
+
+    public void ExitConversation()
+    {
+        if (!inConversation) return;
+        inConversation = false;
+
+        if (agent != null && agent.isOnNavMesh)
+            agent.isStopped = false;
+
+        // Re-evaluate what they should be doing now (covers a period change that
+        // happened mid-conversation) and restores the correct facing.
+        if (hasEnteredSchool && !hasLeftSchool)
+            SnapToCurrentState();
+        else
+            ClearBillboardFocus();
+    }
+
     void InitDay()
     {
         StopAllCoroutines();
@@ -111,6 +147,7 @@ public class NPCBrain : MonoBehaviour
 
     void Update()
     {
+        if (inConversation) return;   
         float currentHour = GetCurrentHour();
 
         if (!dayResetting && hasLeftSchool && currentHour < leaveWindow.x)
@@ -241,6 +278,7 @@ public class NPCBrain : MonoBehaviour
 
     void HandleState(SchoolState state, int period)
     {
+        if (inConversation) return;
         if (spawnAtDoor && !hasEnteredSchool) return;
         if (hasLeftSchool) return;
         if (isWalkingToExit) return;
@@ -251,7 +289,7 @@ public class NPCBrain : MonoBehaviour
     IEnumerator HandleStateWithDelay(SchoolState state, int period)
     {
         yield return new WaitForSeconds(Random.Range(0f, stateChangeDelay));
-
+        if (inConversation) yield break;
         if (state == SchoolState.Class)
             GoToClass(period);
         else

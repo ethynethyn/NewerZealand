@@ -56,7 +56,7 @@ public class PlayerConversationInteractor : MonoBehaviour
         if (ConversationManager.Instance == null) return;
         if (ConversationManager.Instance.IsConversationActive) return;
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             ConversationManager.Instance.StartConversation(currentNPC.myConversation);
 

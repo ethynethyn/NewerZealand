@@ -3,16 +3,35 @@ using DialogueEditor;
 
 public class ConversationInputManager : MonoBehaviour
 {
+    [Header("Active only while a conversation is running")]
+    public GameObject objectToToggle;   // your player-input freezer
+
     private float scrollCooldown = 0.5f;
     private float lastScrollTime = 0f;
+    private bool wasActive = false;
+
+    void Start()
+    {
+        if (objectToToggle != null)
+            objectToToggle.SetActive(false);
+    }
 
     void Update()
     {
-        if (ConversationManager.Instance != null && ConversationManager.Instance.IsConversationActive)
+        bool active = ConversationManager.Instance != null &&
+                      ConversationManager.Instance.IsConversationActive;
+
+        // Only flip the object when the state actually changes
+        if (active != wasActive)
+        {
+            if (objectToToggle != null)
+                objectToToggle.SetActive(active);
+            wasActive = active;
+        }
+
+        if (active)
         {
             float scroll = Input.GetAxis("Mouse ScrollWheel");
-
-            // Add cooldown to prevent fast scrolling through options
             if (Time.time - lastScrollTime > scrollCooldown)
             {
                 if (scroll > 0f)
@@ -27,7 +46,7 @@ public class ConversationInputManager : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 ConversationManager.Instance.PressSelectedOption();
             }

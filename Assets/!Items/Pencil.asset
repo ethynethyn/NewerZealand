@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Pencil
   m_EditorClassIdentifier: 
   itemName: Pencil
+  description: A "common" Writing tool. the favourite for many!
   isEmptyHand: 0
   icon: {fileID: 21300000, guid: b424a818938e38448b391cb9f03bd2cf, type: 3}
   handHoldingSprite: {fileID: 21300000, guid: b424a818938e38448b391cb9f03bd2cf, type: 3}

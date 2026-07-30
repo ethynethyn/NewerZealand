@@ -64,13 +64,25 @@ public class HotbarUI : MonoBehaviour
 
     void RefreshSelection()
     {
+        // While the bag is open, the hovered slot is the highlighted one instead,
+        // so the toolbar selection highlight steps aside.
+        bool show = !InventoryPanelUI.IsOpen;
         int sel = InventoryManager.Instance.SelectedHotbarIndex;
         for (int i = 0; i < slots.Count; i++)
-            slots[i].SetSelected(i == sel);
+            slots[i].SetSelected(show && i == sel);
     }
+
+    bool prevOpen;
 
     void Update()
     {
+        // Re-apply the selection highlight when the bag opens or closes.
+        if (InventoryPanelUI.IsOpen != prevOpen)
+        {
+            prevOpen = InventoryPanelUI.IsOpen;
+            RefreshSelection();
+        }
+
         if (InventoryPanelUI.IsOpen) return; // don't switch slots while the bag is open
 
         var mgr = InventoryManager.Instance;
