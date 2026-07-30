@@ -50,6 +50,12 @@ public class NPCBrain : MonoBehaviour
     [Header("Recess Target")]
     public string preferredRecessZone;
 
+   
+
+    // Conversation state
+    private bool inConversation = false;
+    private Transform conversationLookTarget;
+
     // Cached controller (lazy-found, then reused).
     private SchoolTimeController controller;
     private SchoolTimeController Controller
@@ -69,42 +75,6 @@ public class NPCBrain : MonoBehaviour
 
         if (spawnAtDoor && spawnPoint != null)
             InitDay();
-    }
-
-    // ---- Conversation freeze / face ----
-    private bool inConversation = false;
-
-    public void EnterConversation(Transform lookAt)
-    {
-        if (inConversation) return;
-        inConversation = true;
-
-        // Stop where they are
-        if (agent != null && agent.isOnNavMesh)
-        {
-            agent.isStopped = true;
-            agent.ResetPath();
-        }
-
-        // Face the player via the billboard (no transform rotation, matches your setup)
-        if (billboard != null && lookAt != null)
-            billboard.SetFocus(lookAt);
-    }
-
-    public void ExitConversation()
-    {
-        if (!inConversation) return;
-        inConversation = false;
-
-        if (agent != null && agent.isOnNavMesh)
-            agent.isStopped = false;
-
-        // Re-evaluate what they should be doing now (covers a period change that
-        // happened mid-conversation) and restores the correct facing.
-        if (hasEnteredSchool && !hasLeftSchool)
-            SnapToCurrentState();
-        else
-            ClearBillboardFocus();
     }
 
     void InitDay()
@@ -147,7 +117,9 @@ public class NPCBrain : MonoBehaviour
 
     void Update()
     {
-        if (inConversation) return;   
+        // Frozen while talking — nothing moves, no schedule logic runs.
+        if (inConversation) return;
+
         float currentHour = GetCurrentHour();
 
         if (!dayResetting && hasLeftSchool && currentHour < leaveWindow.x)
@@ -238,6 +210,84 @@ public class NPCBrain : MonoBehaviour
         }
     }
 
+    // ---------------------------------------------
+    // CONVERSATION CONTROL
+    // ---------------------------------------------
+    public void EnterConversation(Transform lookAt)
+    {
+        if (inConversation) return;
+        inConversation = true;
+        conversationLookTarget = lookAt;
+
+        // Cancel anything queued — entering, leaving, or a pending period change.
+        StopAllCoroutines();
+
+        // Freeze on the spot, whatever they were doing.
+        if (agent != null && agent.isOnNavMesh)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
+
+        FacePlayer();
+    }
+
+    public void ExitConversation()
+    {
+        if (!inConversation) return;
+        inConversation = false;
+        conversationLookTarget = null;
+
+        // Work out where they should be right now and send them there.
+        ResumeSchedule();
+    }
+
+    void FacePlayer()
+    {
+        if (billboard == null || conversationLookTarget == null) return;
+
+        // Same call your class-focus system uses, just aimed at the player instead
+        // of the teacher — so the sprite's front turns toward them.
+        billboard.SetFocus(conversationLookTarget);
+    }
+
+    void ResumeSchedule()
+    {
+        if (agent != null && agent.isOnNavMesh)
+            agent.isStopped = false;
+
+        // Never made it inside → let the ENTER logic re-trigger.
+        if (!hasEnteredSchool)
+        {
+            waitingToEnter = true;
+            return;
+        }
+
+        // Already went home → let the day-reset logic handle them.
+        if (hasLeftSchool)
+            return;
+
+        float hour = GetCurrentHour();
+
+        // It's home time now → head for the exit.
+        if (hour >= leaveHour && !isWalkingToExit)
+        {
+            waitingToLeave = false;
+            isWalkingToExit = true;
+            ClearBillboardFocus();
+
+            if (agent != null && agent.isOnNavMesh)
+            {
+                agent.ResetPath();
+                agent.SetDestination(entrancePoint.position);
+            }
+            return;
+        }
+
+        // Otherwise resume class or recess for whatever period we're in.
+        SnapToCurrentState();
+    }
+
     IEnumerator EnterWithDelay()
     {
         yield return new WaitForSeconds(spawnDelay);
@@ -278,7 +328,7 @@ public class NPCBrain : MonoBehaviour
 
     void HandleState(SchoolState state, int period)
     {
-        if (inConversation) return;
+        if (inConversation) return;   // ignore period changes while talking
         if (spawnAtDoor && !hasEnteredSchool) return;
         if (hasLeftSchool) return;
         if (isWalkingToExit) return;
@@ -290,6 +340,7 @@ public class NPCBrain : MonoBehaviour
     {
         yield return new WaitForSeconds(Random.Range(0f, stateChangeDelay));
         if (inConversation) yield break;
+
         if (state == SchoolState.Class)
             GoToClass(period);
         else

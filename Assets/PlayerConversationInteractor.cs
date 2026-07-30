@@ -36,7 +36,6 @@ public class PlayerConversationInteractor : MonoBehaviour
         currentNPC = null;
 
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
-
         if (Physics.Raycast(ray, out RaycastHit hit, interactRange))
         {
             currentNPC = hit.collider.GetComponent<ConversationStarter>();
@@ -58,7 +57,8 @@ public class PlayerConversationInteractor : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            ConversationManager.Instance.StartConversation(currentNPC.myConversation);
+            // Was: ConversationManager.Instance.StartConversation(currentNPC.myConversation);
+            currentNPC.StartTalking(playerCamera);   // freezes the NPC + faces the player
 
             if (interactionImage != null)
                 interactionImage.SetActive(false);
@@ -72,10 +72,10 @@ public class PlayerConversationInteractor : MonoBehaviour
         if (ConversationManager.Instance == null) return;
         if (!ConversationManager.Instance.IsConversationActive) return;
 
-        if (previousNPC != null && currentNPC == null)
+        // Right-click ends the conversation; looking around is now free
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             ConversationManager.Instance.EndConversation();
-
             if (interactionImage != null)
                 interactionImage.SetActive(false);
         }

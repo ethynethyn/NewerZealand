@@ -7,43 +7,35 @@ public class ConversationStarter : MonoBehaviour
 
     [Header("Freeze + face during conversation")]
     public NPCBrain npcBrain;      // auto-filled if on the same GameObject
-    public Transform faceTarget;   // the player; auto-found by tag if left empty
-    public string playerTag = "Player";
+    public Transform faceTarget;   // fallback if StartTalking isn't given a target
 
     private static ConversationStarter s_activeSpeaker;
 
     void Reset() { npcBrain = GetComponent<NPCBrain>(); }
-
-    void Awake()
-    {
-        if (npcBrain == null) npcBrain = GetComponent<NPCBrain>();
-        if (faceTarget == null && !string.IsNullOrEmpty(playerTag))
-        {
-            GameObject p = GameObject.FindWithTag(playerTag);
-            if (p != null) faceTarget = p.transform;
-        }
-    }
+    void Awake() { if (npcBrain == null) npcBrain = GetComponent<NPCBrain>(); }
 
     void OnEnable() { ConversationManager.OnConversationEnded += HandleConversationEnded; }
 
     void OnDisable()
     {
         ConversationManager.OnConversationEnded -= HandleConversationEnded;
-        // Safety: don't leave the NPC frozen if this gets disabled mid-talk
-        if (s_activeSpeaker == this)
+        if (s_activeSpeaker == this)   // safety: don't leave them frozen if disabled mid-talk
         {
             if (npcBrain != null) npcBrain.ExitConversation();
             s_activeSpeaker = null;
         }
     }
 
-    /// <summary> Call this to begin talking to THIS npc. </summary>
-    public void StartTalking()
+    /// <summary> Begin talking to THIS npc. Pass the thing it should turn to face. </summary>
+    public void StartTalking(Transform lookOverride = null)
     {
         if (myConversation == null || ConversationManager.Instance == null) return;
+        if (ConversationManager.Instance.IsConversationActive) return;
+
+        Transform look = (lookOverride != null) ? lookOverride : faceTarget;
 
         s_activeSpeaker = this;
-        if (npcBrain != null) npcBrain.EnterConversation(faceTarget);
+        if (npcBrain != null) npcBrain.EnterConversation(look);
         ConversationManager.Instance.StartConversation(myConversation);
     }
 

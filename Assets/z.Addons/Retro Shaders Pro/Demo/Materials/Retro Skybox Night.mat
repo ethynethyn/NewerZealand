@@ -74,7 +74,7 @@ Material:
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Cloud_Color: {r: 6e-45, g: 0.8637298, b: 0.9999998, a: 1}
+    - _Cloud_Color: {r: 4e-45, g: 0.8637298, b: 0.9999998, a: 1}
     - _Cloud_Height_Thresholds: {r: 0.1, g: 0.5, b: 0, a: 0}
     - _Cloud_Sizes: {r: 5, g: 25, b: 0, a: 0}
     - _Cloud_Velocity: {r: -0.005, g: -0.01, b: 0, a: 0}
