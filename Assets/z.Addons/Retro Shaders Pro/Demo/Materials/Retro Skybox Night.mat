@@ -74,13 +74,13 @@ Material:
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Cloud_Color: {r: 0.055072863, g: 0.69829994, b: 0.83396226, a: 1}
+    - _Cloud_Color: {r: 1.2971144e-15, g: 0.8637296, b: 0.99999964, a: 1}
     - _Cloud_Height_Thresholds: {r: 0.1, g: 0.5, b: 0, a: 0}
     - _Cloud_Sizes: {r: 5, g: 25, b: 0, a: 0}
     - _Cloud_Velocity: {r: -0.005, g: -0.01, b: 0, a: 0}
     - _Cloud_Visibility_Thresholds: {r: 0, g: 0, b: 0, a: 0}
     - _Ground_Color: {r: 0.06666666, g: 0.95748436, b: 1, a: 1}
-    - _Sky_Color: {r: 0.37065855, g: 0.615347, b: 0.7584905, a: 1}
+    - _Sky_Color: {r: 0.1787754, g: 0.485041, b: 0.7962261, a: 1}
     - _Star_Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
