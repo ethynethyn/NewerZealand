@@ -1,0 +1,8 @@
+Model Information:
+* title:	PSX Wooden Table
+* source:	https://sketchfab.com/3d-models/psx-wooden-table-cf41551a07d5492bae1bff6b81cb2e00
+* author:	Charckes (https://sketchfab.com/charlesmoch)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works
