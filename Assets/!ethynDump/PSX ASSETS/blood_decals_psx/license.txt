@@ -1,0 +1,11 @@
+Model Information:
+* title:	blood decals psx
+* source:	https://sketchfab.com/3d-models/blood-decals-psx-d036a3b7b3d24e2d84b06905f3d301fe
+* author:	raydev (https://sketchfab.com/raydevv)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "blood decals psx" (https://sketchfab.com/3d-models/blood-decals-psx-d036a3b7b3d24e2d84b06905f3d301fe) by raydev (https://sketchfab.com/raydevv) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

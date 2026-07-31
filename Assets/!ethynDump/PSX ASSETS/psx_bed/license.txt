@@ -1,0 +1,11 @@
+Model Information:
+* title:	PSX Bed
+* source:	https://sketchfab.com/3d-models/psx-bed-8ded9b7b5f7f4a01bed72bbe469aab18
+* author:	anthonythorsen0914 (https://sketchfab.com/anthonythorsen0914)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "PSX Bed" (https://sketchfab.com/3d-models/psx-bed-8ded9b7b5f7f4a01bed72bbe469aab18) by anthonythorsen0914 (https://sketchfab.com/anthonythorsen0914) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

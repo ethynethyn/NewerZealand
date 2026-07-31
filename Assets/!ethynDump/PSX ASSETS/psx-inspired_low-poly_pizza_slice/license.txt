@@ -1,0 +1,11 @@
+Model Information:
+* title:	PSX-Inspired Low-Poly Pizza Slice
+* source:	https://sketchfab.com/3d-models/psx-inspired-low-poly-pizza-slice-4eaaa4e13530467a9e1541269d101655
+* author:	PSX Game Assets (https://sketchfab.com/PSXGameAssets)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "PSX-Inspired Low-Poly Pizza Slice" (https://sketchfab.com/3d-models/psx-inspired-low-poly-pizza-slice-4eaaa4e13530467a9e1541269d101655) by PSX Game Assets (https://sketchfab.com/PSXGameAssets) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

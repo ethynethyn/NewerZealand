@@ -1,0 +1,11 @@
+Model Information:
+* title:	Lo-Fi Microwave (PSX)
+* source:	https://sketchfab.com/3d-models/lo-fi-microwave-psx-a6619222c5e7418e873f1bd9f3991e8d
+* author:	Vaportrash (https://sketchfab.com/vaportrash)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Lo-Fi Microwave (PSX)" (https://sketchfab.com/3d-models/lo-fi-microwave-psx-a6619222c5e7418e873f1bd9f3991e8d) by Vaportrash (https://sketchfab.com/vaportrash) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

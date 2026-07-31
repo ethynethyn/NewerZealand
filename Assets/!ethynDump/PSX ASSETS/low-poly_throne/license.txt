@@ -1,0 +1,11 @@
+Model Information:
+* title:	Low-Poly Throne
+* source:	https://sketchfab.com/3d-models/low-poly-throne-88da0ea839b645ecbb0457dcaf035cf5
+* author:	Mastatoe (https://sketchfab.com/Liquid_Mastatoe)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Low-Poly Throne" (https://sketchfab.com/3d-models/low-poly-throne-88da0ea839b645ecbb0457dcaf035cf5) by Mastatoe (https://sketchfab.com/Liquid_Mastatoe) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
