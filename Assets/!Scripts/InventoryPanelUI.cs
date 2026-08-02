@@ -31,6 +31,7 @@ public class InventoryPanelUI : MonoBehaviour
     public List<GameObject> disableOnOpen = new List<GameObject>();
 
     readonly List<SlotUI> slots = new List<SlotUI>();
+    bool didFreeze;
     StarterAssetsInputs starterInputs;
     FirstPersonController fpController;
 
@@ -88,14 +89,16 @@ public class InventoryPanelUI : MonoBehaviour
         if (IsOpen) Close(); else Open();
     }
 
-    public void Open()
+    public void Open(bool? freezeOverride = null)
     {
         IsOpen = true;
         EnsureRefs();
         if (inventoryPanel != null) inventoryPanel.SetActive(true);
         RefreshAll();
 
-        if (freezeTime) Time.timeScale = 0f;
+        bool freeze = freezeOverride ?? freezeTime;
+        didFreeze = freeze;
+        if (freeze) Time.timeScale = 0f;
 
         foreach (var o in enableOnOpen) if (o != null) o.SetActive(true);
         foreach (var o in disableOnOpen) if (o != null) o.SetActive(false);
@@ -126,7 +129,8 @@ public class InventoryPanelUI : MonoBehaviour
         EnsureRefs();
         if (inventoryPanel != null) inventoryPanel.SetActive(false);
 
-        if (freezeTime) Time.timeScale = 1f;
+        if (didFreeze) Time.timeScale = 1f;
+        didFreeze = false;
 
         foreach (var o in enableOnOpen) if (o != null) o.SetActive(false);
         foreach (var o in disableOnOpen) if (o != null) o.SetActive(true);
@@ -139,8 +143,10 @@ public class InventoryPanelUI : MonoBehaviour
         if (starterInputs != null)
             starterInputs.cursorInputForLook = true;
 
-        // If a loot container was open alongside the inventory, tear it down too.
+        // If a loot container or shop was open alongside the inventory, tear it down too.
         if (LootController.Instance != null)
             LootController.Instance.OnInventoryClosed();
+        if (ShopController.Instance != null)
+            ShopController.Instance.OnInventoryClosed();
     }
 }

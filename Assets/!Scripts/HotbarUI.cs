@@ -11,6 +11,9 @@ public class HotbarUI : MonoBehaviour
     [Header("Slot Building")]
     public SlotUI slotPrefab;
     public Transform slotContainer;   // e.g. a horizontal LayoutGroup
+    [Tooltip("Optional: the whole hotbar visual (background + slots) to hide when the " +
+             "hotbar is disabled on the InventoryManager. Falls back to Slot Container.")]
+    public GameObject hotbarRoot;
 
     [Header("Selection Input")]
     public bool enableScroll = true;
@@ -29,6 +32,16 @@ public class HotbarUI : MonoBehaviour
 
     void Start()
     {
+        // If the hotbar is turned off, hide it entirely and do nothing else.
+        if (!InventoryManager.Instance.useHotbar)
+        {
+            GameObject root = hotbarRoot != null ? hotbarRoot
+                            : (slotContainer != null ? slotContainer.gameObject : null);
+            if (root != null) root.SetActive(false);
+            enabled = false;
+            return;
+        }
+
         BuildSlots();
 
         var mgr = InventoryManager.Instance;

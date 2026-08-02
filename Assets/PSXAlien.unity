@@ -36819,7 +36819,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetCharacter: {fileID: 166139580}
   statName: Time
-  newChangeInterval: 12
+  newChangeInterval: 0
   setValueOnEnable: 1
   newValue: 8.5
 --- !u!1 &849607303

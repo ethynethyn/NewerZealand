@@ -19,6 +19,8 @@ MonoBehaviour:
   handHoldingSprite: {fileID: 21300000, guid: b424a818938e38448b391cb9f03bd2cf, type: 3}
   handUsingSprite: {fileID: 0}
   maxStackSize: 9
+  sellable: 1
+  sellValue: 5
   isUsable: 0
   useDuration: 0
   useSound: {fileID: 0}

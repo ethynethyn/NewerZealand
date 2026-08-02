@@ -39,6 +39,14 @@ public class ItemData : ScriptableObject
     [Tooltip("Maximum number of this item that can occupy a single slot.")]
     public int maxStackSize = 10;
 
+    [Header("Trading")]
+    [Tooltip("Can this item be sold to shops? Turn OFF for quest items so they can't be sold by accident.")]
+    public bool sellable = true;
+
+    [Min(0)]
+    [Tooltip("Money the player receives for selling ONE of this item.")]
+    public int sellValue = 0;
+
     [Header("Use Settings")]
     [Tooltip("Can this item be used at all? Turn OFF for non-consumables (or the empty hand).")]
     public bool isUsable = true;

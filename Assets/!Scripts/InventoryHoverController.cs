@@ -75,6 +75,10 @@ public class InventoryHoverController : MonoBehaviour
 
     void UpdateTooltip(SlotUI s)
     {
+        // Shop slots drive their own price/description area (ShopController), so the
+        // normal inventory tooltip stays out of the way for them.
+        if (s != null && s.area == InventoryArea.Shop) { HideTooltip(); return; }
+
         ItemData item = null;
         if (s != null && InventoryManager.Instance != null)
         {

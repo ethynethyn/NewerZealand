@@ -6,7 +6,7 @@ using UnityEngine;
 // Shared types
 // ---------------------------------------------------------------------------
 
-public enum InventoryArea { Hotbar, Backpack, Container }
+public enum InventoryArea { Hotbar, Backpack, Container, Shop }
 
 /// <summary>One inventory cell: an item type + how many of it.</summary>
 [Serializable]
@@ -43,6 +43,15 @@ public struct SlotLocation
     public bool Equals(SlotLocation o) => area == o.area && index == o.index;
 }
 
+/// <summary>A single item movement (source -> destination) produced by a shift-click,
+/// used to drive the fly + pop animation.</summary>
+public struct SlotMove
+{
+    public SlotLocation from;
+    public SlotLocation to;
+    public SlotMove(SlotLocation from, SlotLocation to) { this.from = from; this.to = to; }
+}
+
 // ---------------------------------------------------------------------------
 // Manager
 // ---------------------------------------------------------------------------
@@ -56,6 +65,10 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance { get; private set; }
 
     [Header("Hotbar")]
+    [Tooltip("Turn OFF to remove the toolbar/hotbar entirely: items go straight to the " +
+             "backpack and the held item is always the empty hand.")]
+    public bool useHotbar = true;
+
     [Min(1)]
     [Tooltip("Total hotbar slots INCLUDING the empty-hand slot at index 0.")]
     public int hotbarSize = 3;
@@ -81,6 +94,10 @@ public class InventoryManager : MonoBehaviour
     /// <summary>The loot container currently open; its slots are addressed via
     /// InventoryArea.Container. Null when no container is open.</summary>
     [NonSerialized] public LootContainer openContainer;
+
+    /// <summary>The shop currently open; its slots are addressed via
+    /// InventoryArea.Shop. Null when no shop is open.</summary>
+    [NonSerialized] public Shop openShop;
 
     /// <summary>Fired whenever the CONTENTS of any slot change.</summary>
     public event Action OnChanged;
@@ -110,7 +127,10 @@ public class InventoryManager : MonoBehaviour
 
     void BuildSlots()
     {
-        hotbar = new InventorySlot[Mathf.Max(1, hotbarSize)];
+        // When the hotbar is off, keep only the reserved hand slot so items flow to
+        // the backpack and the selection is always the empty hand.
+        int hbSize = useHotbar ? Mathf.Max(1, hotbarSize) : 1;
+        hotbar = new InventorySlot[hbSize];
         for (int i = 0; i < hotbar.Length; i++) hotbar[i] = new InventorySlot();
         if (emptyHandItem != null) hotbar[0].Set(emptyHandItem, 1); // reserved hand slot
 
@@ -129,10 +149,11 @@ public class InventoryManager : MonoBehaviour
         InventorySlot[] arr;
         switch (loc.area)
         {
-            case InventoryArea.Hotbar: arr = hotbar; break;
-            case InventoryArea.Backpack: arr = backpack; break;
+            case InventoryArea.Hotbar:    arr = hotbar; break;
+            case InventoryArea.Backpack:  arr = backpack; break;
             case InventoryArea.Container: arr = openContainer != null ? openContainer.Slots : null; break;
-            default: arr = null; break;
+            case InventoryArea.Shop:      arr = openShop != null ? openShop.Slots : null; break;
+            default:                      arr = null; break;
         }
         if (arr == null || loc.index < 0 || loc.index >= arr.Length) return null;
         return arr[loc.index];
@@ -140,6 +161,31 @@ public class InventoryManager : MonoBehaviour
 
     /// <summary>Register/clear the loot container the Container area maps to.</summary>
     public void SetOpenContainer(LootContainer container) => openContainer = container;
+
+    /// <summary>Register/clear the shop the Shop area maps to.</summary>
+    public void SetOpenShop(Shop shop) => openShop = shop;
+
+    /// <summary>Add items directly to the backpack (used by purchases). Returns leftover.</summary>
+    public int AddToBackpack(ItemData item, int amount)
+    {
+        if (item == null || amount <= 0) return 0;
+        int leftover = DepositInto(backpack, 0, item, amount);
+        OnChanged?.Invoke();
+        return leftover;
+    }
+
+    /// <summary>How many of an item the backpack can currently accept.</summary>
+    public int BackpackRoomFor(ItemData item)
+    {
+        if (item == null || backpack == null) return 0;
+        int room = 0;
+        for (int i = 0; i < backpack.Length; i++)
+        {
+            if (backpack[i].IsEmpty) room += Mathf.Max(1, item.maxStackSize);
+            else if (backpack[i].item == item) room += backpack[i].SpaceLeft;
+        }
+        return room;
+    }
 
     public InventorySlot GetSelectedSlot() => hotbar[selectedHotbarIndex];
 
@@ -354,38 +400,134 @@ public class InventoryManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Shift-click quick move.
-    ///   - With a loot container open: a container slot goes to your inventory,
-    ///     and one of your slots goes into the container.
-    ///   - Otherwise: hotbar &lt;-&gt; backpack.
+    /// Shift-click quick move. Returns the list of item movements it performed so the
+    /// caller can animate them.
+    ///   - With a loot container open: a container slot goes to your inventory, and one
+    ///     of your slots goes into the container.
+    ///   - Otherwise: first try to GATHER all other stacks of the same item into the
+    ///     clicked slot; if there were none to gather, fall back to hotbar &lt;-&gt; backpack.
     /// The hand slot (hotbar index 0) is never used or emptied.
     /// </summary>
-    public void QuickMove(SlotLocation from)
+    public List<SlotMove> QuickMove(SlotLocation from)
     {
-        if (IsHandSlot(from)) return;
+        var moves = new List<SlotMove>();
+        if (IsHandSlot(from)) return moves;
         var src = GetSlot(from);
-        if (src == null || src.IsEmpty) return;
+        if (src == null || src.IsEmpty) return moves;
 
         ItemData item = src.item;
         int amount = src.count;
-        int leftover;
 
         if (openContainer != null)
         {
             if (from.area == InventoryArea.Container)
-                leftover = AddItem(item, amount);                            // chest -> inventory
+            {
+                int leftover = AddItem(item, amount);           // chest -> inventory
+                src.Set(item, leftover);
+                if (leftover < amount)
+                {
+                    var dest = FirstPlayerSlotWith(item);
+                    if (dest.HasValue) moves.Add(new SlotMove(from, dest.Value));
+                }
+            }
             else
-                leftover = DepositInto(openContainer.Slots, 0, item, amount); // inventory -> chest
-        }
-        else
-        {
-            InventorySlot[] target = from.area == InventoryArea.Hotbar ? backpack : hotbar;
-            int start = (target == hotbar) ? 1 : 0;                          // skip the hand slot
-            leftover = DepositInto(target, start, item, amount);
+            {
+                int leftover = DepositInto(openContainer.Slots, 0, item, amount); // inventory -> chest
+                src.Set(item, leftover);
+                if (leftover < amount)
+                {
+                    int di = FirstIndexWith(openContainer.Slots, 0, item);
+                    if (di >= 0) moves.Add(new SlotMove(from, new SlotLocation(InventoryArea.Container, di)));
+                }
+            }
+            OnChanged?.Invoke();
+            return moves;
         }
 
-        src.Set(item, leftover);                    // remainder stays (clears if 0)
+        // Base inventory: gather duplicates into the clicked slot first.
+        if (ConsolidateInto(from, moves)) { OnChanged?.Invoke(); return moves; }
+
+        // Nothing to gather -> quick-move to the other row.
+        InventorySlot[] target = from.area == InventoryArea.Hotbar ? backpack : hotbar;
+        InventoryArea targetArea = (target == hotbar) ? InventoryArea.Hotbar : InventoryArea.Backpack;
+        int start = (target == hotbar) ? 1 : 0;                 // skip the hand slot
+        int leftover2 = DepositInto(target, start, item, amount);
+        src.Set(item, leftover2);
+        if (leftover2 < amount)
+        {
+            int di = FirstIndexWith(target, start, item);
+            if (di >= 0) moves.Add(new SlotMove(from, new SlotLocation(targetArea, di)));
+        }
         OnChanged?.Invoke();
+        return moves;
+    }
+
+    /// <summary>Gather every other stack of the target's item into the target slot.
+    /// Records each contributing move. Returns true if anything moved.</summary>
+    public bool ConsolidateInto(SlotLocation target, List<SlotMove> movesOut)
+    {
+        if (IsHandSlot(target)) return false;
+        var dst = GetSlot(target);
+        if (dst == null || dst.IsEmpty) return false;
+
+        ItemData item = dst.item;
+        bool moved = false;
+        moved |= GatherFrom(hotbar, 1, item, target, dst, movesOut);
+        moved |= GatherFrom(backpack, 0, item, target, dst, movesOut);
+        return moved;
+    }
+
+    bool GatherFrom(InventorySlot[] arr, int start, ItemData item,
+                    SlotLocation target, InventorySlot dst, List<SlotMove> movesOut)
+    {
+        if (arr == null) return false;
+        InventoryArea area = (arr == hotbar) ? InventoryArea.Hotbar : InventoryArea.Backpack;
+        bool moved = false;
+        for (int i = start; i < arr.Length && !dst.IsFull; i++)
+        {
+            var loc = new SlotLocation(area, i);
+            if (loc.Equals(target) || arr[i].IsEmpty || arr[i].item != item) continue;
+
+            int move = Mathf.Min(dst.SpaceLeft, arr[i].count);
+            if (move <= 0) continue;
+
+            dst.count += move;
+            arr[i].count -= move;
+            if (arr[i].count <= 0) arr[i].Clear();
+            movesOut?.Add(new SlotMove(loc, target));
+            moved = true;
+        }
+        return moved;
+    }
+
+    /// <summary>Can this slot accept at least one of the item (empty, or a matching non-full stack)?</summary>
+    public bool CanAccept(SlotLocation loc, ItemData item)
+    {
+        if (item == null || IsHandSlot(loc)) return false;
+        var slot = GetSlot(loc);
+        if (slot == null) return false;
+        if (slot.IsEmpty) return true;
+        return slot.item == item && !slot.IsFull;
+    }
+
+    /// <summary>First backpack-then-hotbar slot containing the item, or null.</summary>
+    public SlotLocation? FirstSlotWith(ItemData item)
+    {
+        int b = FirstIndexWith(backpack, 0, item);
+        if (b >= 0) return new SlotLocation(InventoryArea.Backpack, b);
+        int h = FirstIndexWith(hotbar, 1, item);
+        if (h >= 0) return new SlotLocation(InventoryArea.Hotbar, h);
+        return null;
+    }
+
+    SlotLocation? FirstPlayerSlotWith(ItemData item) => FirstSlotWith(item);
+
+    int FirstIndexWith(InventorySlot[] arr, int start, ItemData item)
+    {
+        if (arr == null) return -1;
+        for (int i = start; i < arr.Length; i++)
+            if (!arr[i].IsEmpty && arr[i].item == item) return i;
+        return -1;
     }
 
     /// <summary>Top up matching stacks, then fill empty slots, in an array. Returns leftover.</summary>

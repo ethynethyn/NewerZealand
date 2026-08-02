@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: Paper
   m_EditorClassIdentifier: 
   itemName: Paper
+  description: 
   isEmptyHand: 0
   icon: {fileID: 21300000, guid: 362d9fef38017454684f3f8f56d4e5b2, type: 3}
   handHoldingSprite: {fileID: 21300000, guid: 362d9fef38017454684f3f8f56d4e5b2, type: 3}
   handUsingSprite: {fileID: 0}
   maxStackSize: 9
+  sellable: 1
+  sellValue: 5
   isUsable: 0
   useDuration: 0
   useSound: {fileID: 0}
