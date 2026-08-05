@@ -67,7 +67,7 @@ public class PlayerPickUp : MonoBehaviour
 
     private void Update()
     {
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);   
         bool hitSomething = Physics.Raycast(ray, out RaycastHit hit, pickupRange, pickupLayer);
 
         bool canPickup = false;
