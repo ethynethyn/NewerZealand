@@ -8,6 +8,10 @@ TagManager:
   - Interactable
   - Vehicle
   - PhoneBox
+  - 'Obstacle '
+  - Goal
+  - Obstacle
+  - OBS
   layers:
   - Default
   - TransparentFX
