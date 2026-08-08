@@ -32,7 +32,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 2507969c5fef6554ab121c577f47fbdf, type: 3}
+        m_Texture: {fileID: 2800000, guid: 611c28f1b8396c74fa2fa41c4a546927, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -89,13 +89,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints:
     - _ColorBitDepth: 64
-    - _ResolutionLimit: 64
+    - _ResolutionLimit: 989
     - _SnapsPerUnit: 276
     m_Floats:
     - _AffineTextureStrength: 0
     - _AlphaClip: 1
     - _AlphaToMask: 0
-    - _AmbientLight: 0.329
+    - _AmbientLight: 0.589
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
