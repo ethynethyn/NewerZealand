@@ -116631,7 +116631,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextPeriod: 1
-  delaySeconds: 2
+  delaySeconds: 1
   useUnscaledTime: 0
   progressionChanges: []
   onCountdownStarted:

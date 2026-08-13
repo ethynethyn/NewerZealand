@@ -28,6 +28,12 @@ public class TriggerNextPeriod : MonoBehaviour
     [Tooltip("Which period type's CURRENT scene to load when the countdown ends.")]
     public PeriodType nextPeriod = PeriodType.Recess;
 
+    [Header("Class period (only used when Next Period = ClassHalls)")]
+    [Tooltip("If ON, sets which period the class scene runs on. Lets you reuse one class scene for any period.")]
+    public bool setClassPeriod = true;
+    [Tooltip("Which period to put the player + NPCs on. 0 = Period 1, 1 = Period 2, 2 = Period 3.")]
+    public int classPeriodIndex = 0;
+
     [Header("Timing")]
     [Tooltip("Seconds to wait after this object is enabled before the scene changes.")]
     public float delaySeconds = 2f;
@@ -80,6 +86,10 @@ public class TriggerNextPeriod : MonoBehaviour
             if (change.mode == ChangeMode.Advance) mgr.AdvancePeriod(change.type);
             else                                   mgr.SetIndex(change.type, change.value);
         }
+
+        // If heading to Class Halls, optionally set which period the scene runs on.
+        if (nextPeriod == PeriodType.ClassHalls && setClassPeriod)
+            mgr.SetClassPeriod(classPeriodIndex);
 
         onBeforeSceneChange?.Invoke();
 

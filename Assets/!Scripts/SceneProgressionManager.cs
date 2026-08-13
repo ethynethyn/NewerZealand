@@ -23,6 +23,11 @@ public class SceneProgressionManager : MonoBehaviour
     public int recessIndex = 0;
     public int lunchIndex = 0;
 
+    [Header("Current Class Period (0 = Period 1, 1 = Period 2, 2 = Period 3)")]
+    [Tooltip("Which period the next Class Halls scene runs. Set by TriggerNextPeriod, " +
+             "read by ClassPeriodStarter. Lets you reuse one class scene for any period.")]
+    public int currentClassPeriod = 0;
+
     void Awake()
     {
         // One persistent instance. Duplicates (from a Core prefab in every scene)
@@ -54,6 +59,19 @@ public class SceneProgressionManager : MonoBehaviour
     public void GoToClassHalls() => GoToPeriod(PeriodType.ClassHalls);
     public void GoToRecess()     => GoToPeriod(PeriodType.Recess);
     public void GoToLunch()      => GoToPeriod(PeriodType.Lunch);
+
+    // ── Class period (which of the 3 class periods the class scene runs) ──
+    // 0 = Period 1, 1 = Period 2, 2 = Period 3. Changing this does NOT reload;
+    // it's read when the next class scene starts (by ClassPeriodStarter).
+    public void SetClassPeriod(int period) => currentClassPeriod = Mathf.Max(0, period);
+    public int GetClassPeriod() => currentClassPeriod;
+
+    // Convenience: set the period AND load the current class scene in one call.
+    public void GoToClassHallsForPeriod(int period)
+    {
+        SetClassPeriod(period);
+        GoToPeriod(PeriodType.ClassHalls);
+    }
 
     // ── Progression control (UnityEvent-friendly) ────────────────────
     // Use the Advance* methods for the common "move to the next scene" case —

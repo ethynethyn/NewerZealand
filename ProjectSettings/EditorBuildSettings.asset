@@ -59,6 +59,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/!jonahDump/!Day5/Schoolday5 part 2.unity
     guid: 3faf131768074164bb7d5c23331fd9a4
+  - enabled: 1
+    path: Assets/!jonahDump/!Day1/Cafeteria1.unity
+    guid: 11b806f2a07fa1b45bcbb8c880e01010
+  - enabled: 1
+    path: Assets/Class-Scene-Template-Optimised.unity
+    guid: 3dad8f98c17824d40b01d24c2a93fc65
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
