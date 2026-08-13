@@ -29,6 +29,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/!jonahDump/DUMP1/MUSICMINIGAME.unity
     guid: 59c92ddc16af8a2428217e2409e1b530
+  - enabled: 1
+    path: Assets/!jonahDump/!Day1/Schoolday1.unity
+    guid: 7bae6d69d5b2cef438ae3b522d6f1a36
+  - enabled: 1
+    path: Assets/!jonahDump/!Day1/Schoolday1CHIMNEY.unity
+    guid: 991d80c68a4f2ff4e85761ac793ff4e4
+  - enabled: 1
+    path: Assets/!jonahDump/!Day1/Sewers1.unity
+    guid: 12ae230f227925e43ab86a5f5d765400
+  - enabled: 1
+    path: Assets/!jonahDump/!Day2/MinecraftJonah.unity
+    guid: b3b15d96d8312a44ca0121274bafb99f
+  - enabled: 1
+    path: Assets/!jonahDump/!Day2/SchoolDay2part3.unity
+    guid: 2eecdf399eec06249a7b11f658cba8ed
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

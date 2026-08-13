@@ -5,6 +5,8 @@ using System.Collections;
 
 public class OutSideManagerDayOnePart2 : MonoBehaviour
 {
+    [SerializeField] private NPCConversation first;
+
     [SerializeField] private NPCConversation conversation;
     [SerializeField] private NPCConversation AfterRunAround;
 
@@ -15,6 +17,16 @@ public class OutSideManagerDayOnePart2 : MonoBehaviour
     private bool chimneyjoinsparty;
     public GameObject DialogueGrateBoys1;
     public GameObject DialogueGrateBoys2;
+
+    
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked; // locks cursor to center + hides it
+        Cursor.visible = false;
+        ConversationManager.Instance.StartConversation(first);
+
+    }
     public void Update()
     {
         if (JonahStaticManager.ChimneyJoinsYourParty)

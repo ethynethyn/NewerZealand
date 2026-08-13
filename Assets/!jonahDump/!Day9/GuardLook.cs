@@ -9,17 +9,25 @@ public class GuardLook : MonoBehaviour
     public GameObject b1;
     public GameObject b2;
     public GameObject b3;
+    public GameObject b4;
+    private bool done;
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            cam1.SetActive(true);
-            e1.SetActive(true);
-            e2.SetActive(true);
-            e3.SetActive(true);
-            b1.SetActive(false);
-            b2.SetActive(false);
-            b3.SetActive(false);
+            if (!done)
+            {
+                cam1.SetActive(true);
+                e1.SetActive(true);
+                e2.SetActive(true);
+                e3.SetActive(true);
+                b1.SetActive(false);
+                b2.SetActive(false);
+                b3.SetActive(false);
+                b4.SetActive(false);
+                done = true;
+            }
+
 
         }
 

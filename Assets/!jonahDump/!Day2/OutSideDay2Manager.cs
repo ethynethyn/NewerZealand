@@ -19,6 +19,29 @@ public class OutSideDay2Manager : MonoBehaviour
     public GameObject chimneyDialogue2;
     public GameObject GrateBrosDialogue1;
     public GameObject GrateBrosDialogue2;
+
+    public GameObject PlayerNewPos;
+    public GameObject Player;
+    public bool matchRotation = false;
+
+
+    public void repositionPlayer()
+    {
+        if (Player == null || PlayerNewPos == null)
+        {
+            Debug.LogError("[Repositioner] Player or PlayerNewPos not assigned!", this);
+            return;
+        }
+
+        var cc = Player.GetComponent<CharacterController>();
+
+        if (cc != null) cc.enabled = false;
+
+        Player.transform.position = PlayerNewPos.transform.position;
+        if (matchRotation) Player.transform.rotation = PlayerNewPos.transform.rotation;
+
+        if (cc != null) cc.enabled = true;
+    }
     public void talkedWithSteven()
     {
         if (talkedwithnateorlewis)
@@ -33,7 +56,8 @@ public class OutSideDay2Manager : MonoBehaviour
     }
     private void Update()
     {
-        if (TalkedWithSteven && talkedwithnateorlewis)
+        //&& talkedwithnateorlewis
+        if (TalkedWithSteven )
         {
             talkedwithnateorlewis = false;
             TalkedWithSteven = false;

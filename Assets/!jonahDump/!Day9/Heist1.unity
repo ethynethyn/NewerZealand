@@ -1450,7 +1450,7 @@ MonoBehaviour:
         m_CallState: 0
   NodeID: 7
   TMPFont: {fileID: 0}
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 8c56c725019debd438bc56db0b698e9b, type: 3}
   Audio: {fileID: 0}
 --- !u!114 &10345298
 MonoBehaviour:
@@ -1548,7 +1548,7 @@ MonoBehaviour:
         m_CallState: 2
   NodeID: 0
   TMPFont: {fileID: 0}
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: c24bd9c9c8bcfc54ca51117054601db0, type: 3}
   Audio: {fileID: 0}
 --- !u!1 &10673600
 GameObject:
@@ -6514,7 +6514,7 @@ Transform:
   m_GameObject: {fileID: 73647953}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.6065906, z: -0, w: 0.7950143}
-  m_LocalPosition: {x: 2.45, y: 0, z: 2.91}
+  m_LocalPosition: {x: 2.45, y: 0.916, z: 2.91}
   m_LocalScale: {x: 0.79671, y: 0.79671, z: 0.79671}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7364,8 +7364,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentIDCounter: 9
-  json: '{"Options":[{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":407,"yPos":340},"ID":8,"ParamActions":[],"TMPFontGUID":null,"Text":"ddddd","parentUIDs":[7],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":7}],"EditorInfo":{"isRoot":true,"xPos":400,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"quick
-    gweedo distract the granny! \r\n","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":8}],"EditorInfo":{"isRoot":false,"xPos":383,"yPos":190},"ID":7,"ParamActions":[],"TMPFontGUID":null,"Text":"on
+  json: '{"Options":[{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":436.5,"yPos":484},"ID":8,"ParamActions":[],"TMPFontGUID":null,"Text":"ddddd","parentUIDs":[7],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":7}],"EditorInfo":{"isRoot":true,"xPos":429.5,"yPos":166},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"quick
+    gweedo distract the granny! \r\n","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":8}],"EditorInfo":{"isRoot":false,"xPos":412.5,"yPos":334},"ID":7,"ParamActions":[],"TMPFontGUID":null,"Text":"on
     it Bro","parentUIDs":[0],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
   saveVersion: 110
   DefaultName: 
@@ -23212,8 +23212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentIDCounter: 14
-  json: '{"Options":[],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":7}],"EditorInfo":{"isRoot":true,"xPos":59,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"...","parentUIDs":[],"AdvanceDialogueAutomatically":true,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0.2,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":13}],"EditorInfo":{"isRoot":false,"xPos":66,"yPos":170},"ID":7,"ParamActions":[],"TMPFontGUID":null,"Text":"EVERYBODY
-    TO THE STAIRS !!!!!!!!!!!!!!!!","parentUIDs":[0],"AdvanceDialogueAutomatically":true,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":999,"Volume":0},{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":71,"yPos":341},"ID":13,"ParamActions":[],"TMPFontGUID":null,"Text":null,"parentUIDs":[7],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
+  json: '{"Options":[],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":7}],"EditorInfo":{"isRoot":true,"xPos":498.5,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"...","parentUIDs":[],"AdvanceDialogueAutomatically":true,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0.2,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":13}],"EditorInfo":{"isRoot":false,"xPos":505.5,"yPos":170},"ID":7,"ParamActions":[],"TMPFontGUID":null,"Text":"EVERYBODY
+    TO THE STAIRS !!!!!!!!!!!!!!!!","parentUIDs":[0],"AdvanceDialogueAutomatically":true,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":999,"Volume":0},{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":510.5,"yPos":341},"ID":13,"ParamActions":[],"TMPFontGUID":null,"Text":null,"parentUIDs":[7],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
   saveVersion: 110
   DefaultName: 
   DefaultSprite: {fileID: 0}
@@ -23227,7 +23227,19 @@ MonoBehaviour:
   EndConversationFont: {fileID: 0}
   Event:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 494307653}
+        m_TargetAssemblyTypeName: Hiest1Manager, Assembly-CSharp
+        m_MethodName: TwoStairs
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &260329829
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37522,7 +37534,7 @@ MonoBehaviour:
         m_CallState: 2
   NodeID: 7
   TMPFont: {fileID: 0}
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: b9c6d0eb0934e7a4ebd743d4f8472081, type: 3}
   Audio: {fileID: 0}
 --- !u!114 &404263780
 MonoBehaviour:
@@ -37608,7 +37620,7 @@ MonoBehaviour:
         m_CallState: 0
   NodeID: 0
   TMPFont: {fileID: 0}
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 0e3b04af76ed68b4c8cadcf448d6db00, type: 3}
   Audio: {fileID: 0}
 --- !u!1 &406491957
 GameObject:
@@ -72007,7 +72019,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentIDCounter: 10
-  json: '{"Options":[{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":463,"yPos":388},"ID":9,"ParamActions":[],"TMPFontGUID":null,"Text":"awdad","parentUIDs":[7],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":7}],"EditorInfo":{"isRoot":true,"xPos":400,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"AAAAAAAAAAAAAAAA","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":9}],"EditorInfo":{"isRoot":false,"xPos":434,"yPos":196},"ID":7,"ParamActions":[],"TMPFontGUID":null,"Text":"[LETS]
+  json: '{"Options":[{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":561.5,"yPos":388},"ID":9,"ParamActions":[],"TMPFontGUID":null,"Text":"awdad","parentUIDs":[7],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":7}],"EditorInfo":{"isRoot":true,"xPos":498.5,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"AAAAAAAAAAAAAAAA","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":9}],"EditorInfo":{"isRoot":false,"xPos":532.5,"yPos":196},"ID":7,"ParamActions":[],"TMPFontGUID":null,"Text":"[LETS]
     D1P \r\n","parentUIDs":[0],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
   saveVersion: 110
   DefaultName: 
@@ -72022,55 +72034,7 @@ MonoBehaviour:
   EndConversationFont: {fileID: 0}
   Event:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1635488567}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: Play
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: watchExit
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 73647955}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: Play
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: gs
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 330993629}
-        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
-        m_MethodName: Play
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: gc
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 151616225}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 0
+      m_Calls: []
 --- !u!1 &759375145
 GameObject:
   m_ObjectHideFlags: 0
@@ -98411,7 +98375,7 @@ MonoBehaviour:
       m_Calls: []
   NodeID: 0
   TMPFont: {fileID: 0}
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: c3f49c269ec2a4240af8844e7a81d637, type: 3}
   Audio: {fileID: 0}
 --- !u!114 &1048744507
 MonoBehaviour:
@@ -98516,7 +98480,7 @@ MonoBehaviour:
       m_Calls: []
   NodeID: 7
   TMPFont: {fileID: 0}
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 2c1fa0673c7717949a4393fadfdff691, type: 3}
   Audio: {fileID: 0}
 --- !u!1 &1049318224
 GameObject:
@@ -130877,7 +130841,7 @@ Transform:
   m_GameObject: {fileID: 1390974666}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.1119995, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5299999, y: 0.49, z: 0.38}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -164057,8 +164021,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentIDCounter: 15
-  json: '{"Options":[{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":189,"yPos":300},"ID":14,"ParamActions":[],"TMPFontGUID":null,"Text":"adadd","parentUIDs":[7],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":7}],"EditorInfo":{"isRoot":true,"xPos":173,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"oh
-    Uhh :3 we were pracitivng for... drama class???\r\n","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0.2,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":14}],"EditorInfo":{"isRoot":false,"xPos":180,"yPos":170},"ID":7,"ParamActions":[],"TMPFontGUID":null,"Text":"Yup.\r\n","parentUIDs":[0],"AdvanceDialogueAutomatically":true,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":999,"Volume":0}]}'
+  json: '{"Options":[{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":514.5,"yPos":300},"ID":14,"ParamActions":[],"TMPFontGUID":null,"Text":"adadd","parentUIDs":[7],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":7}],"EditorInfo":{"isRoot":true,"xPos":498.5,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"oh
+    Uhh :3 we were pracitivng for... drama class???\r\n","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0.2,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":14}],"EditorInfo":{"isRoot":false,"xPos":505.5,"yPos":170},"ID":7,"ParamActions":[],"TMPFontGUID":null,"Text":"Yup.\r\n","parentUIDs":[0],"AdvanceDialogueAutomatically":true,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":999,"Volume":0}]}'
   saveVersion: 110
   DefaultName: 
   DefaultSprite: {fileID: 0}
@@ -164072,7 +164036,19 @@ MonoBehaviour:
   EndConversationFont: {fileID: 0}
   Event:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 494307653}
+        m_TargetAssemblyTypeName: Hiest1Manager, Assembly-CSharp
+        m_MethodName: TwoStairs
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 0
 --- !u!1 &1768877453
 GameObject:
   m_ObjectHideFlags: 0
@@ -185641,19 +185617,7 @@ MonoBehaviour:
   Event:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1909690908}
-        m_TargetAssemblyTypeName: EndScene1, Assembly-CSharp
-        m_MethodName: GuyCOmesup
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 0
-      - m_Target: {fileID: 407978948}
+      - m_Target: {fileID: 1635488567}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
         m_MethodName: Play
         m_Mode: 5
@@ -185662,10 +185626,34 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: n2
+          m_StringArgument: watchExit
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1930152508}
+        m_CallState: 0
+      - m_Target: {fileID: 73647955}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: gs
+          m_BoolArgument: 0
+        m_CallState: 0
+      - m_Target: {fileID: 330993629}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: gc
+          m_BoolArgument: 0
+        m_CallState: 0
+      - m_Target: {fileID: 151616225}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -185675,8 +185663,20 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 0
+      - m_Target: {fileID: 886302266}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: nn
           m_BoolArgument: 1
-        m_CallState: 2
+        m_CallState: 0
 --- !u!1 &1990541965
 GameObject:
   m_ObjectHideFlags: 0
@@ -187329,7 +187329,7 @@ Transform:
   m_GameObject: {fileID: 1997413298}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.219, y: 0.028, z: 0.021}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.53829414, y: 0.49444163, z: 0.3838826}
   m_ConstrainProportionsScale: 0
   m_Children: []

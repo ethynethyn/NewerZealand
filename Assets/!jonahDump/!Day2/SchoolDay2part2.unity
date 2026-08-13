@@ -6804,8 +6804,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentIDCounter: 12
-  json: '{"Options":[{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":361,"yPos":290},"ID":11,"ParamActions":[],"TMPFontGUID":null,"Text":null,"parentUIDs":[8],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":8}],"EditorInfo":{"isRoot":true,"xPos":364.5,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"A
-    Minecraft account code is what you seek?\r\n","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":11}],"EditorInfo":{"isRoot":false,"xPos":351,"yPos":172},"ID":8,"ParamActions":[],"TMPFontGUID":null,"Text":"Well
+  json: '{"Options":[{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":461,"yPos":327},"ID":11,"ParamActions":[],"TMPFontGUID":null,"Text":null,"parentUIDs":[8],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":8}],"EditorInfo":{"isRoot":true,"xPos":464.5,"yPos":59},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"A
+    Minecraft account code is what you seek?\r\n","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":11}],"EditorInfo":{"isRoot":false,"xPos":451,"yPos":209},"ID":8,"ParamActions":[],"TMPFontGUID":null,"Text":"Well
     then, you must get the code from within the game","parentUIDs":[0],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
   saveVersion: 110
   DefaultName: 
@@ -6820,7 +6820,31 @@ MonoBehaviour:
   EndConversationFont: {fileID: 0}
   Event:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1507396306}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: snap
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1145658690}
+        m_TargetAssemblyTypeName: Day2P2PreMinecraftManager, Assembly-CSharp
+        m_MethodName: GoMinecraft
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &91328321
 Transform:
   m_ObjectHideFlags: 0
@@ -50945,24 +50969,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentIDCounter: 69
-  json: '{"Options":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":17}],"EditorInfo":{"isRoot":false,"xPos":369.399963,"yPos":245.399933},"ID":23,"ParamActions":[],"TMPFontGUID":null,"Text":"YES
-    I WAS MY BAD FUCK I DIDNT MEAN TO I AM SOO SORRY BRO","parentUIDs":[15],"SpeechUID":-1},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":17}],"EditorInfo":{"isRoot":false,"xPos":-33.7999268,"yPos":245.399933},"ID":24,"ParamActions":[],"TMPFontGUID":null,"Text":"NO","parentUIDs":[15],"SpeechUID":-1}],"Parameters":[{"__type":"EditableIntParameter:#DialogueEditor","ParameterName":"Player","IntValue":0}],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":15}],"EditorInfo":{"isRoot":true,"xPos":171.5,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"Hey
+  json: '{"Options":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":17}],"EditorInfo":{"isRoot":false,"xPos":691.399963,"yPos":245.399933},"ID":23,"ParamActions":[],"TMPFontGUID":null,"Text":"YES
+    I WAS MY BAD FUCK I DIDNT MEAN TO I AM SOO SORRY BRO","parentUIDs":[15],"SpeechUID":-1},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":17}],"EditorInfo":{"isRoot":false,"xPos":288.200073,"yPos":245.399933},"ID":24,"ParamActions":[],"TMPFontGUID":null,"Text":"NO","parentUIDs":[15],"SpeechUID":-1}],"Parameters":[{"__type":"EditableIntParameter:#DialogueEditor","ParameterName":"Player","IntValue":0}],"SpeechNodes":[{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":15}],"EditorInfo":{"isRoot":true,"xPos":493.5,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"Hey
     {Player} !!","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Principle
-    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":23},{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":24}],"EditorInfo":{"isRoot":false,"xPos":173.999878,"yPos":143.200073},"ID":15,"ParamActions":[],"TMPFontGUID":null,"Text":"{Player}
+    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":23},{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":24}],"EditorInfo":{"isRoot":false,"xPos":495.999878,"yPos":143.200073},"ID":15,"ParamActions":[],"TMPFontGUID":null,"Text":"{Player}
     you were supposed to move onto intermediate school this year, but you have proved
     yourself to be an extrodinary case of anti social and misbehaviour that we have
     decided to hold you back... ","parentUIDs":[0],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Principle
-    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":19}],"EditorInfo":{"isRoot":false,"xPos":197.9997,"yPos":342.400055},"ID":17,"ParamActions":[],"TMPFontGUID":null,"Text":"until
+    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":19}],"EditorInfo":{"isRoot":false,"xPos":519.9997,"yPos":342.400055},"ID":17,"ParamActions":[],"TMPFontGUID":null,"Text":"until
     you can show us that you are capable of intergrating into society. ","parentUIDs":[23,24],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Principle
-    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":20}],"EditorInfo":{"isRoot":false,"xPos":205.199219,"yPos":415.999847},"ID":19,"ParamActions":[],"TMPFontGUID":null,"Text":"you
+    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":20}],"EditorInfo":{"isRoot":false,"xPos":527.1992,"yPos":415.999847},"ID":19,"ParamActions":[],"TMPFontGUID":null,"Text":"you
     must make 10 friends.  ","parentUIDs":[17],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Principle
-    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":21}],"EditorInfo":{"isRoot":false,"xPos":198.7995,"yPos":483.19986},"ID":20,"ParamActions":[],"TMPFontGUID":null,"Text":"i
+    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":21}],"EditorInfo":{"isRoot":false,"xPos":520.7995,"yPos":483.19986},"ID":20,"ParamActions":[],"TMPFontGUID":null,"Text":"i
     dont care who, i dont care how. you just need to prove to me that we dont need
     to send you to juvenile detention, or worse, a mental asylum. ","parentUIDs":[19],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Principle
-    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":22}],"EditorInfo":{"isRoot":false,"xPos":202.799377,"yPos":599.2002},"ID":21,"ParamActions":[],"TMPFontGUID":null,"Text":"make
+    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[{"__type":"EditableSpeechConnection:#DialogueEditor","Conditions":[],"NodeUID":22}],"EditorInfo":{"isRoot":false,"xPos":524.7994,"yPos":599.2002},"ID":21,"ParamActions":[],"TMPFontGUID":null,"Text":"make
     10 friends and come back to me. then we may proceed with your education journey..
     ","parentUIDs":[20],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Principle
-    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":231.599121,"yPos":720.8003},"ID":22,"ParamActions":[],"TMPFontGUID":null,"Text":"good
+    Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0},{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":553.5991,"yPos":720.8003},"ID":22,"ParamActions":[],"TMPFontGUID":null,"Text":"good
     luck. i believe in you","parentUIDs":[21],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"Principle
     Meany","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
   saveVersion: 110
@@ -90873,6 +90897,18 @@ MonoBehaviour:
           m_StringArgument: snap
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1145658690}
+        m_TargetAssemblyTypeName: Day2P2PreMinecraftManager, Assembly-CSharp
+        m_MethodName: GoMinecraft
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   NodeID: 11
   TMPFont: {fileID: 0}
   Icon: {fileID: 0}
@@ -99821,6 +99857,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144769857}
   m_CullTransparentMesh: 1
+--- !u!1 &1145658689
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1145658691}
+  - component: {fileID: 1145658690}
+  m_Layer: 0
+  m_Name: Day2Part2Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1145658690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145658689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f29991f75a09b664aba692441f7c06c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1145658691
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145658689}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 95.5, y: -48.5, z: -150.347}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1146656758
 GameObject:
   m_ObjectHideFlags: 0
@@ -146229,7 +146309,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3852935656990629450, guid: d9fa78e8c3c4f2b4b8f7f77ca8426cca, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -217.86261
+      value: -544
       objectReference: {fileID: 0}
     - target: {fileID: 3852935656990629450, guid: d9fa78e8c3c4f2b4b8f7f77ca8426cca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -175741,7 +175821,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2008385663}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 85610b3e204d2a44ba54b796b57405ee, type: 2}
   m_CullingMode: 0
@@ -198488,6 +198568,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 199639481}
+  - {fileID: 1145658691}
   - {fileID: 1590693318}
   - {fileID: 1851879365}
   - {fileID: 1274389615}
