@@ -58,7 +58,7 @@ Material:
     - _CastShadows: 0
     - _Cloud_Size: 25
     - _Cloud_Size_2: 5
-    - _Color_Mix_Power: 1.45
+    - _Color_Mix_Power: 2
     - _Cull: 1
     - _DstBlend: 10
     - _QueueControl: 0
@@ -74,13 +74,22 @@ Material:
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
+<<<<<<< HEAD
     - _Cloud_Color: {r: 3e-45, g: 0.86372983, b: 0.9999999, a: 1}
+=======
+    - _Cloud_Color: {r: 0.28782475, g: 0.9245283, b: 0.8663226, a: 1}
+>>>>>>> 63a1b573df20a30f7a7c4b48a3a95543ff0e8726
     - _Cloud_Height_Thresholds: {r: 0.1, g: 0.5, b: 0, a: 0}
     - _Cloud_Sizes: {r: 5, g: 25, b: 0, a: 0}
     - _Cloud_Velocity: {r: -0.005, g: -0.01, b: 0, a: 0}
     - _Cloud_Visibility_Thresholds: {r: 0, g: 0, b: 0, a: 0}
+<<<<<<< HEAD
     - _Ground_Color: {r: 0.06666666, g: 0.95748436, b: 1, a: 1}
     - _Sky_Color: {r: 0.17877531, g: 0.48504087, b: 0.7962263, a: 1}
+=======
+    - _Ground_Color: {r: 0.67348766, g: 0.8867924, b: 0.3932003, a: 1}
+    - _Sky_Color: {r: 0.37065855, g: 0.615347, b: 0.7584905, a: 1}
+>>>>>>> 63a1b573df20a30f7a7c4b48a3a95543ff0e8726
     - _Star_Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
