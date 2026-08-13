@@ -2,6 +2,7 @@ using DialogueEditor;
 using StarterAssets;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class OutSideDayOneManager : MonoBehaviour
 {
@@ -10,6 +11,28 @@ public class OutSideDayOneManager : MonoBehaviour
     public GameObject MainCamera;
     public GameObject Player;
     public GameObject Cutscene1Camera;
+    public GameObject PlayerPlace;
+
+    private void Start()
+    {
+        
+    }
+    public void gonow()
+    {
+        MainCamera.transform.position = PlayerPlace.transform.position;  
+    }
+    public void fade2black()
+    {
+        StartCoroutine(goblack());
+
+    }
+    private IEnumerator goblack()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("Sewers1");
+    }
+
+
     public void CutScene1()
     {
         Cutscene1Camera.SetActive(true);

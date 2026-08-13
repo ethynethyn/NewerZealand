@@ -25,6 +25,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _USE_AMBIENT_OVERRIDE
   - _USE_POINT_FILTER_ON
   m_InvalidKeywords:
   - _USE_AMBIENT_OVERRIDE_ON
@@ -97,7 +98,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints:
     - _ColorBitDepth: 64
-    - _ResolutionLimit: 13
+    - _ResolutionLimit: 135
     - _SnapsPerUnit: 64
     m_Floats:
     - _AddPrecomputedVelocity: 0
