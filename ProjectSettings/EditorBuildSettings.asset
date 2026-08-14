@@ -71,6 +71,66 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/!jonahDump/!Day7/Schoolday7 part 2.unity
     guid: 9aabb7a481b764a4aa9125f7a2a1ed45
+  - enabled: 1
+    path: Assets/!jonahDump/!Day1/Cafeteria1.unity
+    guid: 11b806f2a07fa1b45bcbb8c880e01010
+  - enabled: 1
+    path: Assets/!jonahDump/!Day1/CafeteriaNa.unity
+    guid: 17f5e6faebc934549b1663bb6e576d30
+  - enabled: 1
+    path: Assets/!jonahDump/!Day2/Cafeteria2.unity
+    guid: 1161f9ac7a8becc48aeff6df7a422261
+  - enabled: 1
+    path: Assets/!jonahDump/!Day2/Schoolday2.unity
+    guid: 16095ed4f63bdde4c9045669b97568b4
+  - enabled: 1
+    path: Assets/!jonahDump/!Day2/SchoolDay2part2.unity
+    guid: e8d39708e1327924f953694faaca2b84
+  - enabled: 1
+    path: Assets/!jonahDump/!Day3/Cafeteria3.unity
+    guid: a06f0ae2da9882c44ba53c353256e89f
+  - enabled: 1
+    path: Assets/!jonahDump/!Day3/Schoolday3.unity
+    guid: 1087a3b424ca4834fbb82555833b2ca1
+  - enabled: 1
+    path: Assets/!jonahDump/!day4/Cafeteria4.unity
+    guid: 7397dc83ffd653a47810ec44c479e6e4
+  - enabled: 1
+    path: Assets/!jonahDump/!day4/Schoolday4.unity
+    guid: 6e9738425f14504439b7570e437941be
+  - enabled: 1
+    path: Assets/!jonahDump/!Day5/Cafeteria5.unity
+    guid: af93984f49250984ea5aac38a8bd8030
+  - enabled: 1
+    path: Assets/!jonahDump/!Day5/Schoolday5.unity
+    guid: d617da2667b44c04cb6a9175c32fdddd
+  - enabled: 1
+    path: Assets/!jonahDump/!Day6/gweedo den.unity
+    guid: 65e1078376494ec41995932f17d7079c
+  - enabled: 1
+    path: Assets/!jonahDump/!Day6/gweedo den 2.unity
+    guid: 7d1a53034d94fa74081a3460401f7086
+  - enabled: 1
+    path: Assets/!jonahDump/!Day6/IntoSchool 2.unity
+    guid: f263484edc22e3543b5c13feb96b43b0
+  - enabled: 1
+    path: Assets/!jonahDump/!Day6/Schoolday6.unity
+    guid: 819a1d5307f8a0642b9764e01617dfd3
+  - enabled: 1
+    path: Assets/!jonahDump/!Day6/Schoolday6 part 2.unity
+    guid: 1f5bfc823bb065f4aa2bb983ca9facd6
+  - enabled: 1
+    path: Assets/!jonahDump/!Day7/Schoolday7.unity
+    guid: ac87d3fac7721c040a234b56873a126b
+  - enabled: 1
+    path: Assets/!jonahDump/!Day8/gweedo escape bit.unity
+    guid: 78e551d6f3331e14aa27e42f9583f978
+  - enabled: 1
+    path: Assets/!jonahDump/!Day8/Schoolday8.unity
+    guid: 4fc31962831a6d54fbb0a65285196239
+  - enabled: 1
+    path: Assets/!jonahDump/!Day8/Schoolday8 part 2.unity
+    guid: 14ee556913b4d7444927266132fd593b
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
