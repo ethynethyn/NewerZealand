@@ -59,6 +59,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/!jonahDump/!Day5/Schoolday5 part 2.unity
     guid: 3faf131768074164bb7d5c23331fd9a4
+  - enabled: 1
+    path: Assets/!jonahDump/!Day5/Schoolday5 part 3.unity
+    guid: 655f7cede7574bf47b3bce4fb591517c
+  - enabled: 1
+    path: Assets/!jonahDump/!Day5/Schoolday5 part 4.unity
+    guid: 3e8201678604d984fbaab5641df832a4
+  - enabled: 1
+    path: Assets/!jonahDump/!Day6/IntoSchool.unity
+    guid: bd8deef80bfc75b4bb266529bb0c8042
+  - enabled: 1
+    path: Assets/!jonahDump/!Day7/Schoolday7 part 2.unity
+    guid: 9aabb7a481b764a4aa9125f7a2a1ed45
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
