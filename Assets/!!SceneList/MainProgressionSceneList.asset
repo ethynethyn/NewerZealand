@@ -12,6 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b04fcbade9fbec4cafa57c4bbb9db2a, type: 3}
   m_Name: MainProgressionSceneList
   m_EditorClassIdentifier: 
-  classScenes: []
-  recessScenes: []
-  lunchScenes: []
+  classScenes:
+  - sceneAsset: {fileID: 102900000, guid: 3dad8f98c17824d40b01d24c2a93fc65, type: 3}
+    sceneName: Class-Scene-Template-Optimised
+    scenePath: Assets/Class-Scene-Template-Optimised.unity
+  recessScenes:
+  - sceneAsset: {fileID: 102900000, guid: 11b806f2a07fa1b45bcbb8c880e01010, type: 3}
+    sceneName: Cafeteria1
+    scenePath: Assets/!jonahDump/!Day1/Cafeteria1.unity
+  - sceneAsset: {fileID: 102900000, guid: 1161f9ac7a8becc48aeff6df7a422261, type: 3}
+    sceneName: Cafeteria2
+    scenePath: Assets/!jonahDump/!Day2/Cafeteria2.unity
+  lunchScenes:
+  - sceneAsset: {fileID: 102900000, guid: 7bae6d69d5b2cef438ae3b522d6f1a36, type: 3}
+    sceneName: Schoolday1
+    scenePath: Assets/!jonahDump/!Day1/Schoolday1.unity
+  - sceneAsset: {fileID: 102900000, guid: 7bae6d69d5b2cef438ae3b522d6f1a36, type: 3}
+    sceneName: Schoolday1
+    scenePath: Assets/!jonahDump/!Day1/Schoolday1.unity
