@@ -27,6 +27,14 @@ public class SceneProgressionManager : MonoBehaviour
     [Tooltip("Which period the next Class Halls scene runs. Set by TriggerNextPeriod, " +
              "read by ClassPeriodStarter. Lets you reuse one class scene for any period.")]
     public int currentClassPeriod = 0;
+    [Tooltip("How many class periods there are in a day. Advancing past the last one " +
+             "wraps back to Period 1 (so a new day starts on Period 1).")]
+    public int classPeriodCount = 3;
+
+    [Header("Day (A / B)")]
+    [Tooltip("Which day we're on: 0 = A day, 1 = B day, 2 = A day... Day 1 starts on A. " +
+             "Auto-advances each time the class period wraps from the last period back to Period 1.")]
+    public int dayIndex = 0;
 
     void Awake()
     {
@@ -63,8 +71,34 @@ public class SceneProgressionManager : MonoBehaviour
     // ── Class period (which of the 3 class periods the class scene runs) ──
     // 0 = Period 1, 1 = Period 2, 2 = Period 3. Changing this does NOT reload;
     // it's read when the next class scene starts (by ClassPeriodStarter).
-    public void SetClassPeriod(int period) => currentClassPeriod = Mathf.Max(0, period);
+    public void SetClassPeriod(int period)
+    {
+        int count = Mathf.Max(1, classPeriodCount);
+        currentClassPeriod = Mathf.Clamp(period, 0, count - 1);
+    }
+
+    // Move to the next period, wrapping back to Period 1 after the last one so a
+    // new day naturally begins on Period 1. Put this on your period-end triggers.
+    // Each wrap also flips the A/B day (A → B → A ...).
+    public void AdvanceClassPeriod()
+    {
+        int count = Mathf.Max(1, classPeriodCount);
+        bool wrapsToNewDay = (currentClassPeriod + 1) >= count;
+        currentClassPeriod = (currentClassPeriod + 1) % count;
+        if (wrapsToNewDay) dayIndex++;   // finished a full day → next day flips A/B
+    }
+
     public int GetClassPeriod() => currentClassPeriod;
+
+    // ── A / B day (tracked via period progression, not time) ──────────
+    // A day on even day indices (0, 2, 4...), B day on odd (1, 3, 5...).
+    // Day 1 = index 0 = A day.
+    public bool IsADay() => (dayIndex % 2) == 0;
+
+    // Manual overrides (e.g. from dialogue) if you ever need them.
+    public void SetDayIndex(int i) => dayIndex = Mathf.Max(0, i);
+    public void NextDay() => dayIndex++;                 // flips A/B
+    public void ResetToADayOne() { dayIndex = 0; currentClassPeriod = 0; }
 
     // Convenience: set the period AND load the current class scene in one call.
     public void GoToClassHallsForPeriod(int period)
