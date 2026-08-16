@@ -12,6 +12,7 @@ using System.Collections.Generic;
 public class TriggerNextPeriod : MonoBehaviour
 {
     public enum ChangeMode { Advance, SetTo }
+    public enum ClassPeriodAction { LeaveUnchanged, Advance, SetTo }
 
     [System.Serializable]
     public class ProgressionChange
@@ -28,11 +29,14 @@ public class TriggerNextPeriod : MonoBehaviour
     [Tooltip("Which period type's CURRENT scene to load when the countdown ends.")]
     public PeriodType nextPeriod = PeriodType.Recess;
 
-    [Header("Class period (only used when Next Period = ClassHalls)")]
-    [Tooltip("If ON, sets which period the class scene runs on. Lets you reuse one class scene for any period.")]
-    public bool setClassPeriod = true;
-    [Tooltip("Which period to put the player + NPCs on. 0 = Period 1, 1 = Period 2, 2 = Period 3.")]
-    public int classPeriodIndex = 0;
+    [Header("Class period")]
+    [Tooltip("What this trigger does to the class period.\n" +
+             "Advance = move to the next period (wraps to Period 1 after the last).\n" +
+             "SetTo = jump to a specific period.\n" +
+             "LeaveUnchanged = don't touch it.")]
+    public ClassPeriodAction classPeriodAction = ClassPeriodAction.LeaveUnchanged;
+    [Tooltip("Only used when action = SetTo. 0 = Period 1, 1 = Period 2, 2 = Period 3.")]
+    public int classPeriodValue = 0;
 
     [Header("Timing")]
     [Tooltip("Seconds to wait after this object is enabled before the scene changes.")]
@@ -87,9 +91,13 @@ public class TriggerNextPeriod : MonoBehaviour
             else                                   mgr.SetIndex(change.type, change.value);
         }
 
-        // If heading to Class Halls, optionally set which period the scene runs on.
-        if (nextPeriod == PeriodType.ClassHalls && setClassPeriod)
-            mgr.SetClassPeriod(classPeriodIndex);
+        // Adjust the class period. Applies whether we're heading into class now or
+        // just preparing it for the next class scene.
+        switch (classPeriodAction)
+        {
+            case ClassPeriodAction.Advance: mgr.AdvanceClassPeriod(); break;
+            case ClassPeriodAction.SetTo:   mgr.SetClassPeriod(classPeriodValue); break;
+        }
 
         onBeforeSceneChange?.Invoke();
 
