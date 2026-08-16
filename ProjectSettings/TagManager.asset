@@ -12,6 +12,8 @@ TagManager:
   - Goal
   - Obstacle
   - OBS
+  - Minecraftr
+  - Minecraft
   layers:
   - Default
   - TransparentFX

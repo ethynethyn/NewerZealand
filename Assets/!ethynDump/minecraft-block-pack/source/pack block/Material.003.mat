@@ -25,6 +25,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _USE_AMBIENT_OVERRIDE
   - _USE_POINT_FILTER_ON
   m_InvalidKeywords:
   - _USE_AMBIENT_OVERRIDE_ON
@@ -40,7 +41,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: ac83c57e7c9d02344b63f346b0283981, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1ee8a803608ffcd4a8e6566754dba4c1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -97,7 +98,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints:
     - _ColorBitDepth: 64
-    - _ResolutionLimit: 64
+    - _ResolutionLimit: 61
     - _SnapsPerUnit: 64
     m_Floats:
     - _AddPrecomputedVelocity: 0
