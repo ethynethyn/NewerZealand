@@ -15,7 +15,7 @@ MonoBehaviour:
   classScenes:
   - sceneAsset: {fileID: 102900000, guid: 3dad8f98c17824d40b01d24c2a93fc65, type: 3}
     sceneName: Class-Scene-Template-Optimised
-    scenePath: Assets/Class-Scene-Template-Optimised.unity
+    scenePath: Assets/!!SceneList/Class-Scene-Template-Optimised.unity
   recessScenes:
   - sceneAsset: {fileID: 102900000, guid: 11b806f2a07fa1b45bcbb8c880e01010, type: 3}
     sceneName: Cafeteria1
@@ -23,10 +23,25 @@ MonoBehaviour:
   - sceneAsset: {fileID: 102900000, guid: 1161f9ac7a8becc48aeff6df7a422261, type: 3}
     sceneName: Cafeteria2
     scenePath: Assets/!jonahDump/!Day2/Cafeteria2.unity
+  - sceneAsset: {fileID: 102900000, guid: a06f0ae2da9882c44ba53c353256e89f, type: 3}
+    sceneName: Cafeteria3
+    scenePath: Assets/!jonahDump/!Day3/Cafeteria3.unity
+  - sceneAsset: {fileID: 102900000, guid: 7397dc83ffd653a47810ec44c479e6e4, type: 3}
+    sceneName: Cafeteria4
+    scenePath: Assets/!jonahDump/!day4/Cafeteria4.unity
   lunchScenes:
   - sceneAsset: {fileID: 102900000, guid: 7bae6d69d5b2cef438ae3b522d6f1a36, type: 3}
     sceneName: Schoolday1
     scenePath: Assets/!jonahDump/!Day1/Schoolday1.unity
-  - sceneAsset: {fileID: 102900000, guid: 7bae6d69d5b2cef438ae3b522d6f1a36, type: 3}
-    sceneName: Schoolday1
-    scenePath: Assets/!jonahDump/!Day1/Schoolday1.unity
+  - sceneAsset: {fileID: 102900000, guid: 16095ed4f63bdde4c9045669b97568b4, type: 3}
+    sceneName: Schoolday2
+    scenePath: Assets/!jonahDump/!Day2/Schoolday2.unity
+  - sceneAsset: {fileID: 102900000, guid: e8d39708e1327924f953694faaca2b84, type: 3}
+    sceneName: SchoolDay2part2
+    scenePath: Assets/!jonahDump/!Day2/SchoolDay2part2.unity
+  - sceneAsset: {fileID: 102900000, guid: 1087a3b424ca4834fbb82555833b2ca1, type: 3}
+    sceneName: Schoolday3
+    scenePath: Assets/!jonahDump/!Day3/Schoolday3.unity
+  - sceneAsset: {fileID: 102900000, guid: 6e9738425f14504439b7570e437941be, type: 3}
+    sceneName: Schoolday4
+    scenePath: Assets/!jonahDump/!day4/Schoolday4.unity

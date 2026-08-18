@@ -4576,6 +4576,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -37983,6 +37986,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -68449,6 +68455,8 @@ MonoBehaviour:
     endHour: 17
     state: 3
     periodIndex: -1
+  drivePeriodsFromTime: 1
+  dayMode: 0
 --- !u!114 &569495338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68841,6 +68849,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -106271,6 +106282,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -139043,6 +139057,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -145110,6 +145127,70 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1188003120}
   m_Mesh: {fileID: 2212009239438826721, guid: 068e4d3a1e59e804ba0c3e27d14166bf, type: 3}
+--- !u!1 &1188095460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1188095463}
+  - component: {fileID: 1188095462}
+  - component: {fileID: 1188095461}
+  m_Layer: 0
+  m_Name: '`CORE'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1188095461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188095460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ea7a96f56288eb4392ea1778ce13cdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1188095462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188095460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13d4b59aa89981b4fb4ea431dce10cdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneList: {fileID: 11400000, guid: 514e0f0502a0a9e45bb2bf4c2586d0ca, type: 2}
+  classIndex: 0
+  recessIndex: 0
+  lunchIndex: 0
+  currentClassPeriod: 0
+  classPeriodCount: 2
+  dayIndex: 0
+--- !u!4 &1188095463
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188095460}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1188190184
 GameObject:
   m_ObjectHideFlags: 0
@@ -171218,6 +171299,65 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3121ac7214b80064e8bc43fcd52b53b7, type: 3}
   m_PrefabInstance: {fileID: 1388852331}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1390383771
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1390383773}
+  - component: {fileID: 1390383772}
+  m_Layer: 0
+  m_Name: RECESSTRIGGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1390383772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390383771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4df663f2659a6e4f8ad14a995b3da58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextPeriod: 0
+  classPeriodAction: 0
+  classPeriodValue: 0
+  delaySeconds: 1
+  useUnscaledTime: 0
+  progressionChanges:
+  - type: 2
+    mode: 0
+    value: 1
+  onCountdownStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeforeSceneChange:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &1390383773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390383771}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1392134471
 GameObject:
   m_ObjectHideFlags: 0
@@ -236283,6 +236423,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -306098,6 +306241,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 694623152}
+  - {fileID: 1188095463}
+  - {fileID: 1390383773}
   - {fileID: 1007035011}
   - {fileID: 560505192}
   - {fileID: 363085259}

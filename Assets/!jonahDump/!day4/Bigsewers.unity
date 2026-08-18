@@ -4577,6 +4577,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -38068,6 +38071,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -68937,6 +68943,8 @@ MonoBehaviour:
     endHour: 17
     state: 3
     periodIndex: -1
+  drivePeriodsFromTime: 1
+  dayMode: 0
 --- !u!114 &569495338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69329,6 +69337,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -107023,6 +107034,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -118102,7 +118116,19 @@ MonoBehaviour:
   EndConversationFont: {fileID: 0}
   Event:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2105989558}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!4 &978550484
 Transform:
   m_ObjectHideFlags: 0
@@ -140702,6 +140728,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -166078,7 +166107,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2105989558}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   NodeID: 50
   TMPFont: {fileID: 0}
   Icon: {fileID: 21300000, guid: 24697ceed92ddda4c9dd68c862e11c3e, type: 3}
@@ -239522,6 +239563,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -267003,6 +267047,65 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2105989558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2105989560}
+  - component: {fileID: 2105989559}
+  m_Layer: 0
+  m_Name: RECESSTRIGGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &2105989559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105989558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4df663f2659a6e4f8ad14a995b3da58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextPeriod: 0
+  classPeriodAction: 0
+  classPeriodValue: 0
+  delaySeconds: 1
+  useUnscaledTime: 0
+  progressionChanges:
+  - type: 2
+    mode: 0
+    value: 1
+  onCountdownStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeforeSceneChange:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &2105989560
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105989558}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2106160285
 GameObject:
   m_ObjectHideFlags: 0
@@ -309477,6 +309580,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 470431277}
+  - {fileID: 2105989560}
   - {fileID: 1385555011}
   - {fileID: 1599514186}
   - {fileID: 1030524072}

@@ -4559,6 +4559,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -34003,6 +34006,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -62296,6 +62302,8 @@ MonoBehaviour:
     endHour: 17
     state: 3
     periodIndex: -1
+  drivePeriodsFromTime: 1
+  dayMode: 0
 --- !u!114 &569495338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62753,6 +62761,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -97639,6 +97650,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -126904,6 +126918,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
@@ -140897,6 +140914,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextPeriod: 1
+  classPeriodAction: 0
+  classPeriodValue: 0
   delaySeconds: 2
   useUnscaledTime: 0
   progressionChanges: []
@@ -198157,7 +198176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Shop
-  mode: 0
+  mode: 1
   slotCount: 6
   stock:
   - item: {fileID: 11400000, guid: a4fbb614613c99f4f899cd6de89665a4, type: 2}
@@ -205432,6 +205451,9 @@ MonoBehaviour:
   classIndex: 0
   recessIndex: 0
   lunchIndex: 0
+  currentClassPeriod: 0
+  classPeriodCount: 3
+  dayIndex: 0
 --- !u!4 &1851879365
 Transform:
   m_ObjectHideFlags: 0
@@ -211723,6 +211745,9 @@ MonoBehaviour:
   cameraControllerToDisable: {fileID: 1365597085}
   inputBlocker: {fileID: 1840937936}
   timePassingObject: {fileID: 696439386}
+  singleRound: 1
+  skipInitialChoice: 0
+  onWorkCompletedObject: {fileID: 0}
   choiceUIs:
   - {fileID: 608142459}
   - {fileID: 391771334}
