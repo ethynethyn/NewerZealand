@@ -1113,6 +1113,9 @@ MonoBehaviour:
   cursorChar: _
   cursorBlinkRate: 0.5
   resultsDuration: 3
+  goToMorningTea: 1
+  morningTeaScenes:
+  - Cafeteria1
   returnToClassWhenDone: 1
   onPass:
     m_PersistentCalls:
