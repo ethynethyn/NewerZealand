@@ -15,18 +15,22 @@ using TMPro;
 ///  - Lose every heart = instant FAILED screen.
 ///  - Complete the target number of problems (10 by default) = results
 ///    screen graded by how many hearts you lost (A+ / B- / C-).
+///  - Grade sits on screen for Results Duration (3s), then loads the
+///    morning tea scene that matches MorningTeaManager.morningTeaNumber.
 ///
 /// SETUP:
 ///  1. Canvas (Screen Space - Overlay) in your scene/panel.
 ///  2. TMP texts: Question, Answer, Feedback (same as before).
-///  3. NEW: a TMP text anchored to the BOTTOM of the screen -> Hearts Text.
+///  3. A TMP text anchored to the BOTTOM of the screen -> Hearts Text.
 ///     (Or drag 3 heart images/objects into Heart Icons instead - or both.)
-///  4. NEW: a TMP text for the "3 / 10" counter -> Progress Text.
-///  5. NEW (optional): a full-screen panel with one TMP text inside ->
-///     Results Panel + Results Text. This is the "new scene" that pops up
-///     at the end. If you leave it empty, the grade just shows on the
-///     Feedback text instead, so nothing breaks.
-///  6. All grades, messages, and gold star amounts are editable under
+///  4. A TMP text for the "3 / 10" counter -> Progress Text.
+///  5. Optional: a full-screen panel with one TMP text inside ->
+///     Results Panel + Results Text. If you leave it empty, the grade just
+///     shows on the Feedback text instead, so nothing breaks.
+///  6. NEW: fill in Morning Tea Scenes under "After Results".
+///     Element 0 = morning tea 1, element 1 = morning tea 2, and so on.
+///     All those scenes need to be in File > Build Settings.
+///  7. All grades, messages, and gold star amounts are editable under
 ///     the "Grading" header.
 ///
 /// NOTE: this reads Input.inputString (the old Input Manager). If your project
@@ -112,14 +116,14 @@ public class MathQuiz : MonoBehaviour
     [Tooltip("{0} = how many done, {1} = total needed.")]
     public string progressFormat = "{0} / {1}";
 
-    [Header("Results Screen (the 'new scene' at the end)")]
+    [Header("Results Screen")]
     [Tooltip("Optional panel that pops up when the quiz ends. Leave empty and the grade shows on the Feedback text instead.")]
     public GameObject resultsPanel;
     [Tooltip("The TMP text inside the results panel that shows the grade.")]
     public TMP_Text resultsText;
     [Tooltip("Optional: parent object of the quiz UI, gets hidden while the results show.")]
     public GameObject quizPanel;
-    [Tooltip("Advanced: load an actual Unity scene for the results instead of a panel. Scene must be in Build Settings. That scene can read MathQuiz.LastResultText / LastGoldStars / LastPassed / LastHeartsLost.")]
+    [Tooltip("Advanced: load a dedicated results SCENE the instant the quiz ends, skipping the panel and the morning tea handoff entirely. That scene can read MathQuiz.LastResultText / LastGoldStars / LastPassed / LastHeartsLost.")]
     public bool loadResultsScene = false;
     public string resultsSceneName = "";
 
@@ -131,10 +135,14 @@ public class MathQuiz : MonoBehaviour
     public string cursorChar = "_";
     public float cursorBlinkRate = 0.5f;
 
-    [Header("Minigame Return")]
-    [Tooltip("How long the results screen shows before returning to the class. 0 = return instantly.")]
+    [Header("After Results")]
+    [Tooltip("How long the grade stays on screen before moving on. 3 = three seconds.")]
     public float resultsDuration = 3f;
-    [Tooltip("Call ClassMinigameBridge.Finish() after the results screen (on pass AND fail). Ignored when loading a results scene.")]
+    [Tooltip("Load the scene matching MorningTeaManager.morningTeaNumber once the results are done. Happens on pass AND fail.")]
+    public bool goToMorningTea = true;
+    [Tooltip("Scene names, in order. Element 0 = morning tea 1, element 1 = morning tea 2, etc. All of these must be in File > Build Settings.")]
+    public List<string> morningTeaScenes = new List<string>();
+    [Tooltip("Fallback if Go To Morning Tea is off (or the scene name is missing): call ClassMinigameBridge.Finish() instead.")]
     public bool returnToClassWhenDone = true;
 
     [Header("Events (optional)")]
@@ -315,14 +323,14 @@ public class MathQuiz : MonoBehaviour
         else onFail?.Invoke();
         onGoldStarsAwarded?.Invoke(result.goldStars);
 
-        // Option A: a real separate scene.
+        // Optional: skip everything and jump straight to a dedicated results scene.
         if (loadResultsScene && !string.IsNullOrEmpty(resultsSceneName))
         {
             SceneManager.LoadScene(resultsSceneName);
             return;
         }
 
-        // Option B: results panel in this scene (or fall back to the feedback text).
+        // Show the grade in this scene (results panel, or fall back to the feedback text).
         if (questionText != null) questionText.text = "";
         if (answerText != null) answerText.text = "";
         if (feedbackText != null) feedbackText.text = "";
@@ -339,8 +347,7 @@ public class MathQuiz : MonoBehaviour
             feedbackText.text = result.screenText;
         }
 
-        if (returnToClassWhenDone)
-            StartCoroutine(ReturnToClassAfterResults());
+        StartCoroutine(AfterResults());
     }
 
     GradeResult PickGrade()
@@ -350,10 +357,35 @@ public class MathQuiz : MonoBehaviour
         return passGrades[lost];
     }
 
-    IEnumerator ReturnToClassAfterResults()
+    // Waits out the results screen, then sends the player to morning tea.
+    IEnumerator AfterResults()
     {
         yield return new WaitForSeconds(resultsDuration);
-        ClassMinigameBridge.Finish();
+
+        if (goToMorningTea)
+        {
+            string scene = GetMorningTeaScene();
+            if (!string.IsNullOrEmpty(scene))
+            {
+                SceneManager.LoadScene(scene);
+                yield break;
+            }
+
+            Debug.LogWarning(
+                $"[MathQuiz] No scene set for morning tea {MorningTeaManager.morningTeaNumber}. " +
+                $"Add it to Morning Tea Scenes (element {MorningTeaManager.morningTeaNumber - 1}).", this);
+        }
+
+        if (returnToClassWhenDone)
+            ClassMinigameBridge.Finish();
+    }
+
+    // morningTeaNumber 1 -> element 0, 2 -> element 1, etc.
+    string GetMorningTeaScene()
+    {
+        int index = MorningTeaManager.morningTeaNumber - 1;
+        if (index < 0 || index >= morningTeaScenes.Count) return null;
+        return morningTeaScenes[index];
     }
 
     void RefreshHearts()

@@ -278605,6 +278605,7 @@ GameObject:
   - component: {fileID: 7724963481745185601}
   - component: {fileID: 6364516336694313846}
   - component: {fileID: 7724963481745185602}
+  - component: {fileID: 7724963481745185603}
   m_Layer: 0
   m_Name: ConversationEventInfo
   m_TagString: Untagged
@@ -300286,6 +300287,25 @@ MonoBehaviour:
   TMPFont: {fileID: 0}
   Icon: {fileID: 0}
   Audio: {fileID: 0}
+--- !u!114 &7724963481745185603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2241700234244936233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00abedce3cdbbba46bf2d86c9518c9f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event:
+    m_PersistentCalls:
+      m_Calls: []
+  NodeID: 9
+  TMPFont: {fileID: 0}
+  Icon: {fileID: 0}
+  Audio: {fileID: 0}
 --- !u!23 &7725258896038906104
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -303927,7 +303947,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentIDCounter: 20
-  json: '{"Options":[{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":541,"yPos":183},"ID":19,"ParamActions":[],"TMPFontGUID":null,"Text":"next","parentUIDs":[0],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":19}],"EditorInfo":{"isRoot":true,"xPos":490.5,"yPos":22},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"[STEVEN]","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
+  json: '{"Options":[{"Connections":[],"EditorInfo":{"isRoot":false,"xPos":530.5,"yPos":229},"ID":19,"ParamActions":[],"TMPFontGUID":null,"Text":"next","parentUIDs":[0],"SpeechUID":-1}],"Parameters":[],"SpeechNodes":[{"Connections":[{"__type":"EditableOptionConnection:#DialogueEditor","Conditions":[],"NodeUID":19}],"EditorInfo":{"isRoot":true,"xPos":480,"yPos":68},"ID":0,"ParamActions":[],"TMPFontGUID":null,"Text":"[STEVEN]","parentUIDs":[],"AdvanceDialogueAutomatically":false,"AudioGUID":null,"AutoAdvanceShouldDisplayOption":false,"IconGUID":null,"Name":"","OptionUIDs":null,"SpeechUID":0,"TimeUntilAdvance":0,"Volume":0}]}'
   saveVersion: 110
   DefaultName: 
   DefaultSprite: {fileID: 0}
@@ -303936,6 +303956,7 @@ MonoBehaviour:
   - {fileID: 7724963481745185601}
   - {fileID: 6364516336694313846}
   - {fileID: 7724963481745185602}
+  - {fileID: 7724963481745185603}
   ContinueFont: {fileID: 0}
   EndConversationFont: {fileID: 0}
   Event:
