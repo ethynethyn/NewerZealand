@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 840735e85ab35f649b2108cfcdf60880, type: 3}
+  m_Name: DAudio_VoiceDatabase
+  m_EditorClassIdentifier: 
+  defaultProfile: {fileID: 11400000, guid: 97db3529b9f79654abc02de3f54a84e1, type: 2}
+  voices:
+  - speakerName: nate
+    aliases: []
+    profile: {fileID: 11400000, guid: 0c36a260830befb47bc8e75236aaf81f, type: 2}
+  - speakerName: lewis
+    aliases: []
+    profile: {fileID: 11400000, guid: df96f0ff54b423641a7c8badeade2e71, type: 2}

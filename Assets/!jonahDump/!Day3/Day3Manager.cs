@@ -16,10 +16,17 @@ public class Day3Manager : MonoBehaviour
     private bool TalkedWithEveryGirl;
 
     // Update is called once per frame
+
+    public void bruh()
+    {
+        JonahStaticManager.talkedwRoxy = true;
+    }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (JonahStaticManager.talkedwRoxy)
         {
+
+            JonahStaticManager.talkedwRoxy = false;
             GotRaemen = true;
         }
         if (GotRaemen)

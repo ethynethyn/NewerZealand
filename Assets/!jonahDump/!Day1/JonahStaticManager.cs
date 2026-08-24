@@ -7,4 +7,6 @@ public class JonahStaticManager : MonoBehaviour
     public static bool talkedWithSteven;
     public static bool leftSteven;
     public static bool leftSteven2;
+
+    public static bool talkedwRoxy;
 }

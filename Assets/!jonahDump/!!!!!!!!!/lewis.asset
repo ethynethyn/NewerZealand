@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03759c3d7c1359348846dffa351cb475, type: 3}
+  m_Name: lewis
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: b386322d6dbcfc94793ab35050888151, type: 3}
+  randomiseClips: 1
+  volume: 0.7
+  mixerGroup: {fileID: 0}
+  pitch: 1
+  pitchVariance: 0
+  charactersPerBlip: 1
+  minSecondsBetweenBlips: 0.04
+  skipWhitespace: 1
+  skipPunctuation: 0
+  punctuationCharacters: ".,!?;:'\"\u2019\u2026-\u2014"
